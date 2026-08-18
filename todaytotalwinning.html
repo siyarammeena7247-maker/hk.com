@@ -1,0 +1,3035 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Today's Total Winning - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   TODAY'S TOTAL WINNING
+   FINAL COMPLETE REPLACEMENT
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:35px;
+}
+
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    background:#111111;
+    color:#ffffff;
+    padding:18px 15px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 3px 10px rgba(0,0,0,.25);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:15px;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summaryGrid{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+
+.summaryBox{
+    padding:18px 12px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+
+
+.summaryBox p{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+
+.summaryBox h2{
+    font-size:28px;
+}
+
+
+.winningSummary{
+    background:#ffc107;
+    color:#222222;
+}
+
+
+.recordSummary{
+    background:#283593;
+    color:#ffffff;
+}
+
+
+.userSummary{
+    background:#2e7d32;
+    color:#ffffff;
+}
+
+
+.winningSummary h2{
+    font-size:34px;
+}
+
+
+/* =====================================================
+   INFORMATION
+===================================================== */
+
+.infoBox{
+    background:#fff8dd;
+    border-left:5px solid #ffc107;
+    padding:12px 14px;
+    border-radius:9px;
+    margin-bottom:15px;
+    color:#5c4c00;
+    line-height:1.5;
+    font-size:13px;
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+.filterBox{
+    background:#ffffff;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    margin-bottom:15px;
+
+    display:grid;
+    grid-template-columns:1.2fr 1.1fr auto auto auto;
+    gap:10px;
+}
+
+
+.filterBox select,
+.filterBox input{
+    width:100%;
+    height:45px;
+    padding:0 11px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+    background:#ffffff;
+}
+
+
+.filterBox select:focus,
+.filterBox input:focus{
+    border-color:#ffc107;
+    box-shadow:0 0 0 2px rgba(255,193,7,.12);
+}
+
+
+.smallBtn{
+    min-height:45px;
+    padding:0 17px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.todayBtn{
+    background:#ffc107;
+    color:#222222;
+}
+
+
+.searchBtn{
+    background:#2196f3;
+    color:#ffffff;
+}
+
+
+.clearBtn{
+    background:#607d8b;
+    color:#ffffff;
+}
+
+
+/* =====================================================
+   REPORT TOOLS
+===================================================== */
+
+.toolsBox{
+    background:#ffffff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+
+.toolBtn{
+    padding:9px 14px;
+    border:none;
+    border-radius:7px;
+    background:#333333;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.refreshBtn{
+    background:#009688;
+}
+
+
+.searchInput{
+    margin-left:auto;
+    min-width:260px;
+    padding:10px;
+    border:1px solid #cccccc;
+    border-radius:7px;
+    outline:none;
+}
+
+
+.searchInput:focus{
+    border-color:#ffc107;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.tableBox{
+    background:#ffffff;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+
+.winningTable{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1100px;
+    font-size:14px;
+}
+
+
+.winningTable th{
+    background:#ffc107;
+    color:#222222;
+    padding:12px 8px;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+.winningTable td{
+    padding:10px 8px;
+    border:1px solid #dddddd;
+    text-align:center;
+    white-space:nowrap;
+}
+
+
+.winningTable tbody tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+
+.winningTable tbody tr:hover{
+    background:#fff9e5;
+}
+
+
+.winAmount{
+    color:#159447;
+    font-weight:bold;
+}
+
+
+.winStatus{
+    display:inline-block;
+    min-width:65px;
+    background:#e4f8ea;
+    color:#11783a;
+    padding:5px 9px;
+    border-radius:18px;
+    font-weight:bold;
+}
+
+
+.noData{
+    padding:30px !important;
+    color:#777777;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+.back-btn{
+    margin-top:18px;
+    text-align:center;
+}
+
+
+.back-btn a{
+    display:block;
+    padding:13px;
+    background:#333333;
+    color:#ffffff;
+    border-radius:9px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print{
+
+    body{
+        background:#ffffff;
+        padding:0;
+    }
+
+
+    .header{
+        position:static;
+    }
+
+
+    .filterBox,
+    .toolsBox,
+    .back-btn,
+    .infoBox{
+        display:none !important;
+    }
+
+
+    .container{
+        max-width:none;
+        padding:5px;
+    }
+
+
+    .tableBox{
+        box-shadow:none;
+        overflow:visible;
+    }
+
+
+    .winningTable{
+        min-width:0;
+        font-size:10px;
+    }
+
+
+    .winningTable th,
+    .winningTable td{
+        padding:5px 3px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .header{
+        font-size:21px;
+    }
+
+
+    .summaryGrid{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .winningSummary{
+        grid-column:1/-1;
+    }
+
+
+    .summaryBox h2{
+        font-size:24px;
+    }
+
+
+    .winningSummary h2{
+        font-size:31px;
+    }
+
+
+    .filterBox{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .filterBox select{
+        grid-column:1/-1;
+    }
+
+
+    .filterBox input{
+        grid-column:1/-1;
+    }
+
+
+    .toolsBox{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+    }
+
+
+    .toolBtn{
+        width:100%;
+    }
+
+
+    .searchInput{
+        grid-column:1/-1;
+        margin-left:0;
+        min-width:0;
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    TODAY'S TOTAL WINNING
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     SUMMARY
+===================================================== -->
+
+<div class="summaryGrid">
+
+
+    <div class="summaryBox winningSummary">
+
+        <p>
+            Today's Total Winning
+        </p>
+
+        <h2>
+
+            ₹
+            <span id="todayWinningTotal">
+                0.00
+            </span>
+
+        </h2>
+
+    </div>
+
+
+    <div class="summaryBox recordSummary">
+
+        <p>
+            Total Winning Records
+        </p>
+
+        <h2 id="totalRecords">
+            0
+        </h2>
+
+    </div>
+
+
+    <div class="summaryBox userSummary">
+
+        <p>
+            Winning Users
+        </p>
+
+        <h2 id="totalUsers">
+            0
+        </h2>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     SAFE INFORMATION
+===================================================== -->
+
+<div class="infoBox">
+
+    Winning record Result Management se automatically
+    create hota hai.
+
+    Wrong result hone par direct winning delete na karein.
+
+    Result Management ke
+    <strong>REVERSE</strong>
+    button se wallet, passbook aur winning settlement
+    automatically reverse hoga.
+
+</div>
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="filterBox">
+
+
+    <select id="marketFilter">
+
+        <option value="ALL">
+            All Market
+        </option>
+
+    </select>
+
+
+    <input
+    type="date"
+    id="filterDate">
+
+
+    <button
+    type="button"
+    class="smallBtn todayBtn"
+    onclick="todayFilter()">
+
+        TODAY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="smallBtn searchBtn"
+    onclick="searchWinning()">
+
+        SEARCH
+
+    </button>
+
+
+    <button
+    type="button"
+    class="smallBtn clearBtn"
+    onclick="clearFilter()">
+
+        CLEAR
+
+    </button>
+
+
+</div>
+
+
+<!-- =====================================================
+     TOOLS
+===================================================== -->
+
+<div class="toolsBox">
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="copyTable()">
+
+        COPY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="downloadCSV()">
+
+        CSV
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="printReport()">
+
+        PRINT
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn refreshBtn"
+    onclick="refreshData()">
+
+        REFRESH
+
+    </button>
+
+
+    <input
+    type="text"
+    class="searchInput"
+    id="searchInput"
+    placeholder="Search Mobile / Name / Market / Game / Number"
+    autocomplete="off">
+
+
+</div>
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="tableBox">
+
+
+<table
+class="winningTable"
+id="winningTable">
+
+
+<thead>
+
+
+<tr>
+
+    <th>ID</th>
+
+    <th>Mobile</th>
+
+    <th>User Name</th>
+
+    <th>Market</th>
+
+    <th>Game</th>
+
+    <th>Game Type</th>
+
+    <th>Session</th>
+
+    <th>Number</th>
+
+    <th>Winning Amount</th>
+
+    <th>Date</th>
+
+    <th>Time</th>
+
+    <th>Status</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody id="winningTableBody">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+<div class="back-btn">
+
+    <a href="index.html">
+
+        ← Back To Admin Panel
+
+    </a>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA ADMIN
+   TODAY TOTAL WINNING
+   FINAL COMPLETE ENGINE
+
+   CONNECTED STORAGE:
+
+   todayWinning
+   bets
+   markets
+   results
+   userBalances
+   passbook
+   lastResultSync
+===================================================== */
+
+
+/* =====================================================
+   1. SAFE STORAGE
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   2. SAFE VALUE
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+
+/* =====================================================
+   3. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   4. NORMALIZE TEXT
+===================================================== */
+
+function normalizeText(value){
+
+    return String(
+        value || ""
+    )
+    .trim();
+
+}
+
+
+function normalizeUpper(value){
+
+    return normalizeText(
+        value
+    )
+    .toUpperCase();
+
+}
+
+
+
+/* =====================================================
+   5. NORMALIZE MOBILE
+===================================================== */
+
+function normalizeMobile(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+}
+
+
+
+/* =====================================================
+   6. NORMALIZE DATE
+===================================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    /*
+       DD/MM/YYYY
+       DD/MM/YYYY, TIME
+    */
+
+    let slash =
+    text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slash){
+
+        return (
+
+            slash[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slash[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slash[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    /*
+       DD-MM-YYYY
+    */
+
+    let dash =
+    text.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})/
+    );
+
+
+    if(dash){
+
+        return (
+
+            dash[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dash[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dash[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    /*
+       YYYY-MM-DD
+    */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}/
+        .test(
+            text
+        )
+    ){
+
+        return text.substring(
+            0,
+            10
+        );
+
+    }
+
+
+    let parsed =
+    new Date(
+        text
+    );
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    return (
+
+        parsed.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   7. DISPLAY DATE
+===================================================== */
+
+function displayDate(value){
+
+    let normalized =
+    normalizeDate(
+        value
+    );
+
+
+    if(!normalized){
+
+        return safe(
+            value
+        );
+
+    }
+
+
+    let parts =
+    normalized.split(
+        "-"
+    );
+
+
+    return (
+
+        parts[2]
+
+        +
+
+        "/"
+
+        +
+
+        parts[1]
+
+        +
+
+        "/"
+
+        +
+
+        parts[0]
+
+    );
+
+}
+
+
+
+/* =====================================================
+   8. TODAY YYYY-MM-DD
+===================================================== */
+
+function getTodayISO(){
+
+    let today =
+    new Date();
+
+
+    return (
+
+        today.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            today.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            today.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   9. TIME FORMAT
+   ALWAYS 12 HOUR AM / PM
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        !value ||
+        value === "-"
+    ){
+
+        return "-";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    /*
+       Already AM / PM
+    */
+
+    if(
+        /\b(am|pm)\b/i
+        .test(
+            text
+        )
+    ){
+
+        return text
+
+        .replace(
+            /\bam\b/gi,
+            "AM"
+        )
+
+        .replace(
+            /\bpm\b/gi,
+            "PM"
+        );
+
+    }
+
+
+    /*
+       24 Hour HH:MM or HH:MM:SS
+    */
+
+    let match =
+    text.match(
+        /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+    if(match){
+
+        let hour =
+        Number(
+            match[1]
+        );
+
+
+        if(
+            hour >= 0 &&
+            hour <= 23
+        ){
+
+            let suffix =
+            hour >= 12
+            ? "PM"
+            : "AM";
+
+
+            let hour12 =
+            hour % 12;
+
+
+            if(
+                hour12 === 0
+            ){
+
+                hour12 =
+                12;
+
+            }
+
+
+            return (
+
+                String(
+                    hour12
+                )
+                .padStart(
+                    2,
+                    "0"
+                )
+
+                +
+
+                ":"
+
+                +
+
+                match[2]
+
+                +
+
+                (
+                    match[3]
+                    ?
+                    ":" + match[3]
+                    :
+                    ""
+                )
+
+                +
+
+                " "
+
+                +
+
+                suffix
+
+            );
+
+        }
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   10. SORT TIME
+===================================================== */
+
+function getSortTime(item){
+
+    let candidates = [
+
+        item.timestamp,
+
+        item.createdTimestamp,
+
+        item.updatedTimestamp,
+
+        item.id
+
+    ];
+
+
+    for(
+        let value of candidates
+    ){
+
+        let number =
+        Number(
+            value
+        );
+
+
+        if(
+            Number.isFinite(
+                number
+            )
+            &&
+            number > 0
+        ){
+
+            return number;
+
+        }
+
+    }
+
+
+    if(
+        item.createdAt
+    ){
+
+        let parsed =
+        new Date(
+            item.createdAt
+        );
+
+
+        if(
+            !isNaN(
+                parsed.getTime()
+            )
+        ){
+
+            return parsed.getTime();
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+
+/* =====================================================
+   11. MARKET NAME
+===================================================== */
+
+function getMarketName(item){
+
+    if(
+        typeof item === "string"
+    ){
+
+        return normalizeText(
+            item
+        );
+
+    }
+
+
+    if(!item){
+
+        return "";
+
+    }
+
+
+    return normalizeText(
+
+        item.market ||
+
+        item.marketName ||
+
+        item.name ||
+
+        item.title
+
+    );
+
+}
+
+
+
+/* =====================================================
+   12. LOAD MARKETS
+===================================================== */
+
+function loadMarkets(){
+
+    let select =
+    document.getElementById(
+        "marketFilter"
+    );
+
+
+    let oldValue =
+    select.value ||
+    "ALL";
+
+
+    let markets =
+    getStorage(
+        "markets",
+        []
+    );
+
+
+    let winnings =
+    getStorage(
+        "todayWinning",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            markets
+        )
+    ){
+
+        markets = [];
+
+    }
+
+
+    if(
+        !Array.isArray(
+            winnings
+        )
+    ){
+
+        winnings = [];
+
+    }
+
+
+    let names =
+    [];
+
+
+    markets.forEach(
+        function(item){
+
+            let name =
+            getMarketName(
+                item
+            );
+
+
+            if(name){
+
+                names.push(
+                    name
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+       Winning history ke old market bhi
+       dropdown me available rahenge.
+    */
+
+    winnings.forEach(
+        function(item){
+
+            let name =
+            normalizeText(
+                item.market
+            );
+
+
+            if(name){
+
+                names.push(
+                    name
+                );
+
+            }
+
+        }
+    );
+
+
+    let unique =
+    [];
+
+
+    let used =
+    new Set();
+
+
+    names.forEach(
+        function(name){
+
+            let key =
+            normalizeUpper(
+                name
+            );
+
+
+            if(
+                !key ||
+                used.has(
+                    key
+                )
+            ){
+
+                return;
+
+            }
+
+
+            used.add(
+                key
+            );
+
+
+            unique.push(
+                name
+            );
+
+        }
+    );
+
+
+    select.innerHTML = `
+
+        <option value="ALL">
+            All Market
+        </option>
+
+    `;
+
+
+    unique.forEach(
+        function(name){
+
+            let option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value =
+            name;
+
+
+            option.textContent =
+            name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if(
+        [...select.options]
+        .some(
+            function(option){
+
+                return (
+                    option.value ===
+                    oldValue
+                );
+
+            }
+        )
+    ){
+
+        select.value =
+        oldValue;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   13. NORMALIZE WINNING RECORD
+===================================================== */
+
+function normalizeWinning(item){
+
+    let winningAmount =
+    Number(
+
+        item.amount
+
+        ??
+
+        item.winAmount
+
+        ??
+
+        item.winningAmount
+
+        ??
+
+        0
+
+    );
+
+
+    if(
+        !Number.isFinite(
+            winningAmount
+        )
+    ){
+
+        winningAmount =
+        0;
+
+    }
+
+
+    return {
+
+        id:
+        item.id || "",
+
+        settlementKey:
+        normalizeText(
+            item.settlementKey
+        ),
+
+        betId:
+        item.betId || "",
+
+        mobile:
+        normalizeMobile(
+
+            item.mobile ||
+
+            item.userMobile ||
+
+            item.phone
+
+        ),
+
+        name:
+        normalizeText(
+
+            item.name ||
+
+            item.userName ||
+
+            item.playerName
+
+        ),
+
+        market:
+        normalizeText(
+            item.market
+        ),
+
+        game:
+        normalizeText(
+
+            item.game ||
+
+            item.gameType
+
+        ),
+
+        gameType:
+        normalizeText(
+
+            item.gameType ||
+
+            item.game
+
+        ),
+
+        session:
+        normalizeUpper(
+            item.session
+        ),
+
+        number:
+        safe(
+
+            item.number
+
+            ??
+
+            item.bidNumber
+
+        ),
+
+        amount:
+        winningAmount,
+
+        date:
+        item.date ||
+        item.winningDate ||
+        "-",
+
+        time:
+        formatTime12(
+
+            item.time ||
+
+            item.winningTime ||
+
+            "-"
+
+        ),
+
+        status:
+        item.status ||
+        "Win",
+
+        sortTime:
+        getSortTime(
+            item
+        )
+
+    };
+
+}
+
+
+
+/* =====================================================
+   14. GET WINNING DATA
+   DUPLICATE PROTECTION
+===================================================== */
+
+function getWinningData(){
+
+    let raw =
+    getStorage(
+        "todayWinning",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            raw
+        )
+    ){
+
+        raw = [];
+
+    }
+
+
+    let map =
+    new Map();
+
+
+    raw.forEach(
+        function(item,index){
+
+            let record =
+            normalizeWinning(
+                item
+            );
+
+
+            /*
+               Main duplicate key:
+               settlementKey
+
+               Legacy fallback:
+               ID / Market / Mobile / Number / Date
+            */
+
+            let key =
+
+            record.settlementKey
+
+            ||
+
+            (
+
+                String(
+                    record.id || index
+                )
+
+                +
+
+                "|"
+
+                +
+
+                normalizeUpper(
+                    record.market
+                )
+
+                +
+
+                "|"
+
+                +
+
+                record.mobile
+
+                +
+
+                "|"
+
+                +
+
+                String(
+                    record.number
+                )
+
+                +
+
+                "|"
+
+                +
+
+                normalizeDate(
+                    record.date
+                )
+
+            );
+
+
+            let old =
+            map.get(
+                key
+            );
+
+
+            if(
+                !old ||
+                Number(
+                    record.sortTime
+                )
+                >=
+                Number(
+                    old.sortTime
+                )
+            ){
+
+                map.set(
+                    key,
+                    record
+                );
+
+            }
+
+        }
+    );
+
+
+    let records =
+    Array.from(
+        map.values()
+    );
+
+
+    records.sort(
+        function(a,b){
+
+            return (
+
+                Number(
+                    b.sortTime
+                )
+
+                -
+
+                Number(
+                    a.sortTime
+                )
+
+            );
+
+        }
+    );
+
+
+    return records;
+
+}
+
+
+
+/* =====================================================
+   15. CURRENT FILTERED DATA
+===================================================== */
+
+let filteredWinning =
+[];
+
+
+let displayWinning =
+[];
+
+
+
+/* =====================================================
+   16. SEARCH / DATE / MARKET FILTER
+===================================================== */
+
+function searchWinning(){
+
+    let records =
+    getWinningData();
+
+
+    let selectedMarket =
+    document
+    .getElementById(
+        "marketFilter"
+    )
+    .value;
+
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    filteredWinning =
+    records.filter(
+        function(item){
+
+            let marketMatch =
+
+            selectedMarket === "ALL"
+
+            ||
+
+            normalizeUpper(
+                item.market
+            )
+
+            ===
+
+            normalizeUpper(
+                selectedMarket
+            );
+
+
+            let dateMatch =
+
+            selectedDate === ""
+
+            ||
+
+            normalizeDate(
+                item.date
+            )
+
+            ===
+
+            selectedDate;
+
+
+            return (
+
+                marketMatch
+
+                &&
+
+                dateMatch
+
+            );
+
+        }
+    );
+
+
+    renderTable();
+
+}
+
+
+
+/* =====================================================
+   17. TODAY FILTER
+===================================================== */
+
+function todayFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "marketFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    searchWinning();
+
+}
+
+
+
+/* =====================================================
+   18. CLEAR FILTER
+===================================================== */
+
+function clearFilter(){
+
+    document
+    .getElementById(
+        "marketFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    searchWinning();
+
+}
+
+
+
+/* =====================================================
+   19. RENDER SUMMARY
+===================================================== */
+
+function renderSummary(records){
+
+    let total =
+    0;
+
+
+    let users =
+    new Set();
+
+
+    records.forEach(
+        function(item){
+
+            total +=
+            Number(
+                item.amount || 0
+            );
+
+
+            if(
+                item.mobile
+            ){
+
+                users.add(
+                    item.mobile
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "todayWinningTotal"
+    )
+    .innerText =
+    total.toFixed(
+        2
+    );
+
+
+    document
+    .getElementById(
+        "totalRecords"
+    )
+    .innerText =
+    records.length;
+
+
+    document
+    .getElementById(
+        "totalUsers"
+    )
+    .innerText =
+    users.size;
+
+}
+
+
+
+/* =====================================================
+   20. RENDER TABLE
+===================================================== */
+
+function renderTable(){
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    displayWinning =
+    filteredWinning.filter(
+        function(item){
+
+            if(
+                search === ""
+            ){
+
+                return true;
+
+            }
+
+
+            let searchable =
+            [
+
+                item.mobile,
+
+                item.name,
+
+                item.market,
+
+                item.game,
+
+                item.gameType,
+
+                item.session,
+
+                item.number,
+
+                item.amount,
+
+                item.date,
+
+                item.time,
+
+                item.status
+
+            ]
+            .join(
+                " "
+            )
+            .toLowerCase();
+
+
+            return searchable.includes(
+                search
+            );
+
+        }
+    );
+
+
+    renderSummary(
+        displayWinning
+    );
+
+
+    let body =
+    document
+    .getElementById(
+        "winningTableBody"
+    );
+
+
+    body.innerHTML =
+    "";
+
+
+    if(
+        displayWinning.length === 0
+    ){
+
+        body.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="12"
+            class="noData">
+
+                No Winning Data Found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    displayWinning.forEach(
+        function(item,index){
+
+            let row =
+            document.createElement(
+                "tr"
+            );
+
+
+            row.innerHTML = `
+
+            <td>
+                ${index + 1}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.mobile
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.name
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.market
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.game
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.gameType
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.session
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.number
+                    )
+                )}
+            </td>
+
+
+            <td class="winAmount">
+
+                + ₹ ${Number(
+                    item.amount || 0
+                )
+                .toFixed(
+                    2
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    displayDate(
+                        item.date
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    formatTime12(
+                        item.time
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                <span class="winStatus">
+
+                    ${escapeHTML(
+                        safe(
+                            item.status
+                        )
+                    )}
+
+                </span>
+
+            </td>
+
+            `;
+
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   21. REPORT DATA
+===================================================== */
+
+function getReportRows(){
+
+    let rows = [
+
+        [
+            "ID",
+            "Mobile",
+            "User Name",
+            "Market",
+            "Game",
+            "Game Type",
+            "Session",
+            "Number",
+            "Winning Amount",
+            "Date",
+            "Time",
+            "Status"
+        ]
+
+    ];
+
+
+    displayWinning.forEach(
+        function(item,index){
+
+            rows.push([
+
+                index + 1,
+
+                safe(
+                    item.mobile
+                ),
+
+                safe(
+                    item.name
+                ),
+
+                safe(
+                    item.market
+                ),
+
+                safe(
+                    item.game
+                ),
+
+                safe(
+                    item.gameType
+                ),
+
+                safe(
+                    item.session
+                ),
+
+                safe(
+                    item.number
+                ),
+
+                Number(
+                    item.amount || 0
+                )
+                .toFixed(
+                    2
+                ),
+
+                displayDate(
+                    item.date
+                ),
+
+                formatTime12(
+                    item.time
+                ),
+
+                safe(
+                    item.status
+                )
+
+            ]);
+
+        }
+    );
+
+
+    return rows;
+
+}
+
+
+
+/* =====================================================
+   22. COPY
+===================================================== */
+
+function copyTable(){
+
+    if(
+        displayWinning.length === 0
+    ){
+
+        alert(
+            "No Winning Data Available"
+        );
+
+
+        return;
+
+    }
+
+
+    let rows =
+    getReportRows();
+
+
+    let text =
+    rows
+    .map(
+        function(row){
+
+            return row.join(
+                "\t"
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            text
+        )
+        .then(
+            function(){
+
+                alert(
+                    "Today's Winning Data Copied"
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+                    text
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+            text
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   23. FALLBACK COPY
+===================================================== */
+
+function fallbackCopy(text){
+
+    let textarea =
+    document.createElement(
+        "textarea"
+    );
+
+
+    textarea.value =
+    text;
+
+
+    textarea.style.position =
+    "fixed";
+
+
+    textarea.style.opacity =
+    "0";
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.select();
+
+
+    try{
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        alert(
+            "Today's Winning Data Copied"
+        );
+
+    }
+
+    catch(error){
+
+        alert(
+            "Copy Failed"
+        );
+
+    }
+
+
+    textarea.remove();
+
+}
+
+
+
+/* =====================================================
+   24. CSV DOWNLOAD
+===================================================== */
+
+function downloadCSV(){
+
+    if(
+        displayWinning.length === 0
+    ){
+
+        alert(
+            "No Winning Data Available"
+        );
+
+
+        return;
+
+    }
+
+
+    let rows =
+    getReportRows();
+
+
+    let csv =
+    rows
+    .map(
+        function(row){
+
+            return row
+
+            .map(
+                function(value){
+
+                    let text =
+                    String(
+                        value
+                    )
+                    .replace(
+                        /"/g,
+                        '""'
+                    );
+
+
+                    return (
+                        '"' +
+                        text +
+                        '"'
+                    );
+
+                }
+            )
+
+            .join(
+                ","
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    /*
+       UTF-8 BOM:
+       Excel me text/mobile safe open hoga.
+    */
+
+    let blob =
+    new Blob(
+
+        [
+            "\uFEFF" +
+            csv
+        ],
+
+        {
+            type:
+            "text/csv;charset=utf-8;"
+        }
+
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href =
+    url;
+
+
+    link.download =
+
+    "today-total-winning-"
+
+    +
+
+    (
+        document
+        .getElementById(
+            "filterDate"
+        )
+        .value
+
+        ||
+
+        getTodayISO()
+    )
+
+    +
+
+    ".csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+
+/* =====================================================
+   25. PRINT
+===================================================== */
+
+function printReport(){
+
+    window.print();
+
+}
+
+
+
+/* =====================================================
+   26. REFRESH
+===================================================== */
+
+function refreshData(){
+
+    loadMarkets();
+
+    searchWinning();
+
+}
+
+
+
+/* =====================================================
+   27. EVENTS
+===================================================== */
+
+document
+.getElementById(
+    "marketFilter"
+)
+.addEventListener(
+    "change",
+    searchWinning
+);
+
+
+document
+.getElementById(
+    "filterDate"
+)
+.addEventListener(
+    "change",
+    searchWinning
+);
+
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    renderTable
+);
+
+
+
+/* =====================================================
+   28. STORAGE LIVE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === "todayWinning" ||
+            event.key === "markets" ||
+            event.key === "results" ||
+            event.key === "bets" ||
+            event.key === "userBalances" ||
+            event.key === "passbook" ||
+            event.key === "lastResultSync"
+        ){
+
+            refreshData();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   29. RESULT UPDATE EVENT
+===================================================== */
+
+window.addEventListener(
+    "resultUpdated",
+    function(){
+
+        refreshData();
+
+    }
+);
+
+
+
+/* =====================================================
+   30. PAGE FOCUS
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        refreshData();
+
+    }
+);
+
+
+
+/* =====================================================
+   31. VISIBILITY
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            refreshData();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   32. FIRST LOAD
+===================================================== */
+
+function startPage(){
+
+    loadMarkets();
+
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    searchWinning();
+
+}
+
+
+startPage();
+
+
+
+/* =====================================================
+   33. LOCAL TESTING REFRESH
+===================================================== */
+
+setInterval(
+    function(){
+
+        refreshData();
+
+    },
+    3000
+);
+
+
+
+console.log(
+    "✅ HR MATKA Today's Total Winning FINAL Complete Replacement Connected"
+);
+
+
+console.log(
+    "✅ Result Settlement + Reverse + Wallet + Passbook + Today Winning Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

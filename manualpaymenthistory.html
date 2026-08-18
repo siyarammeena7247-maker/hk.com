@@ -1,0 +1,3874 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Manual Payment History - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   MANUALPAYMENTHISTORY.HTML
+   FINAL COMPLETE REPLACEMENT
+
+   FEATURES
+
+   1. Complete Manual Payment History
+   2. Today's Manual Payment Total
+   3. Total Manual Payment Amount
+   4. Total Payment Records
+   5. Date Filter
+   6. Search
+   7. Previous Wallet Balance
+   8. New Wallet Balance
+   9. Transaction ID
+   10. 12 Hour AM / PM Time
+   11. Copy
+   12. CSV
+   13. Print
+   14. Refresh
+   15. Newest Record First
+   16. Old Record Compatibility
+   17. Mobile Friendly Design
+===================================================== */
+
+
+/* =====================================================
+   1. BASIC
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+
+button,
+input{
+    font:inherit;
+}
+
+
+.container{
+    width:100%;
+    max-width:1150px;
+    margin:auto;
+    padding:15px;
+}
+
+
+
+/* =====================================================
+   2. HEADER
+===================================================== */
+
+.header{
+    background:#263238;
+    color:#ffffff;
+    text-align:center;
+    padding:18px 12px;
+    font-size:25px;
+    font-weight:bold;
+    box-shadow:0 3px 10px rgba(0,0,0,.20);
+}
+
+
+
+/* =====================================================
+   3. SUMMARY GRID
+===================================================== */
+
+.summaryGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+
+.summaryBox{
+    min-height:115px;
+    padding:18px 12px;
+    border-radius:13px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.summaryBox p{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+
+.summaryAmount{
+    font-size:30px;
+    font-weight:bold;
+}
+
+
+.summaryCount{
+    font-size:30px;
+    font-weight:bold;
+}
+
+
+
+/* TODAY MANUAL PAYMENT */
+
+.todaySummary{
+    background:#ff9800;
+    color:#ffffff;
+}
+
+
+/* ALL MANUAL PAYMENT */
+
+.totalSummary{
+    background:#2e7d32;
+    color:#ffffff;
+}
+
+
+/* TOTAL RECORDS */
+
+.recordSummary{
+    background:#1565c0;
+    color:#ffffff;
+}
+
+
+
+/* =====================================================
+   4. INFORMATION BOX
+===================================================== */
+
+.infoBox{
+    background:#fff8e1;
+    color:#795548;
+    border-left:5px solid #ffb300;
+    padding:12px 14px;
+    border-radius:9px;
+    margin-bottom:15px;
+    font-size:13px;
+    line-height:1.6;
+}
+
+
+
+/* =====================================================
+   5. FILTER BOX
+===================================================== */
+
+.filterBox{
+    background:#ffffff;
+    padding:14px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    margin-bottom:15px;
+
+    display:grid;
+
+    grid-template-columns:
+    1fr
+    2fr
+    auto
+    auto;
+
+    gap:9px;
+}
+
+
+.filterBox input{
+    width:100%;
+    min-height:44px;
+    padding:9px 10px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+}
+
+
+.filterBox input:focus{
+    border-color:#ff9800;
+}
+
+
+.filterBtn{
+    min-height:44px;
+    border:none;
+    border-radius:8px;
+    padding:9px 16px;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.todayBtn{
+    background:#ff9800;
+}
+
+
+.clearBtn{
+    background:#607d8b;
+}
+
+
+
+/* =====================================================
+   6. TOOLS
+===================================================== */
+
+.toolsBox{
+    background:#ffffff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.toolBtn{
+    border:none;
+    background:#455a64;
+    color:#ffffff;
+    padding:10px 16px;
+    border-radius:7px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.refreshBtn{
+    background:#00acc1;
+}
+
+
+
+/* =====================================================
+   7. SECTION TITLE
+===================================================== */
+
+.sectionTitle{
+    background:#263238;
+    color:#ffffff;
+    padding:13px 15px;
+    border-radius:10px 10px 0 0;
+    font-size:16px;
+    font-weight:bold;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+
+.recordBadge{
+    background:#ffffff;
+    color:#263238;
+    min-width:35px;
+    height:28px;
+    border-radius:15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 9px;
+    font-size:13px;
+}
+
+
+
+/* =====================================================
+   8. TABLE
+===================================================== */
+
+.tableBox{
+    background:#ffffff;
+    overflow:auto;
+    border-radius:0 0 12px 12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    -webkit-overflow-scrolling:touch;
+}
+
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1250px;
+    font-size:13px;
+}
+
+
+th{
+    background:#2196f3;
+    color:#ffffff;
+    padding:11px 8px;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+td{
+    padding:10px 8px;
+    text-align:center;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+tbody tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+
+tbody tr:hover{
+    background:#fff8e1;
+}
+
+
+
+/* =====================================================
+   9. AMOUNT / BALANCE COLORS
+===================================================== */
+
+.creditAmount{
+    color:#159447;
+    font-weight:bold;
+}
+
+
+.oldBalance{
+    color:#d35400;
+    font-weight:bold;
+}
+
+
+.newBalance{
+    color:#673ab7;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   10. STATUS
+===================================================== */
+
+.status{
+    display:inline-block;
+    min-width:78px;
+    padding:5px 10px;
+    border-radius:18px;
+    background:#e8f5e9;
+    color:#2e7d32;
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   11. NO DATA
+===================================================== */
+
+.noData{
+    padding:35px 20px !important;
+    color:#777777;
+    font-weight:bold;
+    text-align:center;
+}
+
+
+
+/* =====================================================
+   12. BACK BUTTON
+===================================================== */
+
+.backBtn{
+    display:block;
+    margin-top:18px;
+    text-align:center;
+    text-decoration:none;
+    background:#455a64;
+    color:#ffffff;
+    padding:13px;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   13. MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .header{
+        font-size:20px;
+        padding:15px 10px;
+    }
+
+
+    .summaryGrid{
+        grid-template-columns:1fr 1fr;
+        gap:9px;
+    }
+
+
+    .todaySummary{
+        grid-column:1/-1;
+    }
+
+
+    .summaryBox{
+        min-height:100px;
+        padding:14px 8px;
+    }
+
+
+    .summaryBox p{
+        font-size:12px;
+    }
+
+
+    .summaryAmount,
+    .summaryCount{
+        font-size:25px;
+    }
+
+
+    .filterBox{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    #searchInput{
+        grid-column:1/-1;
+    }
+
+
+    .toolsBox{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+    }
+
+
+    .toolBtn{
+        width:100%;
+    }
+
+}
+
+
+
+/* =====================================================
+   14. PRINT
+===================================================== */
+
+@media print{
+
+    body{
+        background:#ffffff;
+    }
+
+
+    .filterBox,
+    .toolsBox,
+    .backBtn,
+    .infoBox{
+        display:none !important;
+    }
+
+
+    .container{
+        max-width:none;
+        padding:0;
+    }
+
+
+    .tableBox{
+        overflow:visible;
+        box-shadow:none;
+    }
+
+
+    table{
+        min-width:0;
+        font-size:10px;
+    }
+
+
+    th,
+    td{
+        padding:6px 3px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    MANUAL PAYMENT HISTORY
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     SUMMARY
+===================================================== -->
+
+<div class="summaryGrid">
+
+
+    <div class="summaryBox todaySummary">
+
+        <p>
+            Today's Manual Payment
+        </p>
+
+        <div class="summaryAmount">
+
+            ₹
+            <span id="todayTotal">
+                0.00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="summaryBox totalSummary">
+
+        <p>
+            Total Manual Payment
+        </p>
+
+        <div class="summaryAmount">
+
+            ₹
+            <span id="allTotal">
+                0.00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="summaryBox recordSummary">
+
+        <p>
+            Total Payment Records
+        </p>
+
+        <div
+        class="summaryCount"
+        id="totalRecords">
+
+            0
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     INFORMATION
+===================================================== -->
+
+<div class="infoBox">
+
+    Yahan sirf Admin Panel se kiye gaye
+    Manual Payment records dikhaye jayenge.
+    Payment ke samay ka Transaction ID,
+    Previous Wallet Balance, New Wallet Balance,
+    Date aur 12-hour AM/PM Time bhi record ke saath
+    show hoga.
+
+</div>
+
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="filterBox">
+
+
+    <input
+    type="date"
+    id="filterDate">
+
+
+    <input
+    type="text"
+    id="searchInput"
+    placeholder="Search Name / Mobile / Amount / Transaction ID"
+    autocomplete="off">
+
+
+    <button
+    type="button"
+    class="filterBtn todayBtn"
+    onclick="todayFilter()">
+
+        TODAY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="filterBtn clearBtn"
+    onclick="clearFilter()">
+
+        CLEAR
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     TOOLS
+===================================================== -->
+
+<div class="toolsBox">
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="copyData()">
+
+        COPY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="downloadCSV()">
+
+        CSV
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="window.print()">
+
+        PRINT
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn refreshBtn"
+    onclick="refreshData()">
+
+        REFRESH
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     TABLE TITLE
+===================================================== -->
+
+<div class="sectionTitle">
+
+    <span id="listTitle">
+        Manual Payment Records
+    </span>
+
+
+    <span
+    class="recordBadge"
+    id="recordCount">
+
+        0
+
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="tableBox">
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+    <th>ID</th>
+
+    <th>User Name</th>
+
+    <th>Mobile</th>
+
+    <th>Amount</th>
+
+    <th>Previous Balance</th>
+
+    <th>New Balance</th>
+
+    <th>Transaction ID</th>
+
+    <th>Date</th>
+
+    <th>Time</th>
+
+    <th>Status</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="historyTable">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     BACK
+===================================================== -->
+
+<a
+href="index.html"
+class="backBtn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   MANUAL PAYMENT HISTORY
+   FINAL COMPLETE ENGINE
+
+   MAIN STORAGE:
+   payments
+
+   CONNECTED DATA:
+   userBalances
+   deposits
+   passbook
+===================================================== */
+
+
+/* =====================================================
+   1. SAFE STORAGE READ
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   2. SAFE VALUE
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+
+/* =====================================================
+   3. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   4. TODAY ISO DATE
+===================================================== */
+
+function getTodayISO(){
+
+    let d =
+    new Date();
+
+
+    let yyyy =
+    d.getFullYear();
+
+
+    let mm =
+    String(
+        d.getMonth()+1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    let dd =
+    String(
+        d.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return (
+
+        yyyy +
+        "-" +
+        mm +
+        "-" +
+        dd
+
+    );
+
+}
+
+
+
+
+/* =====================================================
+   5. NORMALIZE DATE
+
+   SUPPORT:
+   DD/MM/YYYY
+   DD-MM-YYYY
+   YYYY-MM-DD
+   ISO DATE
+===================================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+        return "";
+    }
+
+
+    let text =
+    String(value)
+    .trim();
+
+
+    /* =========================================
+       DD/MM/YYYY
+    ========================================= */
+
+    let slashMatch =
+    text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slashMatch){
+
+        let day =
+        String(
+            slashMatch[1]
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let month =
+        String(
+            slashMatch[2]
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let year =
+        slashMatch[3];
+
+
+        return (
+            year +
+            "-" +
+            month +
+            "-" +
+            day
+        );
+
+    }
+
+
+
+    /* =========================================
+       DD-MM-YYYY
+    ========================================= */
+
+    let dashMatch =
+    text.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})/
+    );
+
+
+    if(dashMatch){
+
+        let day =
+        String(
+            dashMatch[1]
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let month =
+        String(
+            dashMatch[2]
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let year =
+        dashMatch[3];
+
+
+        return (
+            year +
+            "-" +
+            month +
+            "-" +
+            day
+        );
+
+    }
+
+
+
+    /* =========================================
+       YYYY-MM-DD
+    ========================================= */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}/
+        .test(
+            text
+        )
+    ){
+
+        return text.substring(
+            0,
+            10
+        );
+
+    }
+
+
+
+    /* =========================================
+       OTHER VALID DATE
+    ========================================= */
+
+    let parsed =
+    new Date(
+        text
+    );
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    let year =
+    parsed.getFullYear();
+
+
+    let month =
+    String(
+        parsed.getMonth()+1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    let day =
+    String(
+        parsed.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+
+}
+
+
+
+/* =====================================================
+   6. DISPLAY DATE
+   OUTPUT = DD/MM/YYYY
+===================================================== */
+
+function displayDate(value){
+
+    let normalized =
+    normalizeDate(
+        value
+    );
+
+
+    if(!normalized){
+
+        return safe(
+            value
+        );
+
+    }
+
+
+    let parts =
+    normalized.split(
+        "-"
+    );
+
+
+    return (
+        parts[2] +
+        "/" +
+        parts[1] +
+        "/" +
+        parts[0]
+    );
+
+}
+
+
+
+/* =====================================================
+   7. 12-HOUR TIME FORMAT
+   AM / PM CAPITAL
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        !value ||
+        value === "-"
+    ){
+
+        return "-";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+
+    /* =========================================
+       ALREADY HAS AM / PM
+    ========================================= */
+
+    if(
+        /\b(am|pm)\b/i
+        .test(
+            text
+        )
+    ){
+
+        return text
+        .replace(
+            /\bam\b/gi,
+            "AM"
+        )
+        .replace(
+            /\bpm\b/gi,
+            "PM"
+        );
+
+    }
+
+
+
+    /* =========================================
+       24-HOUR HH:MM OR HH:MM:SS
+    ========================================= */
+
+    let match =
+    text.match(
+        /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+    if(match){
+
+        let hour =
+        Number(
+            match[1]
+        );
+
+
+        let minute =
+        match[2];
+
+
+        let second =
+        match[3] || "";
+
+
+        if(
+            hour >= 0 &&
+            hour <= 23
+        ){
+
+            let period =
+            hour >= 12
+            ?
+            "PM"
+            :
+            "AM";
+
+
+            let hour12 =
+            hour % 12;
+
+
+            if(
+                hour12 === 0
+            ){
+
+                hour12 =
+                12;
+
+            }
+
+
+            return (
+
+                String(
+                    hour12
+                )
+                .padStart(
+                    2,
+                    "0"
+                )
+
+                +
+
+                ":"
+
+                +
+
+                minute
+
+                +
+
+                (
+                    second
+                    ?
+                    ":" + second
+                    :
+                    ""
+                )
+
+                +
+
+                " "
+
+                +
+
+                period
+
+            );
+
+        }
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   8. CAPITALIZE USER NAME
+===================================================== */
+
+function capitalizeName(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /\b\w/g,
+        function(letter){
+
+            return letter.toUpperCase();
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   9. GET PAYMENTS
+===================================================== */
+
+function getPayments(){
+
+    let payments =
+    getStorage(
+        "payments",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            payments
+        )
+    ){
+
+        return [];
+
+    }
+
+
+    return payments;
+
+}
+
+
+
+/* =====================================================
+   10. CHECK MANUAL PAYMENT
+
+   New records:
+   type = Manual Payment
+
+   Old payments storage records ko bhi
+   manual payment maana jayega.
+===================================================== */
+
+function isManualPayment(item){
+
+    let type =
+    String(
+        item.type || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    let source =
+    String(
+        item.source || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    let details =
+    String(
+        item.details || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    if(
+        type.includes(
+            "manual"
+        )
+    ){
+
+        return true;
+
+    }
+
+
+    if(
+        source.includes(
+            "manual"
+        )
+    ){
+
+        return true;
+
+    }
+
+
+    if(
+        details.includes(
+            "manual"
+        )
+    ){
+
+        return true;
+
+    }
+
+
+    /*
+       payments storage ke purane records me
+       type field nahi tha.
+    */
+
+    if(
+        item.mobile &&
+        item.amount !== undefined
+    ){
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+
+/* =====================================================
+   11. PAYMENT DATE
+===================================================== */
+
+function getPaymentDate(item){
+
+    return (
+
+        item.approvedDate
+
+        ||
+
+        item.paymentDate
+
+        ||
+
+        item.date
+
+        ||
+
+        item.createdDate
+
+        ||
+
+        ""
+
+    );
+
+}
+
+
+
+/* =====================================================
+   12. PAYMENT TIME
+===================================================== */
+
+function getPaymentTime(item){
+
+    return formatTime12(
+
+        item.approvedTime
+
+        ||
+
+        item.paymentTime
+
+        ||
+
+        item.time
+
+        ||
+
+        item.createdTime
+
+        ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   13. TRANSACTION ID
+===================================================== */
+
+function getTransactionId(item){
+
+    return (
+
+        item.transactionId
+
+        ||
+
+        item.transactionID
+
+        ||
+
+        item.txnId
+
+        ||
+
+        item.referenceId
+
+        ||
+
+        item.requestId
+
+        ||
+
+        item.id
+
+        ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   14. PREVIOUS BALANCE
+===================================================== */
+
+function getPreviousBalance(item){
+
+    let values = [
+
+        item.previousBalance,
+
+        item.oldBalance,
+
+        item.beforeBalance,
+
+        item.walletBefore
+
+    ];
+
+
+    for(
+        let value of values
+    ){
+
+        if(
+            value !== undefined &&
+            value !== null &&
+            value !== ""
+        ){
+
+            let number =
+            Number(
+                value
+            );
+
+
+            if(
+                Number.isFinite(
+                    number
+                )
+            ){
+
+                return number;
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =====================================================
+   15. NEW BALANCE
+===================================================== */
+
+function getNewBalance(item){
+
+    let values = [
+
+        item.currentBalance,
+
+        item.newBalance,
+
+        item.afterBalance,
+
+        item.walletAfter
+
+    ];
+
+
+    for(
+        let value of values
+    ){
+
+        if(
+            value !== undefined &&
+            value !== null &&
+            value !== ""
+        ){
+
+            let number =
+            Number(
+                value
+            );
+
+
+            if(
+                Number.isFinite(
+                    number
+                )
+            ){
+
+                return number;
+
+            }
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =====================================================
+   16. BALANCE FALLBACK FROM PASSBOOK
+
+   Purane payment record me previous/new balance
+   nahi mila to transaction ID se passbook
+   check karenge.
+===================================================== */
+
+function findPassbookBalance(item){
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            passbook
+        )
+    ){
+
+        return {
+
+            previous:null,
+            current:null
+
+        };
+
+    }
+
+
+    let transactionId =
+    String(
+        getTransactionId(
+            item
+        )
+    );
+
+
+    let paymentId =
+    String(
+        item.id || ""
+    );
+
+
+    let record =
+    passbook.find(
+        function(entry){
+
+            let referenceValues = [
+
+                entry.transactionId,
+
+                entry.transactionKey,
+
+                entry.referenceId,
+
+                entry.requestId,
+
+                entry.paymentId,
+
+                entry.id
+
+            ];
+
+
+            return referenceValues.some(
+                function(value){
+
+                    if(
+                        value === undefined ||
+                        value === null
+                    ){
+
+                        return false;
+
+                    }
+
+
+                    let text =
+                    String(
+                        value
+                    );
+
+
+                    return (
+
+                        (
+                            transactionId !== "-"
+                            &&
+                            text === transactionId
+                        )
+
+                        ||
+
+                        (
+                            paymentId !== ""
+                            &&
+                            text === paymentId
+                        )
+
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    if(!record){
+
+        return {
+
+            previous:null,
+            current:null
+
+        };
+
+    }
+
+
+    let previous =
+    Number(
+        record.previousBalance
+    );
+
+
+    let current =
+    Number(
+        record.currentBalance
+    );
+
+
+    return {
+
+        previous:
+        Number.isFinite(
+            previous
+        )
+        ?
+        previous
+        :
+        null,
+
+
+        current:
+        Number.isFinite(
+            current
+        )
+        ?
+        current
+        :
+        null
+
+    };
+
+}
+
+
+
+/* =====================================================
+   17. COMPLETE BALANCE INFORMATION
+===================================================== */
+
+function getBalanceInfo(item){
+
+    let previous =
+    getPreviousBalance(
+        item
+    );
+
+
+    let current =
+    getNewBalance(
+        item
+    );
+
+
+    if(
+        previous !== null &&
+        current !== null
+    ){
+
+        return {
+
+            previous:
+            previous,
+
+            current:
+            current
+
+        };
+
+    }
+
+
+    let passbookBalance =
+    findPassbookBalance(
+        item
+    );
+
+
+    if(
+        previous === null
+    ){
+
+        previous =
+        passbookBalance.previous;
+
+    }
+
+
+    if(
+        current === null
+    ){
+
+        current =
+        passbookBalance.current;
+
+    }
+
+
+    return {
+
+        previous:
+        previous,
+
+        current:
+        current
+
+    };
+
+}
+
+
+
+/* =====================================================
+   18. SORT TIME
+===================================================== */
+
+function getSortTime(item){
+
+    let values = [
+
+        item.timestamp,
+
+        item.paymentTimestamp,
+
+        item.createdTimestamp,
+
+        item.approvedTimestamp,
+
+        item.updatedTimestamp,
+
+        item.id
+
+    ];
+
+
+    for(
+        let value of values
+    ){
+
+        let number =
+        Number(
+            value
+        );
+
+
+        if(
+            Number.isFinite(
+                number
+            )
+            &&
+            number > 0
+        ){
+
+            return number;
+
+        }
+
+    }
+
+
+    let dateValues = [
+
+        item.createdAt,
+
+        item.approvedAt,
+
+        item.updatedAt
+
+    ];
+
+
+    for(
+        let value of dateValues
+    ){
+
+        if(!value){
+            continue;
+        }
+
+
+        let parsed =
+        new Date(
+            value
+        );
+
+
+        if(
+            !isNaN(
+                parsed.getTime()
+            )
+        ){
+
+            return parsed.getTime();
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+
+/* =====================================================
+   19. GLOBAL RECORDS
+===================================================== */
+
+let allPayments = [];
+
+let filteredPayments = [];
+
+
+
+/* =====================================================
+   20. LOAD PAYMENT DATA
+===================================================== */
+
+function loadPaymentData(){
+
+    allPayments =
+    getPayments()
+    .filter(
+        isManualPayment
+    );
+
+
+    /*
+       NEWEST PAYMENT FIRST
+    */
+
+    allPayments.sort(
+        function(a,b){
+
+            return (
+
+                Number(
+                    getSortTime(b)
+                )
+
+                -
+
+                Number(
+                    getSortTime(a)
+                )
+
+            );
+
+        }
+    );
+
+
+    filteredPayments =
+    [...allPayments];
+
+
+    updateSummary();
+
+}
+
+
+
+/* =====================================================
+   21. CALCULATE TOTAL
+===================================================== */
+
+function calculateTotal(records){
+
+    let total =
+    0;
+
+
+    records.forEach(
+        function(item){
+
+            let amount =
+            Number(
+                item.amount || 0
+            );
+
+
+            if(
+                Number.isFinite(
+                    amount
+                )
+            ){
+
+                total +=
+                amount;
+
+            }
+
+        }
+    );
+
+
+    return total;
+
+}
+
+
+
+/* =====================================================
+   22. SUMMARY
+===================================================== */
+
+function updateSummary(){
+
+    let today =
+    getTodayISO();
+
+
+    let todayPayments =
+    allPayments.filter(
+        function(item){
+
+            return (
+
+                normalizeDate(
+                    getPaymentDate(
+                        item
+                    )
+                )
+
+                ===
+
+                today
+
+            );
+
+        }
+    );
+
+
+    let todayTotal =
+    calculateTotal(
+        todayPayments
+    );
+
+
+    let allTotal =
+    calculateTotal(
+        allPayments
+    );
+
+
+    document
+    .getElementById(
+        "todayTotal"
+    )
+    .innerText =
+    todayTotal.toFixed(
+        2
+    );
+
+
+    document
+    .getElementById(
+        "allTotal"
+    )
+    .innerText =
+    allTotal.toFixed(
+        2
+    );
+
+
+    document
+    .getElementById(
+        "totalRecords"
+    )
+    .innerText =
+    allPayments.length;
+
+}
+
+
+
+
+/* =====================================================
+   23. APPLY DATE FILTER
+===================================================== */
+
+function applyFilter(){
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    if(!selectedDate){
+
+        filteredPayments =
+        [...allPayments];
+
+    }
+
+    else{
+
+        filteredPayments =
+        allPayments.filter(
+            function(item){
+
+                return (
+
+                    normalizeDate(
+                        getPaymentDate(
+                            item
+                        )
+                    )
+
+                    ===
+
+                    selectedDate
+
+                );
+
+            }
+        );
+
+    }
+
+
+    renderPaymentTable();
+
+}
+
+
+
+/* =====================================================
+   24. TODAY FILTER
+===================================================== */
+
+function todayFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    applyFilter();
+
+}
+
+
+
+/* =====================================================
+   25. CLEAR FILTER
+===================================================== */
+
+function clearFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    filteredPayments =
+    [...allPayments];
+
+
+    renderPaymentTable();
+
+}
+
+
+
+/* =====================================================
+   26. GET SEARCHED RECORDS
+===================================================== */
+
+function getDisplayRecords(){
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    if(!search){
+
+        return [
+            ...filteredPayments
+        ];
+
+    }
+
+
+    return filteredPayments.filter(
+        function(item){
+
+            let balance =
+            getBalanceInfo(
+                item
+            );
+
+
+            let text =
+            [
+
+                item.username,
+
+                item.name,
+
+                item.mobile,
+
+                item.amount,
+
+                getTransactionId(
+                    item
+                ),
+
+                getPaymentDate(
+                    item
+                ),
+
+                getPaymentTime(
+                    item
+                ),
+
+                item.type,
+
+                item.paymentMode,
+
+                item.details,
+
+                item.status,
+
+                balance.previous,
+
+                balance.current
+
+            ]
+            .join(
+                " "
+            )
+            .toLowerCase();
+
+
+            return text.includes(
+                search
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   27. RENDER PAYMENT TABLE
+===================================================== */
+
+function renderPaymentTable(){
+
+    let table =
+    document
+    .getElementById(
+        "historyTable"
+    );
+
+
+    let records =
+    getDisplayRecords();
+
+
+    table.innerHTML =
+    "";
+
+
+    /*
+       Record count agar Part 1 me available hai
+       to automatically update hoga.
+    */
+
+    let visibleCount =
+    document.getElementById(
+        "visibleRecords"
+    );
+
+
+    if(visibleCount){
+
+        visibleCount.innerText =
+        records.length;
+
+    }
+
+
+
+    /* =================================================
+       NO DATA
+    ================================================= */
+
+    if(
+        records.length === 0
+    ){
+
+        table.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="10"
+            class="noData">
+
+                No Manual Payment Found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       CREATE ROWS
+    ================================================= */
+
+    records.forEach(
+        function(item,index){
+
+            let name =
+
+            item.username
+
+            ||
+
+            item.name
+
+            ||
+
+            "User";
+
+
+            name =
+            capitalizeName(
+                name
+            );
+
+
+            let mobile =
+            safe(
+                item.mobile
+            );
+
+
+            let amount =
+            Number(
+                item.amount || 0
+            );
+
+
+            if(
+                !Number.isFinite(
+                    amount
+                )
+            ){
+
+                amount = 0;
+
+            }
+
+
+            let date =
+            displayDate(
+                getPaymentDate(
+                    item
+                )
+            );
+
+
+            let time =
+            getPaymentTime(
+                item
+            );
+
+
+            let transactionId =
+            getTransactionId(
+                item
+            );
+
+
+            let balance =
+            getBalanceInfo(
+                item
+            );
+
+
+            let previousBalance =
+            balance.previous !== null
+            ?
+            "₹ " +
+            Number(
+                balance.previous
+            )
+            .toFixed(
+                2
+            )
+            :
+            "-";
+
+
+            let currentBalance =
+            balance.current !== null
+            ?
+            "₹ " +
+            Number(
+                balance.current
+            )
+            .toFixed(
+                2
+            )
+            :
+            "-";
+
+
+            let status =
+            item.status ||
+            "Success";
+
+
+            let row =
+            document.createElement(
+                "tr"
+            );
+
+
+            row.innerHTML = `
+
+            <td>
+                ${index + 1}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    name
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    mobile
+                )}
+            </td>
+
+
+            <td class="amountCell">
+
+                + ₹ ${amount.toFixed(2)}
+
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    date
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    time
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        transactionId
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    previousBalance
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    currentBalance
+                )}
+            </td>
+
+
+            <td>
+
+                <span class="status success">
+
+                    ${escapeHTML(
+                        safe(
+                            status
+                        )
+                    )}
+
+                </span>
+
+            </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   28. SEARCH EVENT
+===================================================== */
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    function(){
+
+        renderPaymentTable();
+
+    }
+);
+
+
+
+/* =====================================================
+   29. DATE CHANGE EVENT
+===================================================== */
+
+document
+.getElementById(
+    "filterDate"
+)
+.addEventListener(
+    "change",
+    function(){
+
+        applyFilter();
+
+    }
+);
+
+
+
+/* =====================================================
+   30. REFRESH DATA
+===================================================== */
+
+function refreshData(){
+
+    loadPaymentData();
+
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    if(selectedDate){
+
+        filteredPayments =
+        allPayments.filter(
+            function(item){
+
+                return (
+
+                    normalizeDate(
+                        getPaymentDate(
+                            item
+                        )
+                    )
+
+                    ===
+
+                    selectedDate
+
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        filteredPayments =
+        [...allPayments];
+
+    }
+
+
+    renderPaymentTable();
+
+}
+
+
+
+/* =====================================================
+   31. EXPORT RECORDS
+
+   COPY + CSV me wahi records jayenge
+   jo current filter/search me visible hain.
+===================================================== */
+
+function getExportRecords(){
+
+    return getDisplayRecords();
+
+}
+
+
+
+/* =====================================================
+   32. EXPORT ROWS
+===================================================== */
+
+function buildExportRows(){
+
+    let records =
+    getExportRecords();
+
+
+    let rows = [
+
+        [
+            "ID",
+            "User Name",
+            "Mobile",
+            "Amount",
+            "Date",
+            "Time",
+            "Transaction ID",
+            "Previous Balance",
+            "New Balance",
+            "Status"
+        ]
+
+    ];
+
+
+    records.forEach(
+        function(item,index){
+
+            let balance =
+            getBalanceInfo(
+                item
+            );
+
+
+            let previousBalance =
+            balance.previous !== null
+            ?
+            Number(
+                balance.previous
+            )
+            .toFixed(
+                2
+            )
+            :
+            "-";
+
+
+            let currentBalance =
+            balance.current !== null
+            ?
+            Number(
+                balance.current
+            )
+            .toFixed(
+                2
+            )
+            :
+            "-";
+
+
+            rows.push([
+
+                index + 1,
+
+                capitalizeName(
+
+                    item.username
+
+                    ||
+
+                    item.name
+
+                    ||
+
+                    "User"
+
+                ),
+
+                safe(
+                    item.mobile
+                ),
+
+                Number(
+                    item.amount || 0
+                )
+                .toFixed(
+                    2
+                ),
+
+                displayDate(
+                    getPaymentDate(
+                        item
+                    )
+                ),
+
+                getPaymentTime(
+                    item
+                ),
+
+                safe(
+                    getTransactionId(
+                        item
+                    )
+                ),
+
+                previousBalance,
+
+                currentBalance,
+
+                safe(
+                    item.status ||
+                    "Success"
+                )
+
+            ]);
+
+        }
+    );
+
+
+    return rows;
+
+}
+
+
+
+/* =====================================================
+   33. COPY DATA
+===================================================== */
+
+function copyData(){
+
+    let rows =
+    buildExportRows();
+
+
+    let text =
+    rows
+    .map(
+        function(row){
+
+            return row.join(
+                "\t"
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            text
+        )
+        .then(
+            function(){
+
+                alert(
+                    "Manual Payment History Copied Successfully"
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+                    text
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+            text
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   34. FALLBACK COPY
+===================================================== */
+
+function fallbackCopy(text){
+
+    let area =
+    document.createElement(
+        "textarea"
+    );
+
+
+    area.value =
+    text;
+
+
+    area.style.position =
+    "fixed";
+
+
+    area.style.left =
+    "-9999px";
+
+
+    document.body.appendChild(
+        area
+    );
+
+
+    area.focus();
+
+    area.select();
+
+
+    try{
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        alert(
+            "Manual Payment History Copied Successfully"
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Copy Error:",
+            error
+        );
+
+
+        alert(
+            "Copy Failed"
+        );
+
+    }
+
+
+    area.remove();
+
+}
+
+
+
+/* =====================================================
+   35. DOWNLOAD CSV
+===================================================== */
+
+function downloadCSV(){
+
+    let rows =
+    buildExportRows();
+
+
+    let csv =
+    rows
+    .map(
+        function(row){
+
+            return row
+            .map(
+                function(value){
+
+                    return (
+
+                        '"' +
+
+                        String(
+                            value
+                        )
+                        .replace(
+                            /"/g,
+                            '""'
+                        )
+
+                        +
+
+                        '"'
+
+                    );
+
+                }
+            )
+            .join(
+                ","
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    /*
+       UTF-8 BOM
+       Excel me text properly open karne ke liye.
+    */
+
+    let blob =
+    new Blob(
+        [
+            "\uFEFF" +
+            csv
+        ],
+        {
+            type:
+            "text/csv;charset=utf-8;"
+        }
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href =
+    url;
+
+
+    link.download =
+    "manual-payment-history.csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+
+
+
+/* =====================================================
+   36. FINAL CORRECTED TABLE RENDER
+
+   IMPORTANT:
+   Ye final function Part 3 wale render function ko
+   safely override karega.
+
+   FINAL COLUMN ORDER:
+
+   1. ID
+   2. User Name
+   3. Mobile
+   4. Amount
+   5. Previous Balance
+   6. New Balance
+   7. Transaction ID
+   8. Date
+   9. Time
+   10. Status
+===================================================== */
+
+function renderPaymentTable(){
+
+    let table =
+    document.getElementById(
+        "historyTable"
+    );
+
+
+    let records =
+    getDisplayRecords();
+
+
+    table.innerHTML =
+    "";
+
+
+    /* =================================================
+       VISIBLE RECORD COUNT
+    ================================================= */
+
+    document
+    .getElementById(
+        "recordCount"
+    )
+    .innerText =
+    records.length;
+
+
+
+    /* =================================================
+       LIST TITLE
+    ================================================= */
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    let listTitle =
+    document
+    .getElementById(
+        "listTitle"
+    );
+
+
+    if(
+        selectedDate ===
+        getTodayISO()
+    ){
+
+        listTitle.innerText =
+        "Today's Manual Payment Records";
+
+    }
+
+    else if(selectedDate){
+
+        listTitle.innerText =
+
+        "Manual Payment Records - "
+
+        +
+
+        displayDate(
+            selectedDate
+        );
+
+    }
+
+    else{
+
+        listTitle.innerText =
+        "All Manual Payment Records";
+
+    }
+
+
+
+    /* =================================================
+       NO DATA
+    ================================================= */
+
+    if(
+        records.length === 0
+    ){
+
+        table.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="10"
+            class="noData">
+
+                No Manual Payment Found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       CREATE TABLE ROW
+    ================================================= */
+
+    records.forEach(
+        function(item,index){
+
+            let name =
+
+            item.username
+
+            ||
+
+            item.name
+
+            ||
+
+            "User";
+
+
+            name =
+            capitalizeName(
+                name
+            );
+
+
+            let mobile =
+            safe(
+                item.mobile
+            );
+
+
+            let amount =
+            Number(
+                item.amount || 0
+            );
+
+
+            if(
+                !Number.isFinite(
+                    amount
+                )
+            ){
+
+                amount = 0;
+
+            }
+
+
+
+            /* -----------------------------------------
+               BALANCE
+            ----------------------------------------- */
+
+            let balance =
+            getBalanceInfo(
+                item
+            );
+
+
+            let previousBalance =
+            balance.previous !== null
+            ?
+            "₹ " +
+            Number(
+                balance.previous
+            )
+            .toFixed(
+                2
+            )
+            :
+            "-";
+
+
+            let newBalance =
+            balance.current !== null
+            ?
+            "₹ " +
+            Number(
+                balance.current
+            )
+            .toFixed(
+                2
+            )
+            :
+            "-";
+
+
+
+            /* -----------------------------------------
+               TRANSACTION
+            ----------------------------------------- */
+
+            let transactionId =
+            getTransactionId(
+                item
+            );
+
+
+
+            /* -----------------------------------------
+               DATE
+            ----------------------------------------- */
+
+            let date =
+            displayDate(
+                getPaymentDate(
+                    item
+                )
+            );
+
+
+
+            /* -----------------------------------------
+               TIME
+            ----------------------------------------- */
+
+            let time =
+            getPaymentTime(
+                item
+            );
+
+
+
+            /* -----------------------------------------
+               STATUS
+            ----------------------------------------- */
+
+            let status =
+            item.status ||
+            "Approved";
+
+
+
+            /* -----------------------------------------
+               ROW
+            ----------------------------------------- */
+
+            let row =
+            document.createElement(
+                "tr"
+            );
+
+
+            row.innerHTML = `
+
+            <td>
+
+                ${index + 1}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    name
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    mobile
+                )}
+
+            </td>
+
+
+            <td class="creditAmount">
+
+                + ₹ ${amount.toFixed(2)}
+
+            </td>
+
+
+            <td class="oldBalance">
+
+                ${escapeHTML(
+                    previousBalance
+                )}
+
+            </td>
+
+
+            <td class="newBalance">
+
+                ${escapeHTML(
+                    newBalance
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    safe(
+                        transactionId
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    date
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    formatTime12(
+                        time
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                <span class="status">
+
+                    ${escapeHTML(
+                        safe(
+                            status
+                        )
+                    )}
+
+                </span>
+
+            </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   37. FINAL REFRESH
+
+   Manual payment storage ko dobara read karega
+   aur current date/search filter ko preserve karega.
+===================================================== */
+
+function finalRefresh(){
+
+    loadPaymentData();
+
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    if(selectedDate){
+
+        filteredPayments =
+        allPayments.filter(
+            function(item){
+
+                return (
+
+                    normalizeDate(
+                        getPaymentDate(
+                            item
+                        )
+                    )
+
+                    ===
+
+                    selectedDate
+
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        filteredPayments =
+        [...allPayments];
+
+    }
+
+
+    renderPaymentTable();
+
+}
+
+
+
+/* =====================================================
+   38. STORAGE LIVE UPDATE
+
+   Dusre tab/page se Manual Payment hone par
+   history automatically update hogi.
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+
+            event.key === "payments"
+
+            ||
+
+            event.key === "deposits"
+
+            ||
+
+            event.key === "userBalances"
+
+            ||
+
+            event.key === "passbook"
+
+        ){
+
+            finalRefresh();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   39. WINDOW FOCUS REFRESH
+
+   Manual Payment page se history page par
+   wapas aane par fresh records dikhayega.
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        finalRefresh();
+
+    }
+);
+
+
+
+/* =====================================================
+   40. VISIBILITY REFRESH
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            finalRefresh();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   41. SAME TAB MANUAL PAYMENT SIGNAL
+
+   Future me manualpayment.html se custom event
+   dispatch karne par bhi support available rahega.
+===================================================== */
+
+window.addEventListener(
+    "manualPaymentUpdated",
+    function(){
+
+        finalRefresh();
+
+    }
+);
+
+
+
+/* =====================================================
+   42. FIRST LOAD
+
+   IMPORTANT:
+   Page open hote hi ALL manual payment history
+   dikhayenge.
+
+   TODAY button dabane par sirf today's records.
+===================================================== */
+
+function startPage(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    loadPaymentData();
+
+
+    filteredPayments =
+    [...allPayments];
+
+
+    renderPaymentTable();
+
+}
+
+
+startPage();
+
+
+
+/* =====================================================
+   43. LOCAL TEST AUTO REFRESH
+
+   LocalStorage project me same browser testing ke
+   liye har 3 second data fresh rakhega.
+===================================================== */
+
+setInterval(
+    function(){
+
+        finalRefresh();
+
+    },
+    3000
+);
+
+
+
+/* =====================================================
+   44. FINAL CONNECTION CHECK
+===================================================== */
+
+console.log(
+    "✅ HR MATKA Manual Payment History FINAL Complete Replacement Connected"
+);
+
+
+console.log(
+    "✅ Payments + User Balance + Deposit + Passbook Connection Ready"
+);
+
+
+console.log(
+    "✅ Previous Balance + New Balance + Transaction ID Connected"
+);
+
+
+console.log(
+    "✅ Search + Date Filter + Today + Clear Connected"
+);
+
+
+console.log(
+    "✅ Copy + CSV + Print + Refresh Connected"
+);
+
+
+console.log(
+    "✅ 12 Hour AM / PM Time Connected"
+);
+
+
+console.log(
+    "✅ Manual Payment History FINAL Ready"
+);
+
+
+</script>
+
+
+</body>
+
+</html>

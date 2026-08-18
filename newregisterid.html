@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>New User Register</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#111;
+color:#fff;
+min-height:100vh;
+}
+
+.header{
+background:#000;
+padding:20px;
+text-align:center;
+font-size:25px;
+font-weight:bold;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+padding:20px;
+}
+
+.form-box{
+background:#1e1e1e;
+padding:25px;
+border-radius:18px;
+box-shadow:0 5px 18px rgba(0,0,0,.45);
+}
+
+h1{
+text-align:center;
+margin-bottom:25px;
+color:#ffb300;
+font-size:24px;
+}
+
+label{
+display:block;
+margin-bottom:7px;
+font-weight:bold;
+color:#ddd;
+}
+
+input{
+width:100%;
+height:55px;
+padding:0 15px;
+margin-bottom:18px;
+border:1px solid #444;
+border-radius:10px;
+background:#292929;
+color:#fff;
+font-size:17px;
+outline:none;
+}
+
+input:focus{
+border-color:#ff9800;
+}
+
+input::placeholder{
+color:#999;
+}
+
+.registerBtn{
+width:100%;
+height:58px;
+border:none;
+border-radius:10px;
+background:#ff9800;
+color:#111;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.forgotBtn{
+width:100%;
+height:52px;
+border:none;
+border-radius:10px;
+background:#444;
+color:#fff;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+margin-top:12px;
+}
+
+.registerBtn:active,
+.forgotBtn:active{
+transform:scale(.98);
+}
+
+.back-btn{
+text-align:center;
+margin-top:20px;
+}
+
+.back-btn a{
+color:#ffb300;
+text-decoration:none;
+font-weight:bold;
+}
+
+.note{
+margin-top:15px;
+text-align:center;
+color:#999;
+font-size:13px;
+}
+
+
+/* ===================================== */
+/* FORGOT PASSWORD POPUP */
+/* ===================================== */
+
+.popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.75);
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:999;
+}
+
+.popup-box{
+width:100%;
+max-width:420px;
+background:#1d1d1d;
+padding:25px;
+border-radius:18px;
+box-shadow:0 5px 20px rgba(0,0,0,.5);
+}
+
+.popup-box h2{
+text-align:center;
+color:#ffb300;
+margin-bottom:20px;
+}
+
+.popup-btn{
+width:100%;
+height:52px;
+border:none;
+border-radius:10px;
+background:#28a745;
+color:#fff;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.cancel-btn{
+width:100%;
+height:48px;
+border:none;
+border-radius:10px;
+background:#555;
+color:#fff;
+font-size:16px;
+margin-top:10px;
+cursor:pointer;
+}
+
+@media(max-width:600px){
+
+.container{
+padding:15px;
+}
+
+.form-box{
+padding:20px 15px;
+}
+
+.header{
+font-size:22px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="header">
+NEW USER REGISTRATION
+</div>
+
+
+<div class="container">
+
+<div class="form-box">
+
+<h1>Register New User</h1>
+
+
+<label>User Name</label>
+
+<input
+type="text"
+id="name"
+placeholder="Enter User Name"
+autocomplete="off">
+
+
+<label>Mobile Number</label>
+
+<input
+type="tel"
+id="mobile"
+placeholder="Enter 10 Digit Mobile Number"
+maxlength="10"
+inputmode="numeric"
+autocomplete="off">
+
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Enter Numeric Password"
+inputmode="numeric"
+autocomplete="off">
+
+
+<label>City</label>
+
+<input
+type="text"
+id="city"
+placeholder="Enter City"
+autocomplete="off">
+
+
+<button
+class="registerBtn"
+onclick="registerUser()">
+
+REGISTER USER
+
+</button>
+
+
+<button
+class="forgotBtn"
+onclick="openForgotPassword()">
+
+FORGOT PASSWORD
+
+</button>
+
+
+<div class="back-btn">
+
+<a href="index.html">
+
+⬅ Back To Admin Panel
+
+</a>
+
+</div>
+
+
+<div class="note">
+
+One mobile number can create only one account
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ===================================== -->
+<!-- FORGOT PASSWORD POPUP -->
+<!-- ===================================== -->
+
+<div
+class="popup"
+id="forgotPopup">
+
+<div class="popup-box">
+
+<h2>Forgot Password</h2>
+
+
+<label>Registered Mobile Number</label>
+
+<input
+type="tel"
+id="forgotMobile"
+placeholder="Enter Registered Mobile"
+maxlength="10"
+inputmode="numeric">
+
+
+<label>New Password</label>
+
+<input
+type="password"
+id="newPassword"
+placeholder="Enter Numeric Password"
+inputmode="numeric">
+
+
+<label>Confirm New Password</label>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm Numeric Password"
+inputmode="numeric">
+
+
+<button
+class="popup-btn"
+onclick="changePassword()">
+
+UPDATE PASSWORD
+
+</button>
+
+
+<button
+class="cancel-btn"
+onclick="closeForgotPassword()">
+
+CANCEL
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+// =====================================
+// CAPITALIZE WORDS
+// hemant kumar -> Hemant Kumar
+// =====================================
+
+function capitalizeWords(text){
+
+return text
+.toLowerCase()
+.replace(/\b\w/g,function(letter){
+
+return letter.toUpperCase();
+
+});
+
+}
+
+
+// =====================================
+// NAME AUTO CAPITAL
+// =====================================
+
+document
+.getElementById("name")
+.addEventListener("input",function(){
+
+let cursor =
+this.selectionStart;
+
+this.value =
+capitalizeWords(this.value);
+
+this.setSelectionRange(
+cursor,
+cursor
+);
+
+});
+
+
+// =====================================
+// CITY AUTO CAPITAL
+// =====================================
+
+document
+.getElementById("city")
+.addEventListener("input",function(){
+
+let cursor =
+this.selectionStart;
+
+this.value =
+capitalizeWords(this.value);
+
+this.setSelectionRange(
+cursor,
+cursor
+);
+
+});
+
+
+// =====================================
+// ONLY NUMBER FUNCTION
+// =====================================
+
+function onlyNumbers(input){
+
+input.value =
+input.value.replace(/[^0-9]/g,"");
+
+}
+
+
+// =====================================
+// MOBILE NUMBER ONLY
+// =====================================
+
+document
+.getElementById("mobile")
+.addEventListener("input",function(){
+
+onlyNumbers(this);
+
+this.value =
+this.value.slice(0,10);
+
+});
+
+
+// =====================================
+// FORGOT MOBILE ONLY
+// =====================================
+
+document
+.getElementById("forgotMobile")
+.addEventListener("input",function(){
+
+onlyNumbers(this);
+
+this.value =
+this.value.slice(0,10);
+
+});
+
+
+// =====================================
+// PASSWORD ONLY NUMBERS
+// =====================================
+
+document
+.getElementById("password")
+.addEventListener("input",function(){
+
+onlyNumbers(this);
+
+});
+
+
+// =====================================
+// NEW PASSWORD ONLY NUMBERS
+// =====================================
+
+document
+.getElementById("newPassword")
+.addEventListener("input",function(){
+
+onlyNumbers(this);
+
+});
+
+
+// =====================================
+// CONFIRM PASSWORD ONLY NUMBERS
+// =====================================
+
+document
+.getElementById("confirmPassword")
+.addEventListener("input",function(){
+
+onlyNumbers(this);
+
+});
+
+
+// =====================================
+// REGISTER USER
+// =====================================
+
+function registerUser(){
+
+let name =
+document
+.getElementById("name")
+.value
+.trim();
+
+let mobile =
+document
+.getElementById("mobile")
+.value
+.trim();
+
+let password =
+document
+.getElementById("password")
+.value
+.trim();
+
+let city =
+document
+.getElementById("city")
+.value
+.trim();
+
+
+// Final Capital Format
+
+name =
+capitalizeWords(name);
+
+city =
+capitalizeWords(city);
+
+
+// =====================================
+// EMPTY CHECK
+// =====================================
+
+if(
+name === "" ||
+mobile === "" ||
+password === "" ||
+city === ""
+){
+
+alert("Please Fill All Fields");
+
+return;
+
+}
+
+
+// =====================================
+// MOBILE 10 DIGIT CHECK
+// =====================================
+
+if(!/^[0-9]{10}$/.test(mobile)){
+
+alert(
+"Please Enter Valid 10 Digit Mobile Number"
+);
+
+return;
+
+}
+
+
+// =====================================
+// PASSWORD NUMERIC CHECK
+// =====================================
+
+if(!/^[0-9]+$/.test(password)){
+
+alert(
+"Password Must Contain Numbers Only"
+);
+
+return;
+
+}
+
+
+// =====================================
+// PASSWORD MINIMUM LENGTH
+// =====================================
+
+if(password.length < 4){
+
+alert(
+"Password Must Be At Least 4 Digits"
+);
+
+return;
+
+}
+
+
+// =====================================
+// LOAD USERS
+// =====================================
+
+let users =
+JSON.parse(
+localStorage.getItem("users")
+) || [];
+
+
+// =====================================
+// DUPLICATE MOBILE CHECK
+// =====================================
+
+let alreadyRegistered =
+users.some(function(user){
+
+return (
+String(user.mobile || "")
+.trim() === mobile
+);
+
+});
+
+
+if(alreadyRegistered){
+
+alert(
+"This Mobile Number Is Already Registered.\n\n" +
+"Use Forgot Password To Change Password."
+);
+
+return;
+
+}
+
+
+// =====================================
+// DATE AND TIME
+// =====================================
+
+let now =
+new Date();
+
+let registrationDate =
+now.toLocaleDateString("en-GB");
+
+let registrationTime =
+now.toLocaleTimeString(
+"en-US",
+{
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hour12:true
+}
+);
+
+
+// =====================================
+// CREATE USER
+// =====================================
+
+let newUser = {
+
+id:Date.now(),
+
+name:name,
+
+mobile:mobile,
+
+password:password,
+
+city:city,
+
+balance:0,
+
+status:"Active",
+
+registrationDate:registrationDate,
+
+registrationTime:registrationTime,
+
+createdAt:now.toISOString()
+
+};
+
+
+// =====================================
+// SAVE USER
+// =====================================
+
+users.push(newUser);
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+
+// =====================================
+// CREATE WALLET
+// =====================================
+
+let userBalances =
+JSON.parse(
+localStorage.getItem("userBalances")
+) || {};
+
+
+// Existing Wallet Never Overwrite
+
+if(
+userBalances[mobile] === undefined
+){
+
+userBalances[mobile] = 0;
+
+}
+
+
+localStorage.setItem(
+"userBalances",
+JSON.stringify(userBalances)
+);
+
+
+// =====================================
+// CLEAR FORM
+// =====================================
+
+document.getElementById("name").value = "";
+
+document.getElementById("mobile").value = "";
+
+document.getElementById("password").value = "";
+
+document.getElementById("city").value = "";
+
+
+// =====================================
+// SUCCESS
+// =====================================
+
+alert(
+"User Registered Successfully"
+);
+
+}
+
+
+// =====================================
+// OPEN FORGOT PASSWORD
+// =====================================
+
+function openForgotPassword(){
+
+document
+.getElementById("forgotPopup")
+.style.display = "flex";
+
+}
+
+
+// =====================================
+// CLOSE FORGOT PASSWORD
+// =====================================
+
+function closeForgotPassword(){
+
+document
+.getElementById("forgotPopup")
+.style.display = "none";
+
+document
+.getElementById("forgotMobile")
+.value = "";
+
+document
+.getElementById("newPassword")
+.value = "";
+
+document
+.getElementById("confirmPassword")
+.value = "";
+
+}
+
+
+// =====================================
+// CHANGE PASSWORD
+// =====================================
+
+function changePassword(){
+
+let mobile =
+document
+.getElementById("forgotMobile")
+.value
+.trim();
+
+let newPassword =
+document
+.getElementById("newPassword")
+.value
+.trim();
+
+let confirmPassword =
+document
+.getElementById("confirmPassword")
+.value
+.trim();
+
+
+// =====================================
+// MOBILE CHECK
+// =====================================
+
+if(!/^[0-9]{10}$/.test(mobile)){
+
+alert(
+"Please Enter Valid Registered Mobile Number"
+);
+
+return;
+
+}
+
+
+// =====================================
+// PASSWORD NUMBER ONLY CHECK
+// =====================================
+
+if(!/^[0-9]+$/.test(newPassword)){
+
+alert(
+"Password Must Contain Numbers Only"
+);
+
+return;
+
+}
+
+
+// =====================================
+// PASSWORD LENGTH
+// =====================================
+
+if(newPassword.length < 4){
+
+alert(
+"New Password Must Be At Least 4 Digits"
+);
+
+return;
+
+}
+
+
+// =====================================
+// CONFIRM PASSWORD
+// =====================================
+
+if(newPassword !== confirmPassword){
+
+alert(
+"New Password And Confirm Password Do Not Match"
+);
+
+return;
+
+}
+
+
+// =====================================
+// LOAD USERS
+// =====================================
+
+let users =
+JSON.parse(
+localStorage.getItem("users")
+) || [];
+
+
+// =====================================
+// FIND USER
+// =====================================
+
+let userIndex =
+users.findIndex(function(user){
+
+return (
+String(user.mobile || "")
+.trim() === mobile
+);
+
+});
+
+
+// =====================================
+// USER NOT FOUND
+// =====================================
+
+if(userIndex === -1){
+
+alert(
+"Mobile Number Is Not Registered"
+);
+
+return;
+
+}
+
+
+// =====================================
+// UPDATE PASSWORD
+// =====================================
+
+users[userIndex].password =
+newPassword;
+
+users[userIndex].passwordUpdatedAt =
+new Date().toISOString();
+
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+
+// =====================================
+// SUCCESS
+// =====================================
+
+alert(
+"Password Updated Successfully"
+);
+
+
+closeForgotPassword();
+
+}
+
+
+console.log(
+"New User Registration Final Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

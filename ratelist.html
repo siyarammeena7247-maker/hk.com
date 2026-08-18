@@ -1,0 +1,712 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rate List</title>
+
+<style>
+
+/* =========================================
+   HR MATKA - ADMIN RATE LIST
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+    color:#222;
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    padding:15px;
+}
+
+/* =========================================
+   HEADING
+========================================= */
+
+.page-title{
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:18px;
+    border-radius:12px;
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:18px;
+    box-shadow:0 3px 10px rgba(0,0,0,.20);
+}
+
+/* =========================================
+   RATE CARD
+========================================= */
+
+.rate-box{
+    background:#fff;
+    padding:18px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.rate-row{
+    margin-bottom:16px;
+}
+
+.rate-row label{
+    display:block;
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.rate-row input{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #ccc;
+    border-radius:9px;
+    font-size:17px;
+    outline:none;
+}
+
+.rate-row input:focus{
+    border-color:#d9b436;
+    box-shadow:0 0 0 2px rgba(217,180,54,.15);
+}
+
+/* =========================================
+   SAVE BUTTON
+========================================= */
+
+.save-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#28a745;
+    color:#fff;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+.save-btn:active{
+    transform:scale(.99);
+}
+
+/* =========================================
+   CURRENT RATE PREVIEW
+========================================= */
+
+.preview-box{
+    margin-top:20px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    overflow:hidden;
+}
+
+.preview-title{
+    background:#d9b436;
+    color:#111;
+    text-align:center;
+    padding:14px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.preview-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:13px 15px;
+    border-bottom:1px solid #eee;
+}
+
+.preview-row:last-child{
+    border-bottom:none;
+}
+
+.preview-name{
+    font-weight:bold;
+}
+
+.preview-rate{
+    color:#28a745;
+    font-weight:bold;
+}
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-btn{
+    display:block;
+    width:100%;
+    margin-top:18px;
+    padding:13px;
+    text-align:center;
+    text-decoration:none;
+    background:#0d6efd;
+    color:#fff;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:600px){
+
+    .container{
+        padding:10px;
+    }
+
+    .page-title{
+        font-size:22px;
+        padding:15px;
+    }
+
+    .rate-box{
+        padding:15px;
+    }
+
+    .rate-row label{
+        font-size:15px;
+    }
+
+    .rate-row input{
+        font-size:16px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =====================================
+         PAGE TITLE
+    ====================================== -->
+
+    <div class="page-title">
+        Rate List Setting
+    </div>
+
+
+    <!-- =====================================
+         RATE FORM
+    ====================================== -->
+
+    <div class="rate-box">
+
+        <div class="rate-row">
+
+            <label>
+                Single Rate
+            </label>
+
+            <input
+            type="number"
+            id="singleRate"
+            placeholder="Example: 9">
+
+        </div>
+
+
+        <div class="rate-row">
+
+            <label>
+                Jodi Rate
+            </label>
+
+            <input
+            type="number"
+            id="jodiRate"
+            placeholder="Example: 90">
+
+        </div>
+
+
+        <div class="rate-row">
+
+            <label>
+                Single Panna Rate
+            </label>
+
+            <input
+            type="number"
+            id="singlePannaRate"
+            placeholder="Example: 140">
+
+        </div>
+
+
+        <div class="rate-row">
+
+            <label>
+                Double Panna Rate
+            </label>
+
+            <input
+            type="number"
+            id="doublePannaRate"
+            placeholder="Example: 280">
+
+        </div>
+
+
+        <div class="rate-row">
+
+            <label>
+                Triple Panna Rate
+            </label>
+
+            <input
+            type="number"
+            id="triplePannaRate"
+            placeholder="Example: 600">
+
+        </div>
+
+
+        <div class="rate-row">
+
+            <label>
+                Half Sangam Rate
+            </label>
+
+            <input
+            type="number"
+            id="halfSangamRate"
+            placeholder="Example: 1000">
+
+        </div>
+
+
+        <div class="rate-row">
+
+            <label>
+                Full Sangam Rate
+            </label>
+
+            <input
+            type="number"
+            id="fullSangamRate"
+            placeholder="Example: 10000">
+
+        </div>
+
+
+        <button
+        class="save-btn"
+        type="button"
+        onclick="saveRates()">
+
+            Save Rate List
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================
+         CURRENT RATE PREVIEW
+    ====================================== -->
+
+    <div class="preview-box">
+
+        <div class="preview-title">
+            Current Rate List
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Single
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showSingle">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Jodi
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showJodi">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Single Panna
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showSinglePanna">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Double Panna
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showDoublePanna">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Triple Panna
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showTriplePanna">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Half Sangam
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showHalfSangam">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+
+        <div class="preview-row">
+
+            <span class="preview-name">
+                Full Sangam
+            </span>
+
+            <span
+            class="preview-rate"
+            id="showFullSangam">
+
+                1 Rs Ka 0 Rs
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <a
+    href="index.html"
+    class="back-btn">
+
+        ← Back To Admin Panel
+
+    </a>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   HR MATKA RATE LIST SCRIPT
+========================================= */
+
+
+/* =========================================
+   CAPITALIZE FIRST WORD
+========================================= */
+
+function capitalizeFirst(text){
+
+    if(!text){
+        return "";
+    }
+
+    return text.charAt(0).toUpperCase() +
+           text.slice(1);
+
+}
+
+
+/* =========================================
+   SAVE RATE LIST
+========================================= */
+
+function saveRates(){
+
+    let singleRate =
+    document.getElementById("singleRate").value.trim();
+
+    let jodiRate =
+    document.getElementById("jodiRate").value.trim();
+
+    let singlePannaRate =
+    document.getElementById("singlePannaRate").value.trim();
+
+    let doublePannaRate =
+    document.getElementById("doublePannaRate").value.trim();
+
+    let triplePannaRate =
+    document.getElementById("triplePannaRate").value.trim();
+
+    let halfSangamRate =
+    document.getElementById("halfSangamRate").value.trim();
+
+    let fullSangamRate =
+    document.getElementById("fullSangamRate").value.trim();
+
+
+    /* =====================================
+       VALIDATION
+    ====================================== */
+
+    if(
+        singleRate === "" ||
+        jodiRate === "" ||
+        singlePannaRate === "" ||
+        doublePannaRate === "" ||
+        triplePannaRate === "" ||
+        halfSangamRate === "" ||
+        fullSangamRate === ""
+    ){
+
+        alert("Please Fill All Rate Fields");
+
+        return;
+
+    }
+
+
+    /* =====================================
+       CREATE RATE OBJECT
+    ====================================== */
+
+    let rateData = {
+
+        single:
+        Number(singleRate),
+
+        jodi:
+        Number(jodiRate),
+
+        singlePanna:
+        Number(singlePannaRate),
+
+        doublePanna:
+        Number(doublePannaRate),
+
+        triplePanna:
+        Number(triplePannaRate),
+
+        halfSangam:
+        Number(halfSangamRate),
+
+        fullSangam:
+        Number(fullSangamRate),
+
+        updatedAt:
+        new Date().toISOString()
+
+    };
+
+
+    /* =====================================
+       SAVE IN LOCAL STORAGE
+    ====================================== */
+
+    localStorage.setItem(
+        "gameRates",
+        JSON.stringify(rateData)
+    );
+
+
+    alert(
+        "Rate List Saved Successfully"
+    );
+
+
+    loadRates();
+
+}
+
+
+/* =========================================
+   LOAD SAVED RATE LIST
+========================================= */
+
+function loadRates(){
+
+    let rates =
+    JSON.parse(
+        localStorage.getItem("gameRates")
+    );
+
+
+    if(!rates){
+
+        return;
+
+    }
+
+
+    /* =====================================
+       FILL INPUT BOXES
+    ====================================== */
+
+    document.getElementById("singleRate").value =
+    rates.single || "";
+
+    document.getElementById("jodiRate").value =
+    rates.jodi || "";
+
+    document.getElementById("singlePannaRate").value =
+    rates.singlePanna || "";
+
+    document.getElementById("doublePannaRate").value =
+    rates.doublePanna || "";
+
+    document.getElementById("triplePannaRate").value =
+    rates.triplePanna || "";
+
+    document.getElementById("halfSangamRate").value =
+    rates.halfSangam || "";
+
+    document.getElementById("fullSangamRate").value =
+    rates.fullSangam || "";
+
+
+    /* =====================================
+       PREVIEW RATE LIST
+    ====================================== */
+
+    document.getElementById("showSingle").innerHTML =
+    "1 Rs Ka " +
+    (rates.single || 0) +
+    " Rs";
+
+
+    document.getElementById("showJodi").innerHTML =
+    "1 Rs Ka " +
+    (rates.jodi || 0) +
+    " Rs";
+
+
+    document.getElementById("showSinglePanna").innerHTML =
+    "1 Rs Ka " +
+    (rates.singlePanna || 0) +
+    " Rs";
+
+
+    document.getElementById("showDoublePanna").innerHTML =
+    "1 Rs Ka " +
+    (rates.doublePanna || 0) +
+    " Rs";
+
+
+    document.getElementById("showTriplePanna").innerHTML =
+    "1 Rs Ka " +
+    (rates.triplePanna || 0) +
+    " Rs";
+
+
+    document.getElementById("showHalfSangam").innerHTML =
+    "1 Rs Ka " +
+    (rates.halfSangam || 0) +
+    " Rs";
+
+
+    document.getElementById("showFullSangam").innerHTML =
+    "1 Rs Ka " +
+    (rates.fullSangam || 0) +
+    " Rs";
+
+}
+
+
+/* =========================================
+   PAGE OPEN
+========================================= */
+
+loadRates();
+
+
+console.log(
+    "✅ HR MATKA Rate List Connected"
+);
+
+</script>
+
+</body>
+
+</html>

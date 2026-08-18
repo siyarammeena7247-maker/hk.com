@@ -1,0 +1,3032 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Manual Payment - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   MANUALPAYMENT.HTML
+   FINAL COMPLETE REPLACEMENT
+
+   IMPORTANT FIX:
+   Amount field type="number" hata diya gaya hai.
+   Ab scroll/mouse wheel se amount change nahi hoga.
+
+   FEATURES:
+   1. Mobile Number se User Search
+   2. User Name Display
+   3. Current Wallet Balance
+   4. Bank / UPI Details
+   5. Exact Manual Wallet Credit
+   6. Unique Transaction ID
+   7. Duplicate Click Protection
+   8. Payments History Entry
+   9. Deposit History Approved Entry
+   10. Wallet Passbook Credit Entry
+   11. Today's Added Money Sync
+   12. Admin Dashboard Sync
+   13. 12 Hour AM / PM
+   14. User Name Capitalization
+   15. Safe LocalStorage
+   16. Transaction Rollback Protection
+   17. EXACT AMOUNT PROTECTION
+===================================================== */
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#f3f4f6;
+    color:#222222;
+    min-height:100vh;
+    padding:15px;
+}
+
+
+button,
+input{
+    font:inherit;
+}
+
+
+.container{
+    width:100%;
+    max-width:720px;
+    margin:auto;
+}
+
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    background:#ffbd12;
+    color:#111111;
+    padding:18px 15px;
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+    border-radius:10px;
+    margin-bottom:18px;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+
+
+
+/* =====================================================
+   MAIN CARD
+===================================================== */
+
+.card{
+    background:#ffffff;
+    padding:22px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.12);
+}
+
+
+
+/* =====================================================
+   LABEL / INPUT
+===================================================== */
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-top:15px;
+    margin-bottom:7px;
+    color:#333333;
+}
+
+
+input{
+    width:100%;
+    min-height:47px;
+    padding:12px 13px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:16px;
+    outline:none;
+    background:#ffffff;
+}
+
+
+input:focus{
+    border-color:#ffb300;
+    box-shadow:0 0 0 2px rgba(255,179,0,.10);
+}
+
+
+input[readonly]{
+    background:#f5f5f5;
+    color:#333333;
+}
+
+
+
+/* =====================================================
+   USER STATUS
+===================================================== */
+
+.user-status{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    border-radius:8px;
+    font-weight:bold;
+    text-align:center;
+}
+
+
+.user-found{
+    background:#e6f7ea;
+    color:#168333;
+}
+
+
+.user-not-found{
+    background:#ffe7e7;
+    color:#c62828;
+}
+
+
+
+/* =====================================================
+   WALLET
+===================================================== */
+
+.wallet-box{
+    background:linear-gradient(
+        135deg,
+        #218b3d,
+        #43b64c
+    );
+
+    color:#ffffff;
+    padding:19px 12px;
+    border-radius:11px;
+    margin-top:18px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.14);
+}
+
+
+.wallet-box p{
+    font-size:14px;
+    margin-bottom:6px;
+}
+
+
+.wallet-box h2{
+    font-size:30px;
+}
+
+
+
+/* =====================================================
+   TRANSACTION PREVIEW
+===================================================== */
+
+.previewBox{
+    display:none;
+    background:#fff8e1;
+    border-left:5px solid #ffb300;
+    padding:13px;
+    margin-top:17px;
+    border-radius:8px;
+    line-height:1.6;
+    color:#6d4c41;
+    font-size:13px;
+}
+
+
+.previewAmount{
+    font-size:20px;
+    font-weight:bold;
+    color:#159447;
+}
+
+
+
+/* =====================================================
+   SUBMIT
+===================================================== */
+
+.submit-btn{
+    width:100%;
+    min-height:51px;
+    padding:14px;
+    margin-top:22px;
+    border:none;
+    border-radius:8px;
+    background:#ffc107;
+    color:#111111;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.submit-btn:hover{
+    background:#ffb300;
+}
+
+
+.submit-btn:disabled{
+    background:#cccccc;
+    color:#666666;
+    cursor:not-allowed;
+}
+
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+.back-btn{
+    display:block;
+    margin-top:18px;
+    padding:14px;
+    background:#405665;
+    color:#ffffff;
+    text-decoration:none;
+    text-align:center;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+.popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.58);
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:15px;
+}
+
+
+.popup-box{
+    background:#ffffff;
+    width:100%;
+    max-width:410px;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.30);
+    text-align:center;
+}
+
+
+.successIcon{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:#22a559;
+    color:#ffffff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 15px;
+    font-size:35px;
+}
+
+
+.popup-box h2{
+    font-size:21px;
+    margin-bottom:12px;
+}
+
+
+.popup-box p{
+    font-size:15px;
+    line-height:1.6;
+    color:#444444;
+}
+
+
+.transactionRef{
+    display:block;
+    margin-top:10px;
+    padding:9px;
+    border-radius:7px;
+    background:#f3f4f6;
+    color:#333333;
+    font-size:12px;
+    word-break:break-all;
+}
+
+
+.close-btn{
+    width:100%;
+    margin-top:20px;
+    padding:13px;
+    border:none;
+    border-radius:8px;
+    background:#405665;
+    color:#ffffff;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+
+    .card{
+        padding:17px;
+    }
+
+
+    .header{
+        font-size:22px;
+        padding:15px 10px;
+    }
+
+
+    .wallet-box h2{
+        font-size:27px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="header">
+
+    MANUAL PAYMENTS
+
+</div>
+
+
+
+<div class="card">
+
+
+<label for="mobile">
+
+    Mobile Number
+
+</label>
+
+
+<input
+type="tel"
+id="mobile"
+maxlength="10"
+inputmode="numeric"
+autocomplete="off"
+placeholder="Enter 10 Digit Mobile Number">
+
+
+
+<div
+id="userStatus"
+class="user-status">
+</div>
+
+
+
+<label for="username">
+
+    User Name
+
+</label>
+
+
+<input
+type="text"
+id="username"
+readonly>
+
+
+
+<div class="wallet-box">
+
+    <p>
+        Current Wallet Balance
+    </p>
+
+    <h2>
+
+        ₹
+        <span id="walletAmount">
+            0.00
+        </span>
+
+    </h2>
+
+</div>
+
+
+
+<label for="bankName">
+
+    Bank Name
+
+</label>
+
+
+<input
+type="text"
+id="bankName"
+readonly>
+
+
+
+<label for="accountNumber">
+
+    Account Number
+
+</label>
+
+
+<input
+type="text"
+id="accountNumber"
+readonly>
+
+
+
+<label for="ifscCode">
+
+    IFSC Code
+
+</label>
+
+
+<input
+type="text"
+id="ifscCode"
+readonly>
+
+
+
+<label for="upiId">
+
+    UPI ID
+
+</label>
+
+
+<input
+type="text"
+id="upiId"
+readonly>
+
+
+
+<label for="amount">
+
+    Add Amount
+
+</label>
+
+
+<!-- =====================================================
+     IMPORTANT FIX
+
+     type="number" NAHI hai.
+
+     Ab mouse wheel / scroll se:
+     500 -> 498
+     500 -> 502
+
+     jaisi problem nahi hogi.
+===================================================== -->
+
+<input
+type="text"
+id="amount"
+inputmode="numeric"
+autocomplete="off"
+placeholder="Enter Amount"
+maxlength="10">
+
+
+
+<div
+id="previewBox"
+class="previewBox">
+
+    <div>
+        Wallet Credit Preview
+    </div>
+
+    <div
+    id="previewAmount"
+    class="previewAmount">
+
+        + ₹ 0.00
+
+    </div>
+
+</div>
+
+
+
+<button
+type="button"
+id="submitBtn"
+class="submit-btn">
+
+    ADD AMOUNT
+
+</button>
+
+
+
+<a
+href="index.html"
+class="back-btn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SUCCESS POPUP
+===================================================== -->
+
+<div
+class="popup"
+id="popup">
+
+
+<div class="popup-box">
+
+
+<div class="successIcon">
+
+    ✓
+
+</div>
+
+
+<h2>
+
+    Payment Successful
+
+</h2>
+
+
+<p id="popupMessage">
+
+    Manual Payment Added Successfully
+
+</p>
+
+
+<span
+id="transactionRef"
+class="transactionRef">
+
+    Transaction ID: -
+
+</span>
+
+
+<button
+type="button"
+class="close-btn"
+onclick="closePopup()">
+
+    CLOSE
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   MANUAL PAYMENT
+   FINAL EXACT-AMOUNT ENGINE
+===================================================== */
+
+
+
+let selectedUser =
+null;
+
+
+let isSubmitting =
+false;
+
+
+
+/* =====================================================
+   SAFE STORAGE
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+function normalizeMobile(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\D/g,
+        ""
+    )
+    .slice(
+        0,
+        10
+    );
+
+}
+
+
+
+/* =====================================================
+   NAME
+===================================================== */
+
+function capitalizeName(name){
+
+    return String(
+        name || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /\b[a-z]/g,
+        function(letter){
+
+            return letter.toUpperCase();
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   DATE + TIME
+===================================================== */
+
+function getCurrentDateTime(){
+
+    let now =
+    new Date();
+
+
+    let displayTime =
+    now.toLocaleTimeString(
+        "en-US",
+        {
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:true
+        }
+    )
+    .replace(
+        /\bam\b/gi,
+        "AM"
+    )
+    .replace(
+        /\bpm\b/gi,
+        "PM"
+    );
+
+
+    return {
+
+        date:
+        now.toLocaleDateString(
+            "en-GB"
+        ),
+
+        time:
+        displayTime,
+
+        timestamp:
+        now.getTime(),
+
+        iso:
+        now.toISOString()
+
+    };
+
+}
+
+
+
+/* =====================================================
+   TODAY ISO
+===================================================== */
+
+function getTodayISO(){
+
+    let now =
+    new Date();
+
+
+    return (
+
+        now.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            now.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            now.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   NORMALIZE DATE
+===================================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    let slash =
+    text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slash){
+
+        return (
+
+            slash[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slash[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slash[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    if(
+        /^\d{4}-\d{2}-\d{2}/
+        .test(
+            text
+        )
+    ){
+
+        return text.substring(
+            0,
+            10
+        );
+
+    }
+
+
+    let parsed =
+    new Date(
+        text
+    );
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    return (
+
+        parsed.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   TRANSACTION ID
+===================================================== */
+
+function createTransactionId(){
+
+    let now =
+    Date.now();
+
+
+    let random =
+    Math.floor(
+        100000 +
+        Math.random() *
+        900000
+    );
+
+
+    return (
+
+        "MP-"
+
+        +
+
+        now
+
+        +
+
+        "-"
+
+        +
+
+        random
+
+    );
+
+}
+
+
+
+/* =====================================================
+   CLEAR USER
+===================================================== */
+
+function clearUserDetails(){
+
+    selectedUser =
+    null;
+
+
+    document
+    .getElementById(
+        "username"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "walletAmount"
+    )
+    .innerText =
+    "0.00";
+
+
+    document
+    .getElementById(
+        "bankName"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "accountNumber"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "ifscCode"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "upiId"
+    )
+    .value =
+    "";
+
+}
+
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function showStatus(
+    message,
+    type
+){
+
+    let box =
+    document
+    .getElementById(
+        "userStatus"
+    );
+
+
+    box.style.display =
+    "block";
+
+
+    box.className =
+
+    "user-status "
+
+    +
+
+    (
+        type === "success"
+        ?
+        "user-found"
+        :
+        "user-not-found"
+    );
+
+
+    box.textContent =
+    message;
+
+}
+
+
+
+function hideStatus(){
+
+    document
+    .getElementById(
+        "userStatus"
+    )
+    .style.display =
+    "none";
+
+}
+
+
+
+/* =====================================================
+   BALANCE KEY
+===================================================== */
+
+function findBalanceKey(
+    balances,
+    mobile
+){
+
+    let normalized =
+    normalizeMobile(
+        mobile
+    );
+
+
+    let keys =
+    Object.keys(
+        balances
+    );
+
+
+    let found =
+    keys.find(
+        function(key){
+
+            return (
+                normalizeMobile(
+                    key
+                )
+                ===
+                normalized
+            );
+
+        }
+    );
+
+
+    return (
+        found ||
+        normalized
+    );
+
+}
+
+
+
+/* =====================================================
+   FIND USER
+===================================================== */
+
+function findUser(){
+
+    let mobile =
+    normalizeMobile(
+        document
+        .getElementById(
+            "mobile"
+        )
+        .value
+    );
+
+
+    clearUserDetails();
+
+
+    if(
+        mobile.length ===
+        0
+    ){
+
+        hideStatus();
+
+        return;
+
+    }
+
+
+    if(
+        mobile.length !==
+        10
+    ){
+
+        showStatus(
+            "Enter Complete 10 Digit Mobile Number",
+            "error"
+        );
+
+
+        return;
+
+    }
+
+
+    let users =
+    getStorage(
+        "users",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            users
+        )
+    ){
+
+        users = [];
+
+    }
+
+
+    let user =
+    users.find(
+        function(item){
+
+            return (
+
+                normalizeMobile(
+                    item.mobile
+                )
+
+                ===
+
+                mobile
+
+            );
+
+        }
+    );
+
+
+    if(!user){
+
+        showStatus(
+            "User Not Found",
+            "error"
+        );
+
+
+        return;
+
+    }
+
+
+    selectedUser =
+    user;
+
+
+    document
+    .getElementById(
+        "username"
+    )
+    .value =
+    capitalizeName(
+        user.name
+    );
+
+
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    if(
+        !balances ||
+        Array.isArray(
+            balances
+        ) ||
+        typeof balances !==
+        "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    let balanceKey =
+    findBalanceKey(
+        balances,
+        mobile
+    );
+
+
+    let balance =
+    Number(
+        balances[
+            balanceKey
+        ] || 0
+    );
+
+
+    if(
+        !Number.isFinite(
+            balance
+        )
+    ){
+
+        balance = 0;
+
+    }
+
+
+    document
+    .getElementById(
+        "walletAmount"
+    )
+    .innerText =
+    balance.toFixed(
+        2
+    );
+
+
+
+    let bankDetails =
+    getStorage(
+        "bankDetails",
+        {}
+    );
+
+
+    if(
+        !bankDetails ||
+        Array.isArray(
+            bankDetails
+        ) ||
+        typeof bankDetails !==
+        "object"
+    ){
+
+        bankDetails = {};
+
+    }
+
+
+    let bank =
+    bankDetails[mobile] ||
+    bankDetails[balanceKey] ||
+    {};
+
+
+    document
+    .getElementById(
+        "bankName"
+    )
+    .value =
+
+    bank.bankName ||
+
+    bank.bank ||
+
+    user.bankName ||
+
+    user.bank ||
+
+    "";
+
+
+    document
+    .getElementById(
+        "accountNumber"
+    )
+    .value =
+
+    bank.accountNumber ||
+
+    bank.accountNo ||
+
+    bank.number ||
+
+    user.accountNumber ||
+
+    user.accountNo ||
+
+    "";
+
+
+    document
+    .getElementById(
+        "ifscCode"
+    )
+    .value =
+
+    bank.ifscCode ||
+
+    bank.ifsc ||
+
+    user.ifscCode ||
+
+    user.ifsc ||
+
+    "";
+
+
+    document
+    .getElementById(
+        "upiId"
+    )
+    .value =
+
+    bank.upiId ||
+
+    bank.upi ||
+
+    user.upiId ||
+
+    user.upi ||
+
+    "";
+
+
+
+    let upiDetails =
+    getStorage(
+        "upiDetails",
+        {}
+    );
+
+
+    if(
+        !upiDetails ||
+        Array.isArray(
+            upiDetails
+        ) ||
+        typeof upiDetails !==
+        "object"
+    ){
+
+        upiDetails = {};
+
+    }
+
+
+    let upiRecord =
+    upiDetails[mobile] ||
+    upiDetails[balanceKey] ||
+    {};
+
+
+    if(
+        !document
+        .getElementById(
+            "upiId"
+        )
+        .value
+    ){
+
+        document
+        .getElementById(
+            "upiId"
+        )
+        .value =
+
+        upiRecord.upiId ||
+
+        upiRecord.upi ||
+
+        "";
+
+    }
+
+
+    showStatus(
+        "User Found ✓",
+        "success"
+    );
+
+}
+
+
+
+/* =====================================================
+   EXACT AMOUNT INPUT
+
+   IMPORTANT:
+   Sirf digits allow honge.
+
+   Mouse wheel se amount change nahi hoga.
+===================================================== */
+
+function sanitizeAmountInput(){
+
+    let input =
+    document
+    .getElementById(
+        "amount"
+    );
+
+
+    input.value =
+    String(
+        input.value || ""
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+
+    updateAmountPreview();
+
+}
+
+
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+function updateAmountPreview(){
+
+    let rawAmount =
+    document
+    .getElementById(
+        "amount"
+    )
+    .value
+    .trim();
+
+
+    let amount =
+    Number(
+        rawAmount
+    );
+
+
+    let previewBox =
+    document
+    .getElementById(
+        "previewBox"
+    );
+
+
+    if(
+        rawAmount === ""
+        ||
+        !Number.isFinite(
+            amount
+        )
+        ||
+        amount <= 0
+    ){
+
+        previewBox.style.display =
+        "none";
+
+
+        return;
+
+    }
+
+
+    document
+    .getElementById(
+        "previewAmount"
+    )
+    .innerText =
+
+    "+ ₹ " +
+    amount.toFixed(
+        2
+    );
+
+
+    previewBox.style.display =
+    "block";
+
+}
+
+
+
+/* =====================================================
+   TODAY ADDED MONEY
+===================================================== */
+
+function calculateTodayAddedMoney(
+    deposits
+){
+
+    let today =
+    getTodayISO();
+
+
+    let total =
+    0;
+
+
+    deposits.forEach(
+        function(item){
+
+            let status =
+            String(
+                item.status || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+            if(
+                status !==
+                "APPROVED"
+            ){
+
+                return;
+
+            }
+
+
+            let approvedDate =
+            normalizeDate(
+
+                item.approvedDate ||
+
+                item.date
+
+            );
+
+
+            if(
+                approvedDate ===
+                today
+            ){
+
+                let amount =
+                Number(
+                    item.amount || 0
+                );
+
+
+                if(
+                    Number.isFinite(
+                        amount
+                    )
+                ){
+
+                    total +=
+                    amount;
+
+                }
+
+            }
+
+        }
+    );
+
+
+    return total;
+
+}
+
+
+
+/* =====================================================
+   SAFE COMMIT
+===================================================== */
+
+function commitStorageUpdates(
+    updates
+){
+
+    let backups =
+    {};
+
+
+    try{
+
+        Object.keys(
+            updates
+        )
+        .forEach(
+            function(key){
+
+                backups[key] =
+                localStorage.getItem(
+                    key
+                );
+
+            }
+        );
+
+
+        Object.keys(
+            updates
+        )
+        .forEach(
+            function(key){
+
+                let config =
+                updates[key];
+
+
+                if(
+                    config.raw === true
+                ){
+
+                    localStorage.setItem(
+                        key,
+                        String(
+                            config.value
+                        )
+                    );
+
+                }
+
+                else{
+
+                    localStorage.setItem(
+                        key,
+                        JSON.stringify(
+                            config.value
+                        )
+                    );
+
+                }
+
+            }
+        );
+
+
+        return true;
+
+    }
+    catch(error){
+
+        console.error(
+            "Manual Payment Commit Error:",
+            error
+        );
+
+
+        Object.keys(
+            backups
+        )
+        .forEach(
+            function(key){
+
+                try{
+
+                    if(
+                        backups[key] ===
+                        null
+                    ){
+
+                        localStorage.removeItem(
+                            key
+                        );
+
+                    }
+
+                    else{
+
+                        localStorage.setItem(
+                            key,
+                            backups[key]
+                        );
+
+                    }
+
+                }
+                catch(restoreError){
+
+                    console.error(
+                        "Rollback Error:",
+                        key,
+                        restoreError
+                    );
+
+                }
+
+            }
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SAVE PAYMENT
+===================================================== */
+
+function savePayment(){
+
+    if(isSubmitting){
+
+        return;
+
+    }
+
+
+    let mobile =
+    normalizeMobile(
+        document
+        .getElementById(
+            "mobile"
+        )
+        .value
+    );
+
+
+    let amountText =
+    document
+    .getElementById(
+        "amount"
+    )
+    .value
+    .trim();
+
+
+    /*
+       FINAL EXACT AMOUNT
+
+       Example:
+       "500" -> Number = 500
+
+       Koi fee / deduction nahi.
+    */
+
+    let amount =
+    Number(
+        amountText
+    );
+
+
+
+    if(
+        mobile.length !==
+        10
+    ){
+
+        alert(
+            "Please Enter Valid 10 Digit Mobile Number"
+        );
+
+
+        return;
+
+    }
+
+
+
+    if(
+        amountText === ""
+        ||
+        !Number.isFinite(
+            amount
+        )
+        ||
+        amount <= 0
+        ||
+        !Number.isInteger(
+            amount
+        )
+    ){
+
+        alert(
+            "Please Enter Valid Amount"
+        );
+
+
+        return;
+
+    }
+
+
+
+    let users =
+    getStorage(
+        "users",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            users
+        )
+    ){
+
+        users = [];
+
+    }
+
+
+    let user =
+    users.find(
+        function(item){
+
+            return (
+
+                normalizeMobile(
+                    item.mobile
+                )
+
+                ===
+
+                mobile
+
+            );
+
+        }
+    );
+
+
+    if(!user){
+
+        selectedUser =
+        null;
+
+
+        alert(
+            "User Not Found"
+        );
+
+
+        findUser();
+
+
+        return;
+
+    }
+
+
+    selectedUser =
+    user;
+
+
+    let userName =
+    capitalizeName(
+        user.name
+    );
+
+
+
+    let confirmed =
+    confirm(
+
+        "Manual Payment Confirm Karein?"
+
+        +
+
+        "\n\nUser: "
+
+        +
+
+        userName
+
+        +
+
+        "\nMobile: "
+
+        +
+
+        mobile
+
+        +
+
+        "\nAmount: ₹ "
+
+        +
+
+        amount.toFixed(2)
+
+    );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+
+    isSubmitting =
+    true;
+
+
+    let submitButton =
+    document
+    .getElementById(
+        "submitBtn"
+    );
+
+
+    submitButton.disabled =
+    true;
+
+
+    submitButton.innerText =
+    "PROCESSING...";
+
+
+
+    try{
+
+
+        let balances =
+        getStorage(
+            "userBalances",
+            {}
+        );
+
+
+        let payments =
+        getStorage(
+            "payments",
+            []
+        );
+
+
+        let deposits =
+        getStorage(
+            "deposits",
+            []
+        );
+
+
+        let passbook =
+        getStorage(
+            "passbook",
+            []
+        );
+
+
+        if(
+            !balances ||
+            Array.isArray(
+                balances
+            ) ||
+            typeof balances !==
+            "object"
+        ){
+
+            balances = {};
+
+        }
+
+
+        if(
+            !Array.isArray(
+                payments
+            )
+        ){
+
+            payments = [];
+
+        }
+
+
+        if(
+            !Array.isArray(
+                deposits
+            )
+        ){
+
+            deposits = [];
+
+        }
+
+
+        if(
+            !Array.isArray(
+                passbook
+            )
+        ){
+
+            passbook = [];
+
+        }
+
+
+
+        let balanceKey =
+        findBalanceKey(
+            balances,
+            mobile
+        );
+
+
+        let previousBalance =
+        Number(
+            balances[
+                balanceKey
+            ] || 0
+        );
+
+
+        if(
+            !Number.isFinite(
+                previousBalance
+            )
+        ){
+
+            previousBalance =
+            0;
+
+        }
+
+
+
+        /*
+           EXACT WALLET CALCULATION
+
+           Previous 500
+           Add 500
+           New 1000
+
+           No -2
+           No fee
+           No percentage
+        */
+
+        let currentBalance =
+        previousBalance +
+        amount;
+
+
+
+        let transactionId =
+        createTransactionId();
+
+
+        let dateTime =
+        getCurrentDateTime();
+
+
+
+        let duplicate =
+        deposits.some(
+            function(item){
+
+                return (
+
+                    String(
+                        item.transactionId || ""
+                    )
+
+                    ===
+
+                    transactionId
+
+                );
+
+            }
+        );
+
+
+        if(duplicate){
+
+            transactionId =
+            createTransactionId();
+
+        }
+
+
+
+        let paymentRecord = {
+
+            id:
+            dateTime.timestamp,
+
+            transactionId:
+            transactionId,
+
+            referenceId:
+            transactionId,
+
+            requestId:
+            transactionId,
+
+            username:
+            userName,
+
+            name:
+            userName,
+
+            mobile:
+            mobile,
+
+            amount:
+            amount,
+
+            date:
+            dateTime.date,
+
+            time:
+            dateTime.time,
+
+            approvedDate:
+            dateTime.date,
+
+            approvedTime:
+            dateTime.time,
+
+            paymentMode:
+            "Manual Payment",
+
+            type:
+            "Manual Payment",
+
+            status:
+            "Approved",
+
+            previousBalance:
+            previousBalance,
+
+            currentBalance:
+            currentBalance,
+
+            timestamp:
+            dateTime.timestamp,
+
+            createdTimestamp:
+            dateTime.timestamp,
+
+            approvedTimestamp:
+            dateTime.timestamp,
+
+            createdAt:
+            dateTime.iso,
+
+            approvedAt:
+            dateTime.iso,
+
+            source:
+            "manualpayment.html"
+
+        };
+
+
+        payments.push(
+            paymentRecord
+        );
+
+
+
+        let depositRecord = {
+
+            id:
+            dateTime.timestamp,
+
+            transactionId:
+            transactionId,
+
+            referenceId:
+            transactionId,
+
+            requestId:
+            transactionId,
+
+            utr:
+            transactionId,
+
+            name:
+            userName,
+
+            username:
+            userName,
+
+            mobile:
+            mobile,
+
+            amount:
+            amount,
+
+            date:
+            dateTime.date,
+
+            time:
+            dateTime.time,
+
+            requestDate:
+            dateTime.date,
+
+            requestTime:
+            dateTime.time,
+
+            approvedDate:
+            dateTime.date,
+
+            approvedTime:
+            dateTime.time,
+
+            paymentMode:
+            "Manual Payment",
+
+            type:
+            "Manual Payment",
+
+            status:
+            "Approved",
+
+            walletCredited:
+            true,
+
+            walletCreditAmount:
+            amount,
+
+            previousBalance:
+            previousBalance,
+
+            currentBalance:
+            currentBalance,
+
+            timestamp:
+            dateTime.timestamp,
+
+            createdTimestamp:
+            dateTime.timestamp,
+
+            approvedTimestamp:
+            dateTime.timestamp,
+
+            updatedTimestamp:
+            dateTime.timestamp,
+
+            createdAt:
+            dateTime.iso,
+
+            approvedAt:
+            dateTime.iso,
+
+            updatedAt:
+            dateTime.iso,
+
+            source:
+            "manualpayment.html"
+
+        };
+
+
+        deposits.push(
+            depositRecord
+        );
+
+
+
+        balances[
+            balanceKey
+        ] =
+        currentBalance;
+
+
+
+        let transactionKey =
+
+        "MANUAL_PAYMENT:"
+
+        +
+
+        transactionId;
+
+
+        let passbookExists =
+        passbook.some(
+            function(item){
+
+                return (
+
+                    String(
+                        item.transactionKey || ""
+                    )
+
+                    ===
+
+                    transactionKey
+
+                );
+
+            }
+        );
+
+
+        if(
+            !passbookExists
+        ){
+
+            passbook.push({
+
+                id:
+                dateTime.timestamp +
+                Math.random(),
+
+                transactionKey:
+                transactionKey,
+
+                transactionId:
+                transactionId,
+
+                referenceId:
+                transactionId,
+
+                requestId:
+                transactionId,
+
+                depositId:
+                depositRecord.id,
+
+                mobile:
+                mobile,
+
+                name:
+                userName,
+
+                type:
+                "Deposit",
+
+                details:
+                "Manual Payment Deposit",
+
+                previousBalance:
+                previousBalance,
+
+                amount:
+                amount,
+
+                currentBalance:
+                currentBalance,
+
+                date:
+                dateTime.date,
+
+                time:
+                dateTime.time,
+
+                status:
+                "Success",
+
+                timestamp:
+                dateTime.timestamp,
+
+                createdTimestamp:
+                dateTime.timestamp,
+
+                createdAt:
+                dateTime.iso,
+
+                source:
+                "manualpayment.html"
+
+            });
+
+        }
+
+
+
+        let todayAddedMoney =
+        calculateTodayAddedMoney(
+            deposits
+        );
+
+
+        let today =
+        getTodayISO();
+
+
+
+        let committed =
+        commitStorageUpdates({
+
+            payments:{
+                value:
+                payments
+            },
+
+            deposits:{
+                value:
+                deposits
+            },
+
+            userBalances:{
+                value:
+                balances
+            },
+
+            passbook:{
+                value:
+                passbook
+            },
+
+            todayAddedMoney:{
+                value:
+                todayAddedMoney,
+                raw:true
+            },
+
+            todayAddedMoneyDate:{
+                value:
+                today,
+                raw:true
+            },
+
+            lastManualPayment:{
+                value:{
+
+                    transactionId:
+                    transactionId,
+
+                    mobile:
+                    mobile,
+
+                    amount:
+                    amount,
+
+                    previousBalance:
+                    previousBalance,
+
+                    currentBalance:
+                    currentBalance,
+
+                    timestamp:
+                    dateTime.timestamp
+
+                }
+            }
+
+        });
+
+
+
+        if(!committed){
+
+            alert(
+                "Manual Payment Save Failed.\n\nData ko safe rakhne ke liye transaction cancel kar diya gaya."
+            );
+
+
+            return;
+
+        }
+
+
+
+        document
+        .getElementById(
+            "popupMessage"
+        )
+        .innerHTML =
+
+        "₹ "
+
+        +
+
+        amount.toFixed(2)
+
+        +
+
+        " successfully added to "
+
+        +
+
+        userName
+
+        +
+
+        ".<br><br>Previous Wallet: ₹ "
+
+        +
+
+        previousBalance.toFixed(2)
+
+        +
+
+        "<br>New Wallet Balance: ₹ "
+
+        +
+
+        currentBalance.toFixed(2);
+
+
+
+        document
+        .getElementById(
+            "transactionRef"
+        )
+        .innerText =
+
+        "Transaction ID: "
+
+        +
+
+        transactionId;
+
+
+
+        document
+        .getElementById(
+            "popup"
+        )
+        .style.display =
+        "flex";
+
+
+
+        document
+        .getElementById(
+            "amount"
+        )
+        .value =
+        "";
+
+
+        updateAmountPreview();
+
+
+        findUser();
+
+
+
+        window.dispatchEvent(
+            new Event(
+                "manualPaymentUpdated"
+            )
+        );
+
+
+        console.log(
+            "✅ Exact Manual Payment Saved",
+            {
+                transactionId:
+                transactionId,
+
+                mobile:
+                mobile,
+
+                amount:
+                amount,
+
+                previousBalance:
+                previousBalance,
+
+                currentBalance:
+                currentBalance
+            }
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "Manual Payment Error:",
+            error
+        );
+
+
+        alert(
+            "Manual Payment Process karte samay error aaya."
+        );
+
+    }
+
+    finally{
+
+        isSubmitting =
+        false;
+
+
+        submitButton.disabled =
+        false;
+
+
+        submitButton.innerText =
+        "ADD AMOUNT";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CLOSE POPUP
+===================================================== */
+
+function closePopup(){
+
+    document
+    .getElementById(
+        "popup"
+    )
+    .style.display =
+    "none";
+
+}
+
+
+
+/* =====================================================
+   MOBILE INPUT EVENT
+===================================================== */
+
+document
+.getElementById(
+    "mobile"
+)
+.addEventListener(
+    "input",
+    function(){
+
+        this.value =
+        normalizeMobile(
+            this.value
+        );
+
+
+        findUser();
+
+    }
+);
+
+
+
+/* =====================================================
+   AMOUNT INPUT EVENT
+===================================================== */
+
+document
+.getElementById(
+    "amount"
+)
+.addEventListener(
+    "input",
+    sanitizeAmountInput
+);
+
+
+
+/* =====================================================
+   IMPORTANT EXTRA PROTECTION
+
+   Wheel event amount ko kabhi modify nahi karega.
+===================================================== */
+
+document
+.getElementById(
+    "amount"
+)
+.addEventListener(
+    "wheel",
+    function(event){
+
+        event.preventDefault();
+
+        this.blur();
+
+    },
+    {
+        passive:false
+    }
+);
+
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+document
+.getElementById(
+    "amount"
+)
+.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            event.preventDefault();
+
+
+            savePayment();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   SUBMIT BUTTON
+===================================================== */
+
+document
+.getElementById(
+    "submitBtn"
+)
+.addEventListener(
+    "click",
+    savePayment
+);
+
+
+
+/* =====================================================
+   POPUP OUTSIDE CLICK
+===================================================== */
+
+document
+.getElementById(
+    "popup"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target ===
+            this
+        ){
+
+            closePopup();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   STORAGE LIVE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === "users"
+
+            ||
+
+            event.key === "userBalances"
+
+            ||
+
+            event.key === "bankDetails"
+
+            ||
+
+            event.key === "upiDetails"
+        ){
+
+            let mobile =
+            normalizeMobile(
+                document
+                .getElementById(
+                    "mobile"
+                )
+                .value
+            );
+
+
+            if(
+                mobile.length ===
+                10
+            ){
+
+                findUser();
+
+            }
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   PAGE FOCUS
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        let mobile =
+        normalizeMobile(
+            document
+            .getElementById(
+                "mobile"
+            )
+            .value
+        );
+
+
+        if(
+            mobile.length ===
+            10
+        ){
+
+            findUser();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   FIRST LOAD
+===================================================== */
+
+clearUserDetails();
+
+hideStatus();
+
+updateAmountPreview();
+
+
+
+console.log(
+    "✅ HR MATKA Manual Payment FINAL EXACT AMOUNT Replacement Connected"
+);
+
+
+console.log(
+    "✅ Mouse Wheel Amount Change Problem Fixed"
+);
+
+
+console.log(
+    "✅ ₹500 Enter = Exact ₹500 Credit"
+);
+
+
+console.log(
+    "✅ Wallet + Payments + Deposits + Passbook Connected"
+);
+
+
+console.log(
+    "✅ Today Added Money + Dashboard Sync Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

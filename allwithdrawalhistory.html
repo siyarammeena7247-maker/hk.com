@@ -1,0 +1,4976 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>All Withdrawal History - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   ALL WITHDRAWAL HISTORY
+   FINAL COMPLETE REPLACEMENT
+
+   FEATURES:
+   - Pending / Paid / Rejected Count
+   - Today's Paid Withdrawal Total
+   - Correct Request Date + Time
+   - Correct Paid Date + Time
+   - Correct Rejected Date + Time
+   - 12 Hour AM / PM Format
+   - Status Filter
+   - Date Filter
+   - Search
+   - Copy
+   - CSV
+   - Print
+   - Refresh
+   - Full Details Popup
+   - Old + New Record Compatibility
+   - User Name Proper Capitalization
+   - Safe HTML Output
+   - Live LocalStorage Update
+===================================================== */
+
+
+/* =====================================================
+   1. BASIC RESET
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:35px;
+}
+
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+
+/* =====================================================
+   2. HEADER
+===================================================== */
+
+.header{
+    background:#263238;
+    color:#ffffff;
+    padding:18px 15px;
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+    letter-spacing:.3px;
+    box-shadow:0 3px 10px rgba(0,0,0,.20);
+}
+
+
+/* =====================================================
+   3. MAIN CONTAINER
+===================================================== */
+
+.container{
+    width:100%;
+    max-width:1180px;
+    margin:auto;
+    padding:15px;
+}
+
+
+/* =====================================================
+   4. TODAY TOTAL SUMMARY
+===================================================== */
+
+.summaryBox{
+    background:linear-gradient(
+        135deg,
+        #ffc107,
+        #ffb300
+    );
+    color:#222222;
+    padding:20px 15px;
+    border-radius:14px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+
+
+.summaryBox p{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+
+.summaryAmount{
+    display:block;
+    font-size:34px;
+    margin-top:7px;
+}
+
+
+/* =====================================================
+   5. STATUS COUNT CARDS
+===================================================== */
+
+.statusCards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+
+.statusCard{
+    background:#ffffff;
+    padding:16px 10px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.statusCard p{
+    font-size:13px;
+    color:#666666;
+    margin-bottom:6px;
+}
+
+
+.statusCard h2{
+    font-size:26px;
+}
+
+
+.pendingCard{
+    border-left:5px solid #f39c12;
+}
+
+
+.paidCard{
+    border-left:5px solid #27ae60;
+}
+
+
+.rejectedCard{
+    border-left:5px solid #e74c3c;
+}
+
+
+/* =====================================================
+   6. INFORMATION BOX
+===================================================== */
+
+.infoBox{
+    background:#ffffff;
+    border-left:5px solid #2196f3;
+    padding:12px 14px;
+    margin-bottom:15px;
+    border-radius:8px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    color:#555555;
+    font-size:13px;
+    line-height:1.6;
+}
+
+
+/* =====================================================
+   7. FILTER BOX
+===================================================== */
+
+.filterBox{
+    background:#ffffff;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr auto auto auto;
+    gap:10px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.filterBox select,
+.filterBox input{
+    width:100%;
+    height:44px;
+    padding:0 10px;
+    border:1px solid #cccccc;
+    border-radius:7px;
+    font-size:15px;
+    outline:none;
+    background:#ffffff;
+}
+
+
+.filterBox select:focus,
+.filterBox input:focus{
+    border-color:#ffc107;
+    box-shadow:0 0 0 2px rgba(255,193,7,.10);
+}
+
+
+.smallBtn{
+    height:44px;
+    padding:0 18px;
+    border:none;
+    border-radius:7px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.todayBtn{
+    background:#ffc107;
+    color:#222222;
+}
+
+
+.searchBtn{
+    background:#2196f3;
+    color:#ffffff;
+}
+
+
+.clearBtn{
+    background:#607d8b;
+    color:#ffffff;
+}
+
+
+/* =====================================================
+   8. TOOL BAR
+===================================================== */
+
+.toolsBox{
+    background:#ffffff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.toolBtn{
+    border:none;
+    background:#455a64;
+    color:#ffffff;
+    padding:10px 14px;
+    border-radius:7px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.refreshBtn{
+    background:#009688;
+}
+
+
+.searchBox{
+    margin-left:auto;
+    min-width:290px;
+    padding:10px;
+    border:1px solid #cccccc;
+    border-radius:7px;
+    outline:none;
+}
+
+
+.searchBox:focus{
+    border-color:#2196f3;
+}
+
+
+/* =====================================================
+   9. TABLE
+===================================================== */
+
+.tableBox{
+    background:#ffffff;
+    border-radius:12px;
+    overflow:auto;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    -webkit-overflow-scrolling:touch;
+}
+
+
+.withdrawTable{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1250px;
+    font-size:14px;
+}
+
+
+.withdrawTable th{
+    background:#e74c3c;
+    color:#ffffff;
+    padding:12px 8px;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+.withdrawTable td{
+    padding:10px 8px;
+    text-align:center;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+.withdrawTable tbody tr:nth-child(even){
+    background:#fafafa;
+}
+
+
+.withdrawTable tbody tr:hover{
+    background:#f5f5f5;
+}
+
+
+/* =====================================================
+   10. STATUS COLORS
+===================================================== */
+
+.status{
+    display:inline-block;
+    min-width:80px;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+.statusPending{
+    color:#a85f00;
+    background:#fff3df;
+}
+
+
+.statusPaid{
+    color:#11783a;
+    background:#e4f8ea;
+}
+
+
+.statusRejected{
+    color:#c62828;
+    background:#fde7e7;
+}
+
+
+/* =====================================================
+   11. VIEW DETAILS BUTTON
+===================================================== */
+
+.detailsBtn{
+    border:none;
+    background:#2196f3;
+    color:#ffffff;
+    padding:8px 13px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   12. NO DATA
+===================================================== */
+
+.noData{
+    padding:30px!important;
+    color:#777777;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   13. BACK BUTTON
+===================================================== */
+
+.backBtn{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    padding:13px;
+    background:#455a64;
+    color:#ffffff;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   14. DETAILS POPUP
+===================================================== */
+
+.popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.60);
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:15px;
+}
+
+
+.popup.show{
+    display:flex;
+}
+
+
+.popupBox{
+    width:100%;
+    max-width:540px;
+    max-height:90vh;
+    overflow:auto;
+    background:#ffffff;
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 8px 28px rgba(0,0,0,.30);
+}
+
+
+.popupBox h2{
+    text-align:center;
+    margin-bottom:18px;
+    color:#263238;
+}
+
+
+.popupAmount{
+    background:#fff7d6;
+    border-radius:9px;
+    padding:12px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:15px;
+    color:#1565c0;
+}
+
+
+.detailRow{
+    padding:9px 0;
+    border-bottom:1px solid #eeeeee;
+    line-height:1.5;
+    word-break:break-word;
+}
+
+
+.detailRow b{
+    color:#555555;
+}
+
+
+.copyDetailsBtn,
+.closeBtn{
+    width:100%;
+    border:none;
+    padding:13px;
+    border-radius:8px;
+    margin-top:12px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.copyDetailsBtn{
+    background:#2196f3;
+    color:#ffffff;
+}
+
+
+.closeBtn{
+    background:#455a64;
+    color:#ffffff;
+}
+
+
+/* =====================================================
+   15. PRINT
+===================================================== */
+
+@media print{
+
+    .header,
+    .filterBox,
+    .toolsBox,
+    .infoBox,
+    .backBtn,
+    .detailsBtn,
+    .popup{
+        display:none!important;
+    }
+
+
+    body{
+        background:#ffffff;
+    }
+
+
+    .container{
+        max-width:none;
+        padding:0;
+    }
+
+
+    .tableBox{
+        box-shadow:none;
+        overflow:visible;
+    }
+
+
+    .withdrawTable{
+        min-width:0;
+        font-size:10px;
+    }
+
+}
+
+
+/* =====================================================
+   16. MOBILE
+===================================================== */
+
+@media(max-width:750px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .header{
+        font-size:21px;
+        padding:15px 10px;
+    }
+
+
+    .summaryAmount{
+        font-size:29px;
+    }
+
+
+    .statusCards{
+        grid-template-columns:repeat(3,1fr);
+        gap:7px;
+    }
+
+
+    .statusCard{
+        padding:12px 5px;
+    }
+
+
+    .statusCard p{
+        font-size:11px;
+    }
+
+
+    .statusCard h2{
+        font-size:21px;
+    }
+
+
+    .filterBox{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .filterBox .clearBtn{
+        grid-column:1/-1;
+    }
+
+
+    .toolsBox{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+    }
+
+
+    .searchBox{
+        grid-column:1/-1;
+        width:100%;
+        min-width:0;
+        margin-left:0;
+    }
+
+
+    .toolBtn{
+        padding:10px 5px;
+        font-size:12px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    ALL WITHDRAWAL HISTORY
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     TODAY PAID TOTAL
+===================================================== -->
+
+<div class="summaryBox">
+
+    <p>
+        Today's Total Paid Withdrawal
+    </p>
+
+    <span class="summaryAmount">
+
+        ₹ <span id="todayWithdrawalTotal">0.00</span>
+
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+     STATUS COUNTERS
+===================================================== -->
+
+<div class="statusCards">
+
+
+<div class="statusCard pendingCard">
+
+    <p>
+        Pending Requests
+    </p>
+
+    <h2 id="pendingCount">
+        0
+    </h2>
+
+</div>
+
+
+<div class="statusCard paidCard">
+
+    <p>
+        Paid Requests
+    </p>
+
+    <h2 id="paidCount">
+        0
+    </h2>
+
+</div>
+
+
+<div class="statusCard rejectedCard">
+
+    <p>
+        Rejected Requests
+    </p>
+
+    <h2 id="rejectedCount">
+        0
+    </h2>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     INFORMATION
+===================================================== -->
+
+<div class="infoBox">
+
+    Withdrawal Request page se jo request
+    <b>Paid</b> hoti hai,
+    uska Paid Date aur Paid Time yahan automatically
+    show hoga.
+
+    Rejected request ka Rejected Date / Time bhi
+    Details ke andar available rahega.
+
+</div>
+
+
+
+<!-- =====================================================
+     FILTERS
+===================================================== -->
+
+<div class="filterBox">
+
+
+<select id="statusFilter">
+
+    <option value="ALL">
+        All Status
+    </option>
+
+    <option value="Pending">
+        Pending
+    </option>
+
+    <option value="Paid">
+        Paid
+    </option>
+
+    <option value="Rejected">
+        Rejected
+    </option>
+
+</select>
+
+
+<input
+type="date"
+id="filterDate">
+
+
+<button
+type="button"
+class="smallBtn todayBtn"
+onclick="todayFilter()">
+
+    TODAY
+
+</button>
+
+
+<button
+type="button"
+class="smallBtn searchBtn"
+onclick="searchWithdrawal()">
+
+    SEARCH
+
+</button>
+
+
+<button
+type="button"
+class="smallBtn clearBtn"
+onclick="clearFilter()">
+
+    CLEAR
+
+</button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     REPORT TOOLS
+===================================================== -->
+
+<div class="toolsBox">
+
+
+<button
+type="button"
+class="toolBtn"
+onclick="copyData()">
+
+    COPY
+
+</button>
+
+
+<button
+type="button"
+class="toolBtn"
+onclick="downloadCSV()">
+
+    CSV
+
+</button>
+
+
+<button
+type="button"
+class="toolBtn"
+onclick="printReport()">
+
+    PRINT
+
+</button>
+
+
+<button
+type="button"
+class="toolBtn refreshBtn"
+onclick="refreshData()">
+
+    REFRESH
+
+</button>
+
+
+<input
+type="text"
+id="searchInput"
+class="searchBox"
+placeholder="Search Name / Mobile / UPI / Account / Status"
+autocomplete="off"
+oninput="renderWithdrawalTable()">
+
+
+</div>
+
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="tableBox">
+
+
+<table
+class="withdrawTable">
+
+
+<thead>
+
+<tr>
+
+    <th>ID</th>
+
+    <th>User Name</th>
+
+    <th>Mobile</th>
+
+    <th>Amount</th>
+
+    <th>Request Date</th>
+
+    <th>Request Time</th>
+
+    <th>Paid / Rejected Date</th>
+
+    <th>Paid / Rejected Time</th>
+
+    <th>Payment Mode</th>
+
+    <th>Status</th>
+
+    <th>Details</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="withdrawTable">
+
+<tr>
+
+    <td
+    colspan="11"
+    class="noData">
+
+        No Withdrawal History Found
+
+    </td>
+
+</tr>
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<a
+href="index.html"
+class="backBtn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     DETAILS POPUP
+===================================================== -->
+
+<div
+class="popup"
+id="detailsPopup">
+
+
+<div class="popupBox">
+
+
+<h2>
+    Withdrawal Details
+</h2>
+
+
+<div
+id="popupAmount"
+class="popupAmount">
+
+    ₹ 0.00
+
+</div>
+
+
+<div id="popupContent">
+
+</div>
+
+
+<button
+type="button"
+class="copyDetailsBtn"
+onclick="copyCurrentDetails()">
+
+    📋 Copy Full Details
+
+</button>
+
+
+<button
+type="button"
+class="closeBtn"
+onclick="closeDetails()">
+
+    CLOSE
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+
+   ALL WITHDRAWAL HISTORY
+   FINAL COMPLETE ENGINE
+
+   PART 1 JAVASCRIPT START
+===================================================== */
+
+
+/* =====================================================
+   17. GLOBAL DATA
+===================================================== */
+
+let allWithdrawals = [];
+
+let filteredWithdrawals = [];
+
+let currentDetailItem = null;
+
+
+
+/* =====================================================
+   18. SAFE STORAGE READ
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   19. SAFE TEXT
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+
+/* =====================================================
+   20. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   21. USER NAME CAPITALIZATION
+===================================================== */
+
+function capitalizeWords(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /\b[a-z]/g,
+        function(letter){
+
+            return letter.toUpperCase();
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   22. NORMALIZE STATUS
+===================================================== */
+
+function normalizeStatus(value){
+
+    let status =
+    String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    if(
+        status === "approved" ||
+        status === "success" ||
+        status === "successful"
+    ){
+
+        return "paid";
+
+    }
+
+
+    return status;
+
+}
+
+
+
+/* =====================================================
+   23. TODAY ISO DATE
+===================================================== */
+
+function getTodayISO(){
+
+    let now =
+    new Date();
+
+
+    let year =
+    now.getFullYear();
+
+
+    let month =
+    String(
+        now.getMonth()+1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    let day =
+    String(
+        now.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+
+}
+
+
+
+/* =====================================================
+   24. NORMALIZE DATE
+===================================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    /*
+       DD/MM/YYYY
+       DD/MM/YYYY, TIME
+    */
+
+    let slashMatch =
+    text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slashMatch){
+
+        return (
+
+            slashMatch[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slashMatch[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slashMatch[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    /*
+       YYYY-MM-DD
+    */
+
+    let isoMatch =
+    text.match(
+        /^(\d{4})-(\d{2})-(\d{2})/
+    );
+
+
+    if(isoMatch){
+
+        return (
+
+            isoMatch[1]
+
+            +
+
+            "-"
+
+            +
+
+            isoMatch[2]
+
+            +
+
+            "-"
+
+            +
+
+            isoMatch[3]
+
+        );
+
+    }
+
+
+    /*
+       DD-MM-YYYY
+    */
+
+    let dashMatch =
+    text.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})/
+    );
+
+
+    if(dashMatch){
+
+        return (
+
+            dashMatch[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dashMatch[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dashMatch[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    let parsed =
+    new Date(
+        text
+    );
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    return (
+
+        parsed.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+
+
+/* =====================================================
+   25. DATE DISPLAY
+   DD/MM/YYYY
+===================================================== */
+
+function displayDate(value){
+
+    let normalized =
+    normalizeDate(
+        value
+    );
+
+
+    if(!normalized){
+
+        return safe(
+            value
+        );
+
+    }
+
+
+    let parts =
+    normalized.split(
+        "-"
+    );
+
+
+    return (
+
+        parts[2]
+
+        +
+
+        "/"
+
+        +
+
+        parts[1]
+
+        +
+
+        "/"
+
+        +
+
+        parts[0]
+
+    );
+
+}
+
+
+
+/* =====================================================
+   26. NORMALIZE 12-HOUR TIME
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    /*
+       Already AM / PM
+    */
+
+    if(
+        /\b(am|pm)\b/i
+        .test(
+            text
+        )
+    ){
+
+        return text
+        .replace(
+            /\bam\b/gi,
+            "AM"
+        )
+        .replace(
+            /\bpm\b/gi,
+            "PM"
+        );
+
+    }
+
+
+    /*
+       HH:MM
+       HH:MM:SS
+    */
+
+    let match =
+    text.match(
+        /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+    if(match){
+
+        let hour =
+        Number(
+            match[1]
+        );
+
+
+        let minute =
+        match[2];
+
+
+        let second =
+        match[3] || "";
+
+
+        if(
+            hour >= 0 &&
+            hour <= 23
+        ){
+
+            let suffix =
+            hour >= 12
+            ? "PM"
+            : "AM";
+
+
+            let hour12 =
+            hour % 12;
+
+
+            if(
+                hour12 === 0
+            ){
+
+                hour12 =
+                12;
+
+            }
+
+
+            return (
+
+                String(
+                    hour12
+                )
+                .padStart(
+                    2,
+                    "0"
+                )
+
+                +
+
+                ":"
+
+                +
+
+                minute
+
+                +
+
+                (
+                    second
+                    ?
+                    ":" + second
+                    :
+                    ""
+                )
+
+                +
+
+                " "
+
+                +
+
+                suffix
+
+            );
+
+        }
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   27. SPLIT OLD DATE + TIME
+===================================================== */
+
+function splitDateTime(value){
+
+    let result = {
+
+        date:"",
+
+        time:""
+
+    };
+
+
+    if(!value){
+
+        return result;
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    if(
+        text.includes(
+            ","
+        )
+    ){
+
+        let parts =
+        text.split(
+            ","
+        );
+
+
+        result.date =
+        parts.shift()
+        .trim();
+
+
+        result.time =
+        parts
+        .join(",")
+        .trim();
+
+
+        return result;
+
+    }
+
+
+    result.date =
+    text;
+
+
+    return result;
+
+}
+
+
+
+/* =====================================================
+   28. REQUEST DATE
+===================================================== */
+
+function getRequestDate(item){
+
+    if(
+        item.requestDate
+    ){
+
+        return item.requestDate;
+
+    }
+
+
+    let legacy =
+    splitDateTime(
+        item.date
+    );
+
+
+    return (
+        legacy.date ||
+        item.date ||
+        "-"
+    );
+
+}
+
+
+
+/* =====================================================
+   29. REQUEST TIME
+===================================================== */
+
+function getRequestTime(item){
+
+    if(
+        item.requestTime
+    ){
+
+        return formatTime12(
+            item.requestTime
+        );
+
+    }
+
+
+    if(
+        item.time
+    ){
+
+        return formatTime12(
+            item.time
+        );
+
+    }
+
+
+    let legacy =
+    splitDateTime(
+        item.date
+    );
+
+
+    return formatTime12(
+        legacy.time ||
+        "-"
+    );
+
+}
+
+
+
+/* =====================================================
+   30. PAID DATE
+===================================================== */
+
+function getPaidDate(item){
+
+    let status =
+    normalizeStatus(
+        item.status
+    );
+
+
+    if(
+        status !== "paid"
+    ){
+
+        return "-";
+
+    }
+
+
+    if(
+        item.paidDate
+    ){
+
+        return item.paidDate;
+
+    }
+
+
+    if(
+        item.approvedDate
+    ){
+
+        return item.approvedDate;
+
+    }
+
+
+    if(
+        item.paymentDate
+    ){
+
+        return item.paymentDate;
+
+    }
+
+
+    if(
+        item.paidAt
+    ){
+
+        let parts =
+        splitDateTime(
+            item.paidAt
+        );
+
+
+        return (
+            parts.date ||
+            item.paidAt
+        );
+
+    }
+
+
+    if(
+        item.approvedAt
+    ){
+
+        let parts =
+        splitDateTime(
+            item.approvedAt
+        );
+
+
+        return (
+            parts.date ||
+            item.approvedAt
+        );
+
+    }
+
+
+    return "-";
+
+}
+
+
+
+/* =====================================================
+   31. PAID TIME
+===================================================== */
+
+function getPaidTime(item){
+
+    let status =
+    normalizeStatus(
+        item.status
+    );
+
+
+    if(
+        status !== "paid"
+    ){
+
+        return "-";
+
+    }
+
+
+    if(
+        item.paidTime
+    ){
+
+        return formatTime12(
+            item.paidTime
+        );
+
+    }
+
+
+    if(
+        item.approvedTime
+    ){
+
+        return formatTime12(
+            item.approvedTime
+        );
+
+    }
+
+
+    if(
+        item.paidAt
+    ){
+
+        let parts =
+        splitDateTime(
+            item.paidAt
+        );
+
+
+        if(
+            parts.time
+        ){
+
+            return formatTime12(
+                parts.time
+            );
+
+        }
+
+    }
+
+
+    if(
+        item.approvedAt
+    ){
+
+        let parts =
+        splitDateTime(
+            item.approvedAt
+        );
+
+
+        if(
+            parts.time
+        ){
+
+            return formatTime12(
+                parts.time
+            );
+
+        }
+
+    }
+
+
+    return "-";
+
+}
+
+
+
+/* =====================================================
+   32. REJECTED DATE
+===================================================== */
+
+function getRejectedDate(item){
+
+    if(
+        normalizeStatus(
+            item.status
+        )
+        !==
+        "rejected"
+    ){
+
+        return "-";
+
+    }
+
+
+    return (
+
+        item.rejectedDate ||
+
+        item.rejectDate ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   33. REJECTED TIME
+===================================================== */
+
+function getRejectedTime(item){
+
+    if(
+        normalizeStatus(
+            item.status
+        )
+        !==
+        "rejected"
+    ){
+
+        return "-";
+
+    }
+
+
+    return formatTime12(
+
+        item.rejectedTime ||
+
+        item.rejectTime ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   34. COMPLETION DATE
+===================================================== */
+
+function getCompletionDate(item){
+
+    let status =
+    normalizeStatus(
+        item.status
+    );
+
+
+    if(
+        status === "paid"
+    ){
+
+        return getPaidDate(
+            item
+        );
+
+    }
+
+
+    if(
+        status === "rejected"
+    ){
+
+        return getRejectedDate(
+            item
+        );
+
+    }
+
+
+    return "-";
+
+}
+
+
+
+/* =====================================================
+   35. COMPLETION TIME
+===================================================== */
+
+function getCompletionTime(item){
+
+    let status =
+    normalizeStatus(
+        item.status
+    );
+
+
+    if(
+        status === "paid"
+    ){
+
+        return getPaidTime(
+            item
+        );
+
+    }
+
+
+    if(
+        status === "rejected"
+    ){
+
+        return getRejectedTime(
+            item
+        );
+
+    }
+
+
+    return "-";
+
+}
+
+
+
+/* =====================================================
+   36. SORT TIME
+===================================================== */
+
+function getSortTime(item){
+
+    let possible = [
+
+        item.processedAt,
+
+        item.updatedTimestamp,
+
+        item.timestamp,
+
+        item.createdTimestamp,
+
+        item.id
+
+    ];
+
+
+    for(
+        let value of possible
+    ){
+
+        let number =
+        Number(
+            value
+        );
+
+
+        if(
+            Number.isFinite(number) &&
+            number > 0
+        ){
+
+            return number;
+
+        }
+
+    }
+
+
+    let possibleDates = [
+
+        item.createdAt,
+
+        item.updatedAt,
+
+        item.paidAt,
+
+        item.approvedAt,
+
+        item.date
+
+    ];
+
+
+    for(
+        let value of possibleDates
+    ){
+
+        if(!value){
+
+            continue;
+
+        }
+
+
+        let parsed =
+        new Date(
+            value
+        );
+
+
+        if(
+            !isNaN(
+                parsed.getTime()
+            )
+        ){
+
+            return parsed.getTime();
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+
+/* =====================================================
+   37. LOAD WITHDRAWAL DATA
+===================================================== */
+
+function loadWithdrawalData(){
+
+    let data =
+    getStorage(
+        "withdrawals",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            data
+        )
+    ){
+
+        data = [];
+
+    }
+
+
+    allWithdrawals =
+    data
+    .map(
+        function(item){
+
+            return item || {};
+
+        }
+    )
+    .sort(
+        function(a,b){
+
+            return (
+
+                getSortTime(b)
+
+                -
+
+                getSortTime(a)
+
+            );
+
+        }
+    );
+
+
+    filteredWithdrawals =
+    [...allWithdrawals];
+
+
+    updateStatusCounts();
+
+    updateTodayTotal();
+
+    renderWithdrawalTable();
+
+}
+
+
+
+/* =====================================================
+   38. UPDATE STATUS COUNTS
+===================================================== */
+
+function updateStatusCounts(){
+
+    let pending =
+    0;
+
+
+    let paid =
+    0;
+
+
+    let rejected =
+    0;
+
+
+    allWithdrawals.forEach(
+        function(item){
+
+            let status =
+            normalizeStatus(
+                item.status
+            );
+
+
+            if(
+                status === "pending"
+            ){
+
+                pending++;
+
+            }
+
+
+            else if(
+                status === "paid"
+            ){
+
+                paid++;
+
+            }
+
+
+            else if(
+                status === "rejected"
+            ){
+
+                rejected++;
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "pendingCount"
+    )
+    .innerText =
+    pending;
+
+
+    document
+    .getElementById(
+        "paidCount"
+    )
+    .innerText =
+    paid;
+
+
+    document
+    .getElementById(
+        "rejectedCount"
+    )
+    .innerText =
+    rejected;
+
+}
+
+
+
+/* =====================================================
+   39. TODAY PAID TOTAL
+===================================================== */
+
+function updateTodayTotal(){
+
+    let today =
+    getTodayISO();
+
+
+    let total =
+    0;
+
+
+    allWithdrawals.forEach(
+        function(item){
+
+            let status =
+            normalizeStatus(
+                item.status
+            );
+
+
+            if(
+                status !==
+                "paid"
+            ){
+
+                return;
+
+            }
+
+
+            let paidDate =
+            normalizeDate(
+                getPaidDate(
+                    item
+                )
+            );
+
+
+            if(
+                paidDate ===
+                today
+            ){
+
+                total +=
+                Number(
+                    item.amount || 0
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "todayWithdrawalTotal"
+    )
+    .innerText =
+    total.toFixed(
+        2
+    );
+
+}
+
+
+
+/* =====================================================
+   40. STATUS CSS
+===================================================== */
+
+function getStatusClass(status){
+
+    let value =
+    normalizeStatus(
+        status
+    );
+
+
+    if(
+        value === "paid"
+    ){
+
+        return "statusPaid";
+
+    }
+
+
+    if(
+        value === "rejected"
+    ){
+
+        return "statusRejected";
+
+    }
+
+
+    return "statusPending";
+
+}
+
+
+
+/* =====================================================
+   41. STATUS DISPLAY TEXT
+===================================================== */
+
+function getStatusText(status){
+
+    let value =
+    normalizeStatus(
+        status
+    );
+
+
+    if(
+        value === "paid"
+    ){
+
+        return "Paid";
+
+    }
+
+
+    if(
+        value === "rejected"
+    ){
+
+        return "Rejected";
+
+    }
+
+
+    return "Pending";
+
+}
+
+
+
+/* =====================================================
+   42. FILTERED DISPLAY DATA
+===================================================== */
+
+function getDisplayData(){
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    return filteredWithdrawals
+    .filter(
+        function(item){
+
+            if(
+                search === ""
+            ){
+
+                return true;
+
+            }
+
+
+            let searchable =
+            [
+
+                item.name,
+
+                item.mobile,
+
+                item.amount,
+
+                item.status,
+
+                item.paymentMode,
+
+                item.holderName,
+
+                item.holder,
+
+                item.bankName,
+
+                item.bank,
+
+                item.accountNumber,
+
+                item.ifsc,
+
+                item.ifscCode,
+
+                item.upi,
+
+                item.upiId,
+
+                item.requestId,
+
+                item.id,
+
+                getRequestDate(
+                    item
+                ),
+
+                getRequestTime(
+                    item
+                ),
+
+                getCompletionDate(
+                    item
+                ),
+
+                getCompletionTime(
+                    item
+                )
+
+            ]
+            .join(
+                " "
+            )
+            .toLowerCase();
+
+
+            return searchable.includes(
+                search
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   43. RENDER TABLE
+===================================================== */
+
+function renderWithdrawalTable(){
+
+    let table =
+    document
+    .getElementById(
+        "withdrawTable"
+    );
+
+
+    let displayData =
+    getDisplayData();
+
+
+    table.innerHTML =
+    "";
+
+
+    if(
+        displayData.length ===
+        0
+    ){
+
+        table.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="11"
+            class="noData">
+
+                No Withdrawal History Found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    displayData.forEach(
+        function(item,index){
+
+            let requestDate =
+            displayDate(
+                getRequestDate(
+                    item
+                )
+            );
+
+
+            let requestTime =
+            getRequestTime(
+                item
+            );
+
+
+            let completionDate =
+            displayDate(
+                getCompletionDate(
+                    item
+                )
+            );
+
+
+            let completionTime =
+            getCompletionTime(
+                item
+            );
+
+
+            let status =
+            getStatusText(
+                item.status
+            );
+
+
+            let row =
+            document.createElement(
+                "tr"
+            );
+
+
+            row.innerHTML = `
+
+            <td>
+                ${index + 1}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        capitalizeWords(
+                            item.name
+                        )
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.mobile
+                    )
+                )}
+            </td>
+
+
+            <td>
+                ₹ ${Number(
+                    item.amount || 0
+                ).toFixed(2)}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    requestDate
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    requestTime
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    completionDate
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    completionTime
+                )}
+            </td>
+
+
+            <td>
+                ${escapeHTML(
+                    safe(
+                        item.paymentMode
+                    )
+                )}
+            </td>
+
+
+            <td>
+
+                <span
+                class="
+                status
+                ${getStatusClass(
+                    item.status
+                )}
+                ">
+
+                    ${escapeHTML(
+                        status
+                    )}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                <button
+                type="button"
+                class="detailsBtn"
+                data-record-id="${escapeHTML(
+                    String(
+                        item.id ??
+                        item.requestId ??
+                        index
+                    )
+                )}"
+                onclick="openDetailsByButton(this)">
+
+                    VIEW
+
+                </button>
+
+            </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+
+
+/* =====================================================
+   44. SEARCH / FILTER
+===================================================== */
+
+function searchWithdrawal(){
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    let selectedStatus =
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value;
+
+
+    filteredWithdrawals =
+    allWithdrawals.filter(
+        function(item){
+
+            let itemStatus =
+            normalizeStatus(
+                item.status
+            );
+
+
+            let statusMatch =
+
+            selectedStatus === "ALL"
+
+            ||
+
+            itemStatus ===
+            normalizeStatus(
+                selectedStatus
+            );
+
+
+            let itemDate =
+            "";
+
+
+            /*
+               Paid withdrawal:
+               paid/completion date से filter होगा.
+            */
+
+            if(
+                itemStatus ===
+                "paid"
+            ){
+
+                itemDate =
+                normalizeDate(
+                    getPaidDate(
+                        item
+                    )
+                );
+
+            }
+
+
+            /*
+               Rejected:
+               rejected date से filter होगा.
+            */
+
+            else if(
+                itemStatus ===
+                "rejected"
+            ){
+
+                itemDate =
+                normalizeDate(
+                    getRejectedDate(
+                        item
+                    )
+                );
+
+            }
+
+
+            /*
+               Pending:
+               request date से filter होगा.
+            */
+
+            else{
+
+                itemDate =
+                normalizeDate(
+                    getRequestDate(
+                        item
+                    )
+                );
+
+            }
+
+
+            let dateMatch =
+
+            selectedDate === ""
+
+            ||
+
+            itemDate ===
+            selectedDate;
+
+
+            return (
+
+                statusMatch
+
+                &&
+
+                dateMatch
+
+            );
+
+        }
+    );
+
+
+    renderWithdrawalTable();
+
+}
+
+
+
+/* =====================================================
+   45. TODAY FILTER
+===================================================== */
+
+function todayFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    searchWithdrawal();
+
+}
+
+
+
+/* =====================================================
+   46. CLEAR FILTER
+===================================================== */
+
+function clearFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    filteredWithdrawals =
+    [...allWithdrawals];
+
+
+    renderWithdrawalTable();
+
+}
+
+
+
+/* =====================================================
+   47. REFRESH DATA
+===================================================== */
+
+function refreshData(){
+
+    loadWithdrawalData();
+
+
+    /*
+       Current selected filter
+       preserve रहेगा.
+    */
+
+    searchWithdrawal();
+
+}
+
+
+
+/* =====================================================
+   48. FIND WITHDRAWAL RECORD
+===================================================== */
+
+function findWithdrawalById(
+    id
+){
+
+    let textId =
+    String(
+        id ?? ""
+    );
+
+
+    return allWithdrawals.find(
+        function(item,index){
+
+            let recordId =
+            String(
+
+                item.id ??
+
+                item.requestId ??
+
+                index
+
+            );
+
+
+            return (
+                recordId ===
+                textId
+            );
+
+        }
+    )
+    || null;
+
+}
+
+
+
+/* =====================================================
+   49. OPEN DETAILS FROM BUTTON
+===================================================== */
+
+function openDetailsByButton(
+    button
+){
+
+    let id =
+    button
+    .getAttribute(
+        "data-record-id"
+    );
+
+
+    openDetails(
+        id
+    );
+
+}
+
+
+
+/* =====================================================
+   50. OPEN DETAILS
+===================================================== */
+
+function openDetails(id){
+
+    let item =
+    findWithdrawalById(
+        id
+    );
+
+
+    if(!item){
+
+        alert(
+            "Withdrawal Details Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    currentDetailItem =
+    item;
+
+
+    let holderName =
+
+    item.holderName ||
+
+    item.holder ||
+
+    "-";
+
+
+    let bankName =
+
+    item.bankName ||
+
+    item.bank ||
+
+    "-";
+
+
+    let accountNumber =
+
+    item.accountNumber ||
+
+    item.accountNo ||
+
+    "-";
+
+
+    let ifsc =
+
+    item.ifsc ||
+
+    item.ifscCode ||
+
+    "-";
+
+
+    let upi =
+
+    item.upi ||
+
+    item.upiId ||
+
+    "-";
+
+
+    let requestId =
+
+    item.requestId ||
+
+    item.id ||
+
+    "-";
+
+
+    let requestDate =
+    displayDate(
+        getRequestDate(
+            item
+        )
+    );
+
+
+    let requestTime =
+    getRequestTime(
+        item
+    );
+
+
+    let completionDate =
+    displayDate(
+        getCompletionDate(
+            item
+        )
+    );
+
+
+    let completionTime =
+    getCompletionTime(
+        item
+    );
+
+
+    let status =
+    getStatusText(
+        item.status
+    );
+
+
+    document
+    .getElementById(
+        "popupContent"
+    )
+    .innerHTML = `
+
+
+        <div class="detailRow">
+
+            <b>
+                Request ID:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    requestId
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                User Name:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    capitalizeWords(
+                        item.name
+                    )
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Mobile:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    item.mobile
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Withdrawal Amount:
+            </b>
+
+            ₹ ${Number(
+                item.amount || 0
+            ).toFixed(2)}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Payment Mode:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    item.paymentMode
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Account Holder:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    holderName
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Bank Name:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    bankName
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Account Number:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    accountNumber
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                IFSC Code:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    ifsc
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                UPI ID / PhonePe:
+            </b>
+
+            ${escapeHTML(
+                safe(
+                    upi
+                )
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Request Date:
+            </b>
+
+            ${escapeHTML(
+                requestDate
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Request Time:
+            </b>
+
+            ${escapeHTML(
+                requestTime
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Process Date:
+            </b>
+
+            ${escapeHTML(
+                completionDate
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Process Time:
+            </b>
+
+            ${escapeHTML(
+                completionTime
+            )}
+
+        </div>
+
+
+        <div class="detailRow">
+
+            <b>
+                Status:
+            </b>
+
+            <span
+            class="
+            status
+            ${getStatusClass(
+                item.status
+            )}
+            ">
+
+                ${escapeHTML(
+                    status
+                )}
+
+            </span>
+
+        </div>
+
+    `;
+
+
+    document
+    .getElementById(
+        "detailsPopup"
+    )
+    .classList
+    .add(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   51. CLOSE DETAILS POPUP
+===================================================== */
+
+function closeDetails(){
+
+    document
+    .getElementById(
+        "detailsPopup"
+    )
+    .classList
+    .remove(
+        "show"
+    );
+
+
+    currentDetailItem =
+    null;
+
+}
+
+
+
+/* =====================================================
+   52. CLOSE POPUP BY OUTSIDE CLICK
+===================================================== */
+
+document
+.getElementById(
+    "detailsPopup"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target ===
+            this
+        ){
+
+            closeDetails();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   53. ESC KEY CLOSE POPUP
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            closeDetails();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   54. COPY CURRENT FULL DETAILS
+===================================================== */
+
+function copyCurrentDetails(){
+
+    if(
+        !currentDetailItem
+    ){
+
+        alert(
+            "No Withdrawal Selected"
+        );
+
+
+        return;
+
+    }
+
+
+    let item =
+    currentDetailItem;
+
+
+    let holderName =
+
+    item.holderName ||
+
+    item.holder ||
+
+    "-";
+
+
+    let bankName =
+
+    item.bankName ||
+
+    item.bank ||
+
+    "-";
+
+
+    let accountNumber =
+
+    item.accountNumber ||
+
+    item.accountNo ||
+
+    "-";
+
+
+    let ifsc =
+
+    item.ifsc ||
+
+    item.ifscCode ||
+
+    "-";
+
+
+    let upi =
+
+    item.upi ||
+
+    item.upiId ||
+
+    "-";
+
+
+    let requestId =
+
+    item.requestId ||
+
+    item.id ||
+
+    "-";
+
+
+    let text =
+
+`HR MATKA - Withdrawal Details
+
+Request ID: ${safe(requestId)}
+
+User Name: ${safe(capitalizeWords(item.name))}
+Mobile: ${safe(item.mobile)}
+Amount: ₹ ${Number(item.amount || 0).toFixed(2)}
+
+Payment Mode: ${safe(item.paymentMode)}
+Account Holder: ${safe(holderName)}
+Bank Name: ${safe(bankName)}
+Account Number: ${safe(accountNumber)}
+IFSC Code: ${safe(ifsc)}
+UPI ID / PhonePe: ${safe(upi)}
+
+Request Date: ${displayDate(getRequestDate(item))}
+Request Time: ${getRequestTime(item)}
+
+Process Date: ${displayDate(getCompletionDate(item))}
+Process Time: ${getCompletionTime(item)}
+
+Status: ${getStatusText(item.status)}`;
+
+
+    copyText(
+
+        text,
+
+        "Withdrawal Details Copied Successfully"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   55. COPY TABLE DATA
+===================================================== */
+
+function copyData(){
+
+    let displayData =
+    getDisplayData();
+
+
+    if(
+        displayData.length === 0
+    ){
+
+        alert(
+            "Copy Karne Ke Liye Koi Data Nahi Hai"
+        );
+
+
+        return;
+
+    }
+
+
+    let rows = [[
+
+        "ID",
+
+        "User Name",
+
+        "Mobile",
+
+        "Amount",
+
+        "Request Date",
+
+        "Request Time",
+
+        "Process Date",
+
+        "Process Time",
+
+        "Payment Mode",
+
+        "Status"
+
+    ]];
+
+
+    displayData.forEach(
+        function(item,index){
+
+            rows.push([
+
+                index + 1,
+
+                capitalizeWords(
+                    item.name
+                ),
+
+                safe(
+                    item.mobile
+                ),
+
+                Number(
+                    item.amount || 0
+                )
+                .toFixed(
+                    2
+                ),
+
+                displayDate(
+                    getRequestDate(
+                        item
+                    )
+                ),
+
+                getRequestTime(
+                    item
+                ),
+
+                displayDate(
+                    getCompletionDate(
+                        item
+                    )
+                ),
+
+                getCompletionTime(
+                    item
+                ),
+
+                safe(
+                    item.paymentMode
+                ),
+
+                getStatusText(
+                    item.status
+                )
+
+            ]);
+
+        }
+    );
+
+
+    let text =
+    rows
+    .map(
+        function(row){
+
+            return row.join(
+                "\t"
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    copyText(
+
+        text,
+
+        "Withdrawal History Copied Successfully"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   56. COPY HELPER
+===================================================== */
+
+function copyText(
+    text,
+    successMessage
+){
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            text
+        )
+        .then(
+            function(){
+
+                alert(
+                    successMessage
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+
+                    text,
+
+                    successMessage
+
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+
+            text,
+
+            successMessage
+
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   57. FALLBACK COPY
+===================================================== */
+
+function fallbackCopy(
+    text,
+    successMessage
+){
+
+    let textarea =
+    document.createElement(
+        "textarea"
+    );
+
+
+    textarea.value =
+    text;
+
+
+    textarea.style.position =
+    "fixed";
+
+
+    textarea.style.left =
+    "-9999px";
+
+
+    textarea.style.top =
+    "0";
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.focus();
+
+
+    textarea.select();
+
+
+    try{
+
+        let copied =
+        document.execCommand(
+            "copy"
+        );
+
+
+        if(copied){
+
+            alert(
+                successMessage
+            );
+
+        }
+
+        else{
+
+            alert(
+                "Copy Failed"
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "Copy Error:",
+            error
+        );
+
+
+        alert(
+            "Copy Failed"
+        );
+
+    }
+
+
+    textarea.remove();
+
+}
+
+
+
+/* =====================================================
+   58. CSV DOWNLOAD
+===================================================== */
+
+function downloadCSV(){
+
+    let displayData =
+    getDisplayData();
+
+
+    if(
+        displayData.length ===
+        0
+    ){
+
+        alert(
+            "CSV Download Ke Liye Koi Data Nahi Hai"
+        );
+
+
+        return;
+
+    }
+
+
+    let rows = [[
+
+        "ID",
+
+        "Request ID",
+
+        "User Name",
+
+        "Mobile",
+
+        "Amount",
+
+        "Request Date",
+
+        "Request Time",
+
+        "Process Date",
+
+        "Process Time",
+
+        "Payment Mode",
+
+        "Status",
+
+        "Account Holder",
+
+        "Bank Name",
+
+        "Account Number",
+
+        "IFSC",
+
+        "UPI ID"
+
+    ]];
+
+
+    displayData.forEach(
+        function(item,index){
+
+            rows.push([
+
+                index + 1,
+
+                safe(
+                    item.requestId ||
+                    item.id
+                ),
+
+                capitalizeWords(
+                    item.name
+                ),
+
+                safe(
+                    item.mobile
+                ),
+
+                Number(
+                    item.amount || 0
+                )
+                .toFixed(
+                    2
+                ),
+
+                displayDate(
+                    getRequestDate(
+                        item
+                    )
+                ),
+
+                getRequestTime(
+                    item
+                ),
+
+                displayDate(
+                    getCompletionDate(
+                        item
+                    )
+                ),
+
+                getCompletionTime(
+                    item
+                ),
+
+                safe(
+                    item.paymentMode
+                ),
+
+                getStatusText(
+                    item.status
+                ),
+
+                safe(
+                    item.holderName ||
+                    item.holder
+                ),
+
+                safe(
+                    item.bankName ||
+                    item.bank
+                ),
+
+                safe(
+                    item.accountNumber ||
+                    item.accountNo
+                ),
+
+                safe(
+                    item.ifsc ||
+                    item.ifscCode
+                ),
+
+                safe(
+                    item.upi ||
+                    item.upiId
+                )
+
+            ]);
+
+        }
+    );
+
+
+    let csv =
+    rows
+    .map(
+        function(row){
+
+            return row
+            .map(
+                function(value){
+
+                    let text =
+                    String(
+                        value
+                    )
+                    .replace(
+                        /"/g,
+                        '""'
+                    );
+
+
+                    return (
+                        '"' +
+                        text +
+                        '"'
+                    );
+
+                }
+            )
+            .join(
+                ","
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    let blob =
+    new Blob(
+        [
+            "\uFEFF" +
+            csv
+        ],
+        {
+            type:
+            "text/csv;charset=utf-8;"
+        }
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href =
+    url;
+
+
+    link.download =
+    "HR-MATKA-All-Withdrawal-History.csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+
+
+/* =====================================================
+   59. PRINT REPORT
+===================================================== */
+
+function printReport(){
+
+    window.print();
+
+}
+
+
+
+/* =====================================================
+   60. STATUS FILTER CHANGE
+===================================================== */
+
+document
+.getElementById(
+    "statusFilter"
+)
+.addEventListener(
+    "change",
+    searchWithdrawal
+);
+
+
+
+/* =====================================================
+   61. DATE FILTER CHANGE
+===================================================== */
+
+document
+.getElementById(
+    "filterDate"
+)
+.addEventListener(
+    "change",
+    searchWithdrawal
+);
+
+
+
+/* =====================================================
+   62. SEARCH INPUT EVENT
+===================================================== */
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    function(){
+
+        renderWithdrawalTable();
+
+    }
+);
+
+
+
+/* =====================================================
+   63. LIVE STORAGE UPDATE
+
+   Withdrawal Request page se:
+   - Pending
+   - Paid
+   - Rejected
+   - Wallet update
+   - Passbook update
+
+   hone par history automatically refresh hogi.
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key ===
+            "withdrawals"
+
+            ||
+
+            event.key ===
+            "userBalances"
+
+            ||
+
+            event.key ===
+            "passbook"
+
+            ||
+
+            event.key ===
+            "lastWithdrawalUpdate"
+
+            ||
+
+            event.key ===
+            "lastWalletUpdate"
+        ){
+
+            loadWithdrawalData();
+
+
+            searchWithdrawal();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   64. SAME TAB WITHDRAWAL UPDATE
+===================================================== */
+
+window.addEventListener(
+    "withdrawalUpdated",
+    function(){
+
+        loadWithdrawalData();
+
+        searchWithdrawal();
+
+    }
+);
+
+
+
+/* =====================================================
+   65. WINDOW FOCUS REFRESH
+
+   Kisi doosre page se wapas
+   All Withdrawal History me aane par
+   latest data reload hoga.
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        loadWithdrawalData();
+
+        searchWithdrawal();
+
+    }
+);
+
+
+
+/* =====================================================
+   66. PAGE VISIBILITY REFRESH
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            loadWithdrawalData();
+
+            searchWithdrawal();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   67. SAFE OLD RECORD REPAIR
+
+   Purane withdrawal records me
+   kuch basic fields missing ho to
+   display compatibility improve karega.
+
+   IMPORTANT:
+   Is function me wallet ya payment
+   amount change nahi hoga.
+===================================================== */
+
+function repairLegacyWithdrawalRecords(){
+
+    let withdrawals =
+    getStorage(
+        "withdrawals",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            withdrawals
+        )
+    ){
+
+        return;
+
+    }
+
+
+    let changed =
+    false;
+
+
+    withdrawals.forEach(
+        function(item,index){
+
+            if(
+                !item ||
+                typeof item !==
+                "object"
+            ){
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               ID REPAIR
+            ----------------------------------------- */
+
+            if(
+                item.id === undefined ||
+                item.id === null ||
+                item.id === ""
+            ){
+
+                item.id =
+                Date.now()
+                +
+                index
+                +
+                Math.random();
+
+
+                changed =
+                true;
+
+            }
+
+
+            /* -----------------------------------------
+               STATUS REPAIR
+            ----------------------------------------- */
+
+            if(
+                !item.status
+            ){
+
+                item.status =
+                "Pending";
+
+
+                changed =
+                true;
+
+            }
+
+
+            /* -----------------------------------------
+               NAME CAPITALIZATION
+            ----------------------------------------- */
+
+            if(
+                item.name
+            ){
+
+                let properName =
+                capitalizeWords(
+                    item.name
+                );
+
+
+                if(
+                    properName !==
+                    item.name
+                ){
+
+                    item.name =
+                    properName;
+
+
+                    changed =
+                    true;
+
+                }
+
+            }
+
+
+            /* -----------------------------------------
+               PAID DATE/TIME LEGACY REPAIR
+            ----------------------------------------- */
+
+            if(
+                normalizeStatus(
+                    item.status
+                )
+                ===
+                "paid"
+            ){
+
+                if(
+                    !item.paidDate &&
+                    item.approvedDate
+                ){
+
+                    item.paidDate =
+                    item.approvedDate;
+
+
+                    changed =
+                    true;
+
+                }
+
+
+                if(
+                    !item.paidTime &&
+                    item.approvedTime
+                ){
+
+                    item.paidTime =
+                    item.approvedTime;
+
+
+                    changed =
+                    true;
+
+                }
+
+
+                if(
+                    item.paidTime
+                ){
+
+                    let formatted =
+                    formatTime12(
+                        item.paidTime
+                    );
+
+
+                    if(
+                        formatted !==
+                        item.paidTime
+                    ){
+
+                        item.paidTime =
+                        formatted;
+
+
+                        changed =
+                        true;
+
+                    }
+
+                }
+
+            }
+
+
+            /* -----------------------------------------
+               REJECTED TIME LEGACY REPAIR
+            ----------------------------------------- */
+
+            if(
+                normalizeStatus(
+                    item.status
+                )
+                ===
+                "rejected"
+            ){
+
+                if(
+                    !item.rejectedDate &&
+                    item.rejectDate
+                ){
+
+                    item.rejectedDate =
+                    item.rejectDate;
+
+
+                    changed =
+                    true;
+
+                }
+
+
+                if(
+                    !item.rejectedTime &&
+                    item.rejectTime
+                ){
+
+                    item.rejectedTime =
+                    item.rejectTime;
+
+
+                    changed =
+                    true;
+
+                }
+
+
+                if(
+                    item.rejectedTime
+                ){
+
+                    let formatted =
+                    formatTime12(
+                        item.rejectedTime
+                    );
+
+
+                    if(
+                        formatted !==
+                        item.rejectedTime
+                    ){
+
+                        item.rejectedTime =
+                        formatted;
+
+
+                        changed =
+                        true;
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    if(changed){
+
+        try{
+
+            localStorage.setItem(
+                "withdrawals",
+                JSON.stringify(
+                    withdrawals
+                )
+            );
+
+        }
+        catch(error){
+
+            console.error(
+                "Legacy Withdrawal Repair Save Error:",
+                error
+            );
+
+        }
+
+    }
+
+}
+
+
+
+/* =====================================================
+   68. TODAY TOTAL DASHBOARD SYNC
+
+   Admin index.html ko latest
+   Today's Withdrawal amount mil sake.
+===================================================== */
+
+function syncTodayWithdrawalSignal(){
+
+    let today =
+    getTodayISO();
+
+
+    let total =
+    0;
+
+
+    allWithdrawals.forEach(
+        function(item){
+
+            if(
+                normalizeStatus(
+                    item.status
+                )
+                !==
+                "paid"
+            ){
+
+                return;
+
+            }
+
+
+            let paidDate =
+            normalizeDate(
+                getPaidDate(
+                    item
+                )
+            );
+
+
+            if(
+                paidDate ===
+                today
+            ){
+
+                total +=
+                Number(
+                    item.amount || 0
+                );
+
+            }
+
+        }
+    );
+
+
+    try{
+
+        localStorage.setItem(
+            "todayWithdrawalMoney",
+            String(
+                total
+            )
+        );
+
+
+        localStorage.setItem(
+            "todayWithdrawalMoneyDate",
+            today
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Today Withdrawal Sync Error:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   69. PAGE INITIALIZATION
+===================================================== */
+
+function initializeWithdrawalHistory(){
+
+    try{
+
+        /*
+           Step 1:
+           Purane records compatibility repair.
+        */
+
+        repairLegacyWithdrawalRecords();
+
+
+        /*
+           Step 2:
+           Default page open par
+           date filter blank rakhenge,
+           taki full history dikhe.
+        */
+
+        document
+        .getElementById(
+            "filterDate"
+        )
+        .value =
+        "";
+
+
+        /*
+           Step 3:
+           All Status default.
+        */
+
+        document
+        .getElementById(
+            "statusFilter"
+        )
+        .value =
+        "ALL";
+
+
+        /*
+           Step 4:
+           Search blank.
+        */
+
+        document
+        .getElementById(
+            "searchInput"
+        )
+        .value =
+        "";
+
+
+        /*
+           Step 5:
+           Data load.
+        */
+
+        loadWithdrawalData();
+
+
+        /*
+           Step 6:
+           Dashboard signal sync.
+        */
+
+        syncTodayWithdrawalSignal();
+
+
+        console.log(
+            "✅ HR MATKA All Withdrawal History Page Initialized"
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Withdrawal History Initialization Error:",
+            error
+        );
+
+
+        alert(
+            "Withdrawal History page load karte samay error aaya hai."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   70. SAFE REFRESH WITHOUT ALERT
+
+   Same-tab/local testing ke liye.
+===================================================== */
+
+function silentRefresh(){
+
+    loadWithdrawalData();
+
+
+    searchWithdrawal();
+
+
+    syncTodayWithdrawalSignal();
+
+}
+
+
+
+/* =====================================================
+   71. LOCAL TEST AUTO REFRESH
+===================================================== */
+
+setInterval(
+    function(){
+
+        silentRefresh();
+
+    },
+    3000
+);
+
+
+
+/* =====================================================
+   72. DOM READY
+===================================================== */
+
+if(
+    document.readyState ===
+    "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeWithdrawalHistory
+    );
+
+}
+
+else{
+
+    initializeWithdrawalHistory();
+
+}
+
+
+
+/* =====================================================
+   73. FINAL CONNECTION STATUS
+===================================================== */
+
+console.log(
+    "✅ HR MATKA All Withdrawal History FINAL Complete Replacement Connected"
+);
+
+
+console.log(
+    "✅ Pending + Paid + Rejected Counters Connected"
+);
+
+
+console.log(
+    "✅ Request Date + Request Time Connected"
+);
+
+
+console.log(
+    "✅ Paid Date + Paid Time Connected"
+);
+
+
+console.log(
+    "✅ Rejected Date + Rejected Time Connected"
+);
+
+
+console.log(
+    "✅ 12-Hour AM/PM Format Connected"
+);
+
+
+console.log(
+    "✅ Search + Filter + Today + Clear Connected"
+);
+
+
+console.log(
+    "✅ Copy + CSV + Print + Details Popup Connected"
+);
+
+
+console.log(
+    "✅ Withdrawal Request + Wallet + Passbook Live Sync Connected"
+);
+
+
+/* =====================================================
+   ALLWITHDRAWALHISTORY.HTML
+   PART 4 END
+
+   COMPLETE FILE END
+===================================================== */
+
+</script>
+
+</body>
+
+</html>

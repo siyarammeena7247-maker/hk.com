@@ -1,0 +1,820 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Details</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.2);
+}
+
+h1{
+text-align:center;
+}
+
+.info{
+margin-top:15px;
+font-size:18px;
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+background:#3498db;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>User Details</h1>
+
+<div class="info">
+Name :
+<span id="name"></span>
+</div>
+
+<div class="info">
+Mobile :
+<span id="mobile"></span>
+</div>
+
+<div class="info">
+City :
+<span id="city"></span>
+</div>
+
+<div class="info">
+Wallet :
+₹ <span id="wallet"></span>
+</div>
+
+
+<div class="info">
+Status :
+<span id="userStatus" style="font-weight:bold;color:green;">
+Active
+</span>
+</div>
+
+
+<button onclick="editUser()">
+✏️ Edit Profile
+</button>
+
+
+
+
+<div id="bankBox" style="display:none;margin-top:20px;">
+
+<h3>🏦 Bank Details</h3>
+
+<label>Account Holder Name</label>
+<input type="text" id="bankHolder">
+
+<label>Account Number</label>
+<input type="text" id="bankNumber">
+
+<label>IFSC Code</label>
+<input type="text" id="ifsc">
+
+<label>Bank Name</label>
+<input type="text" id="bankName">
+
+<label>Branch Name</label>
+<input type="text" id="branchName">
+
+<label>District</label>
+<input type="text" id="district">
+
+<label>State</label>
+<input type="text" id="state">
+
+<button onclick="saveBankDetails()">
+💾 Save Bank Details
+</button>
+
+</div>
+
+
+
+
+<hr>
+
+<div id="upiBox" style="display:none; margin-top:20px;">
+
+<h3>UPI Details</h3>
+
+<label>UPI Holder Name</label>
+<input type="text" id="upiHolder">
+
+<label>UPI ID</label>
+<input type="text" id="upiId">
+
+<label>PhonePe Number</label>
+<input type="text" id="phonepe">
+
+<label>Google Pay Number</label>
+<input type="text" id="gpay">
+
+<label>Paytm Number</label>
+<input type="text" id="paytm">
+
+<button onclick="saveUpi()">
+💾 Save UPI Details
+</button>
+
+</div>
+
+
+
+
+<button onclick="changePassword()">
+🔑 Change Password
+</button>
+
+<button onclick="editBank()">
+🏦 Bank Details
+</button>
+
+<button onclick="editUpi()">
+📱 UPI Details
+</button>
+
+<button onclick="openPassbook()">
+📖 Passbook
+</button>
+
+
+
+<hr>
+
+<h3>💰 Wallet Management</h3>
+
+<label>Add / Deduct Amount</label>
+
+<input
+type="number"
+id="walletAmount"
+placeholder="Enter Amount">
+
+<button onclick="addBalance()">
+➕ Add Balance
+</button>
+
+<button onclick="deductBalance()">
+➖ Deduct Balance
+</button>
+
+
+<button onclick="blockUser()">
+🚫 Block / Unblock User
+</button>
+
+
+
+
+
+<div id="editBox" style="display:none;margin-top:20px;">
+
+<label>User Name</label>
+<input type="text" id="editName">
+
+
+
+<label>City</label>
+<input type="text" id="editCity">
+
+<button onclick="saveUser()">
+💾 Save Changes
+</button>
+
+</div>
+
+
+
+<div id="passwordBox" style="display:none;margin-top:20px;">
+
+<label>New Password</label>
+
+<input
+type="password"
+id="newPassword"
+placeholder="Enter New Password">
+
+<button onclick="savePassword()">
+🔑 Save Password
+</button>
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+
+// ===============================
+// USER LOAD
+// ===============================
+
+let user =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let balances =
+JSON.parse(localStorage.getItem("userBalances")) || {};
+
+if(user){
+
+document.getElementById("name").innerHTML =
+user.name;
+
+document.getElementById("mobile").innerHTML =
+user.mobile;
+
+document.getElementById("city").innerHTML =
+user.city;
+
+document.getElementById("wallet").innerHTML =
+balances[user.mobile] || 0;
+
+// Status
+
+document.getElementById("userStatus").innerHTML =
+user.status || "Active";
+
+if((user.status || "Active")=="Blocked"){
+
+document.getElementById("userStatus").style.color="red";
+
+}else{
+
+document.getElementById("userStatus").style.color="green";
+
+}
+
+// ===============================
+// BANK DETAILS
+// ===============================
+
+let bankData =
+JSON.parse(localStorage.getItem("bankDetails")) || {};
+
+let bank =
+bankData[user.mobile] || {};
+
+document.getElementById("bankHolder").value =
+bank.holder || "";
+
+document.getElementById("bankNumber").value =
+bank.number || "";
+
+document.getElementById("ifsc").value =
+bank.ifsc || "";
+
+document.getElementById("bankName").value =
+bank.bank || "";
+
+document.getElementById("branchName").value =
+bank.branch || "";
+
+document.getElementById("district").value =
+bank.district || "";
+
+document.getElementById("state").value =
+bank.state || "";
+
+// ===============================
+// UPI DETAILS
+// ===============================
+
+let upiData =
+JSON.parse(localStorage.getItem("upiDetails")) || {};
+
+let upi =
+upiData[user.mobile] || {};
+
+document.getElementById("upiHolder").value =
+upi.holder || "";
+
+document.getElementById("upiId").value =
+upi.upiId || "";
+
+document.getElementById("phonepe").value =
+upi.phonepe || "";
+
+document.getElementById("gpay").value =
+upi.gpay || "";
+
+document.getElementById("paytm").value =
+upi.paytm || "";
+
+}else{
+
+alert("No User Selected");
+
+window.location.href="users.html";
+
+}
+
+// ===============================
+// EDIT USER
+// ===============================
+
+function editUser(){
+
+document.getElementById("editBox").style.display="block";
+
+document.getElementById("editName").value =
+document.getElementById("name").innerHTML;
+
+document.getElementById("editCity").value =
+document.getElementById("city").innerHTML;
+
+}
+
+// ===============================
+// SAVE USER
+// ===============================
+
+function saveUser(){
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let oldUser =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let index =
+users.findIndex(u=>u.mobile==oldUser.mobile);
+
+if(index==-1){
+
+alert("User Not Found");
+
+return;
+
+}
+
+users[index].name =
+document.getElementById("editName").value;
+
+users[index].city =
+document.getElementById("editCity").value;
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+localStorage.setItem(
+"selectedUser",
+JSON.stringify(users[index])
+);
+
+alert("User Details Updated Successfully");
+
+location.reload();
+
+}
+
+
+
+// ===============================
+// CHANGE PASSWORD
+// ===============================
+
+function changePassword(){
+
+document.getElementById("passwordBox").style.display="block";
+
+}
+
+function savePassword(){
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let oldUser =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let index =
+users.findIndex(u=>u.mobile==oldUser.mobile);
+
+if(index==-1){
+
+alert("User Not Found");
+
+return;
+
+}
+
+let newPassword =
+document.getElementById("newPassword").value;
+
+if(newPassword==""){
+
+alert("Enter New Password");
+
+return;
+
+}
+
+users[index].password = newPassword;
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+alert("Password Changed Successfully");
+
+document.getElementById("newPassword").value="";
+
+}
+
+// ===============================
+// BANK DETAILS
+// ===============================
+
+function editBank(){
+
+document.getElementById("bankBox").style.display="block";
+
+}
+
+function saveBankDetails(){
+
+let bankData =
+JSON.parse(localStorage.getItem("bankDetails")) || {};
+
+let user =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+bankData[user.mobile]={
+
+holder:
+document.getElementById("bankHolder").value,
+
+number:
+document.getElementById("bankNumber").value,
+
+ifsc:
+document.getElementById("ifsc").value,
+
+bank:
+document.getElementById("bankName").value,
+
+branch:
+document.getElementById("branchName").value,
+
+district:
+document.getElementById("district").value,
+
+state:
+document.getElementById("state").value
+
+};
+
+localStorage.setItem(
+"bankDetails",
+JSON.stringify(bankData)
+);
+
+alert("Bank Details Saved Successfully");
+
+}
+
+// ===============================
+// UPI DETAILS
+// ===============================
+
+function editUpi(){
+
+document.getElementById("upiBox").style.display="block";
+
+}
+
+function saveUpi(){
+
+let upiData =
+JSON.parse(localStorage.getItem("upiDetails")) || {};
+
+let user =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+upiData[user.mobile]={
+
+holder:
+document.getElementById("upiHolder").value,
+
+upiId:
+document.getElementById("upiId").value,
+
+phonepe:
+document.getElementById("phonepe").value,
+
+gpay:
+document.getElementById("gpay").value,
+
+paytm:
+document.getElementById("paytm").value
+
+};
+
+localStorage.setItem(
+"upiDetails",
+JSON.stringify(upiData)
+);
+
+alert("UPI Details Saved Successfully");
+
+}
+
+
+
+
+// ===============================
+// BLOCK / UNBLOCK USER
+// ===============================
+
+function blockUser(){
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let oldUser =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let index =
+users.findIndex(u => u.mobile == oldUser.mobile);
+
+if(index==-1){
+
+alert("User Not Found");
+
+return;
+
+}
+
+if((users[index].status || "Active")=="Active"){
+
+users[index].status="Blocked";
+
+alert("User Blocked Successfully");
+
+}else{
+
+users[index].status="Active";
+
+alert("User Activated Successfully");
+
+}
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+localStorage.setItem(
+"selectedUser",
+JSON.stringify(users[index])
+);
+
+location.reload();
+
+}
+
+// ===============================
+// PASSBOOK
+// ===============================
+
+function openPassbook(){
+
+window.location.href="passbook.html";
+
+}
+
+
+
+
+
+// ===============================
+// ADD BALANCE
+// ===============================
+
+function addBalance(){
+
+let amount =
+Number(document.getElementById("walletAmount").value);
+
+if(amount<=0){
+
+alert("Enter Valid Amount");
+
+return;
+
+}
+
+let user =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let balances =
+JSON.parse(localStorage.getItem("userBalances")) || {};
+
+let previousBalance =
+Number(balances[user.mobile] || 0);
+
+let currentBalance =
+previousBalance + amount;
+
+balances[user.mobile] = currentBalance;
+
+localStorage.setItem(
+"userBalances",
+JSON.stringify(balances)
+);
+
+// Passbook Entry
+
+let passbook =
+JSON.parse(localStorage.getItem("passbook")) || [];
+
+passbook.push({
+
+mobile:user.mobile,
+
+date:new Intl.DateTimeFormat("en-GB",{
+day:"2-digit",
+month:"short",
+year:"numeric",
+hour:"2-digit",
+minute:"2-digit",
+hour12:true
+}).format(new Date()),
+
+type:"Deposit",
+
+previousBalance:previousBalance,
+
+amount:amount,
+
+currentBalance:currentBalance,
+
+status:"Success",
+
+details:"Admin Add Balance"
+
+});
+
+localStorage.setItem(
+"passbook",
+JSON.stringify(passbook)
+);
+
+alert("Balance Added Successfully");
+
+location.reload();
+
+}
+
+
+
+// ===============================
+// DEDUCT BALANCE
+// ===============================
+
+function deductBalance(){
+
+let amount =
+Number(document.getElementById("walletAmount").value);
+
+if(amount<=0){
+
+alert("Enter Valid Amount");
+
+return;
+
+}
+
+let user =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let balances =
+JSON.parse(localStorage.getItem("userBalances")) || {};
+
+let previousBalance =
+Number(balances[user.mobile] || 0);
+
+if(previousBalance < amount){
+
+alert("Insufficient Balance");
+
+return;
+
+}
+
+let currentBalance =
+previousBalance - amount;
+
+balances[user.mobile] = currentBalance;
+
+localStorage.setItem(
+"userBalances",
+JSON.stringify(balances)
+);
+
+// Passbook Entry
+
+let passbook =
+JSON.parse(localStorage.getItem("passbook")) || [];
+
+passbook.push({
+
+mobile:user.mobile,
+
+date:new Intl.DateTimeFormat("en-GB",{
+day:"2-digit",
+month:"short",
+year:"numeric",
+hour:"2-digit",
+minute:"2-digit",
+hour12:true
+}).format(new Date()),
+
+type:"Withdraw",
+
+previousBalance:previousBalance,
+
+amount:amount,
+
+currentBalance:currentBalance,
+
+status:"Success",
+
+details:"Admin Deduct Balance"
+
+});
+
+localStorage.setItem(
+"passbook",
+JSON.stringify(passbook)
+);
+
+alert("Balance Deducted Successfully");
+
+location.reload();
+
+}
+
+
+</script>
+
+
+
+</body>
+
+</html>

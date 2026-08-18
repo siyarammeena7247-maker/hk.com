@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Deposit Request - Admin</title>
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN
+   DEPOSIT REQUEST - FINAL CONNECTED FILE
+===================================================== */
+
+
+/* =====================================================
+   1. BASIC DESIGN
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:15px;
+}
+
+
+/* =====================================================
+   2. PAGE TITLE
+===================================================== */
+
+.pageTitle{
+    background:#111111;
+    color:#ffffff;
+    text-align:center;
+    padding:18px;
+    border-radius:12px;
+    font-size:27px;
+    font-weight:bold;
+    margin-bottom:18px;
+    box-shadow:0 3px 10px rgba(0,0,0,.20);
+}
+
+
+/* =====================================================
+   3. SUMMARY
+===================================================== */
+
+.summaryGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.summaryBox{
+    background:#ffffff;
+    border-radius:12px;
+    padding:16px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+.summaryBox h3{
+    font-size:15px;
+    color:#666666;
+    margin-bottom:7px;
+}
+
+.summaryBox p{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.pendingSummary{
+    border-left:5px solid #ff9800;
+}
+
+.approvedSummary{
+    border-left:5px solid #28a745;
+}
+
+.rejectedSummary{
+    border-left:5px solid #e53935;
+}
+
+
+/* =====================================================
+   4. SEARCH
+===================================================== */
+
+.searchBox{
+    background:#ffffff;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+.searchBox input{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:16px;
+    outline:none;
+}
+
+
+/* =====================================================
+   5. REQUEST CARD
+===================================================== */
+
+.requestList{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.requestCard{
+    background:#ffffff;
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    border-left:5px solid #ff9800;
+}
+
+.requestCard.approved{
+    border-left-color:#28a745;
+}
+
+.requestCard.rejected{
+    border-left-color:#e53935;
+}
+
+.requestTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid #eeeeee;
+}
+
+.requestNumber{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.amount{
+    font-size:24px;
+    font-weight:bold;
+    color:#1976d2;
+}
+
+
+/* =====================================================
+   6. DETAILS
+===================================================== */
+
+.detailGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px 18px;
+}
+
+.detailItem{
+    padding:9px 0;
+    border-bottom:1px solid #f0f0f0;
+    word-break:break-word;
+}
+
+.detailLabel{
+    font-size:13px;
+    color:#777777;
+    margin-bottom:4px;
+}
+
+.detailValue{
+    font-size:16px;
+    font-weight:bold;
+    color:#222222;
+}
+
+
+/* =====================================================
+   7. SCREENSHOT
+===================================================== */
+
+.screenshotBox{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid #eeeeee;
+}
+
+.screenshotBox h4{
+    margin-bottom:10px;
+}
+
+.paymentScreenshot{
+    width:100%;
+    max-height:430px;
+    object-fit:contain;
+    border:1px solid #dddddd;
+    border-radius:12px;
+    background:#fafafa;
+    cursor:pointer;
+}
+
+.noScreenshot{
+    padding:18px;
+    background:#f5f5f5;
+    color:#777777;
+    border-radius:10px;
+    text-align:center;
+}
+
+
+/* =====================================================
+   8. STATUS
+===================================================== */
+
+.statusBadge{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.statusBadge.pending{
+    background:#fff3cd;
+    color:#9a6700;
+}
+
+.statusBadge.approved{
+    background:#dff4e4;
+    color:#218838;
+}
+
+.statusBadge.rejected{
+    background:#fde1e1;
+    color:#c62828;
+}
+
+
+/* =====================================================
+   9. ACTION BUTTONS
+===================================================== */
+
+.actionArea{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+    margin-top:16px;
+}
+
+.actionBtn{
+    border:none;
+    border-radius:8px;
+    padding:12px 8px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.copyBtn{
+    background:#1976d2;
+    color:#ffffff;
+}
+
+.approveBtn{
+    background:#28a745;
+    color:#ffffff;
+}
+
+.rejectBtn{
+    background:#e53935;
+    color:#ffffff;
+}
+
+.disabledBtn{
+    background:#bdbdbd;
+    color:#ffffff;
+    cursor:not-allowed;
+}
+
+
+/* =====================================================
+   10. BACK / EMPTY
+===================================================== */
+
+.emptyBox{
+    background:#ffffff;
+    padding:35px 20px;
+    border-radius:12px;
+    text-align:center;
+    color:#777777;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+.backBtn{
+    display:block;
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    text-align:center;
+    text-decoration:none;
+    background:#0d6efd;
+    color:#ffffff;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   11. IMAGE MODAL
+===================================================== */
+
+.imageModal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.82);
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.imageModal.show{
+    display:flex;
+}
+
+.modalContent{
+    position:relative;
+    max-width:900px;
+    width:100%;
+}
+
+.modalContent img{
+    width:100%;
+    max-height:88vh;
+    object-fit:contain;
+    border-radius:10px;
+    background:#ffffff;
+}
+
+.closeModal{
+    position:absolute;
+    top:-14px;
+    right:-8px;
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#ffffff;
+    color:#111111;
+    font-size:24px;
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   12. MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+    .pageTitle{
+        font-size:22px;
+        padding:15px;
+    }
+
+    .summaryGrid{
+        grid-template-columns:1fr;
+    }
+
+    .detailGrid{
+        grid-template-columns:1fr;
+    }
+
+    .actionArea{
+        grid-template-columns:1fr;
+    }
+
+    .requestTop{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     A. PAGE TITLE
+===================================================== -->
+
+<div class="pageTitle">
+
+    Deposit Request
+
+</div>
+
+
+
+<!-- =====================================================
+     B. SUMMARY
+===================================================== -->
+
+<div class="summaryGrid">
+
+
+    <div class="summaryBox pendingSummary">
+
+        <h3>
+            Pending Requests
+        </h3>
+
+        <p id="pendingCount">
+            0
+        </p>
+
+    </div>
+
+
+    <div class="summaryBox approvedSummary">
+
+        <h3>
+            Approved Requests
+        </h3>
+
+        <p id="approvedCount">
+            0
+        </p>
+
+    </div>
+
+
+    <div class="summaryBox rejectedSummary">
+
+        <h3>
+            Rejected Requests
+        </h3>
+
+        <p id="rejectedCount">
+            0
+        </p>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     C. SEARCH
+===================================================== -->
+
+<div class="searchBox">
+
+    <input
+    type="text"
+    id="searchInput"
+    placeholder="Search Mobile / Name / UTR">
+
+</div>
+
+
+
+<!-- =====================================================
+     D. REQUEST LIST
+===================================================== -->
+
+<div
+id="depositList"
+class="requestList">
+
+</div>
+
+
+
+<a
+href="index.html"
+class="backBtn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     E. SCREENSHOT MODAL
+===================================================== -->
+
+<div
+id="imageModal"
+class="imageModal"
+onclick="closeImageModal(event)">
+
+    <div class="modalContent">
+
+        <button
+        class="closeModal"
+        type="button"
+        onclick="forceCloseImageModal()">
+
+            ×
+
+        </button>
+
+        <img
+        id="modalImage"
+        alt="Payment Screenshot">
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   1. SAFE STORAGE
+===================================================== */
+
+function getStorage(key, fallback){
+
+    try{
+
+        let raw =
+        localStorage.getItem(key);
+
+        if(!raw){
+
+            return fallback;
+
+        }
+
+        return JSON.parse(raw);
+
+    }
+    catch(error){
+
+        console.log(
+            "Storage Error:",
+            error
+        );
+
+        return fallback;
+
+    }
+
+}
+
+
+function saveStorage(key, value){
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(value)
+    );
+
+}
+
+
+
+/* =====================================================
+   2. ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+
+/* =====================================================
+   3. MONEY
+===================================================== */
+
+function money(value){
+
+    return Number(
+        value || 0
+    ).toFixed(2);
+
+}
+
+
+
+/* =====================================================
+   4. GET USER DEPOSIT REQUESTS ONLY
+
+   Manual Payment records are excluded.
+===================================================== */
+
+function getAllDeposits(){
+
+    let deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    if(
+        !Array.isArray(deposits)
+    ){
+
+        deposits = [];
+
+    }
+
+
+    return deposits;
+
+}
+
+
+function isUserDepositRequest(item){
+
+    return (
+
+        item.type ===
+        "User Deposit Request"
+
+        ||
+
+        (
+            item.utr &&
+            item.type !==
+            "Manual Payment"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   5. SUMMARY
+===================================================== */
+
+function renderSummary(){
+
+    let deposits =
+    getAllDeposits()
+    .filter(
+        isUserDepositRequest
+    );
+
+
+    let pending =
+    deposits.filter(
+        item =>
+        item.status ===
+        "Pending"
+    ).length;
+
+
+    let approved =
+    deposits.filter(
+        item =>
+        item.status ===
+        "Approved"
+    ).length;
+
+
+    let rejected =
+    deposits.filter(
+        item =>
+        item.status ===
+        "Rejected"
+    ).length;
+
+
+    document.getElementById(
+        "pendingCount"
+    ).innerText =
+    pending;
+
+
+    document.getElementById(
+        "approvedCount"
+    ).innerText =
+    approved;
+
+
+    document.getElementById(
+        "rejectedCount"
+    ).innerText =
+    rejected;
+
+}
+
+
+
+/* =====================================================
+   6. RENDER REQUESTS
+===================================================== */
+
+function renderDeposits(){
+
+    let deposits =
+    getAllDeposits();
+
+
+    let search =
+    document.getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    let list =
+    document.getElementById(
+        "depositList"
+    );
+
+
+    list.innerHTML =
+    "";
+
+
+    let indexed =
+    deposits
+    .map(
+        function(item,index){
+
+            return {
+
+                item:item,
+
+                originalIndex:index
+
+            };
+
+        }
+    )
+    .filter(
+        function(data){
+
+            return isUserDepositRequest(
+                data.item
+            );
+
+        }
+    );
+
+
+    indexed.reverse();
+
+
+    if(search){
+
+        indexed =
+        indexed.filter(
+            function(data){
+
+                let item =
+                data.item;
+
+
+                let text =
+                [
+
+                    item.name,
+
+                    item.mobile,
+
+                    item.utr,
+
+                    item.requestId,
+
+                    item.status
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
+    }
+
+
+    if(
+        indexed.length === 0
+    ){
+
+        list.innerHTML = `
+
+        <div class="emptyBox">
+
+            No Deposit Request Found
+
+        </div>
+
+        `;
+
+
+        renderSummary();
+
+        return;
+
+    }
+
+
+    indexed.forEach(
+        function(data){
+
+            let item =
+            data.item;
+
+
+            let index =
+            data.originalIndex;
+
+
+            let status =
+            String(
+                item.status ||
+                "Pending"
+            );
+
+
+            let cardClass =
+            "";
+
+
+            if(
+                status === "Approved"
+            ){
+
+                cardClass =
+                "approved";
+
+            }
+
+
+            if(
+                status === "Rejected"
+            ){
+
+                cardClass =
+                "rejected";
+
+            }
+
+
+            let screenshotHTML = "";
+
+
+            if(
+                item.screenshotData
+            ){
+
+                screenshotHTML = `
+
+                <img
+                class="paymentScreenshot"
+                src="${item.screenshotData}"
+                alt="Payment Screenshot"
+                onclick="openImageModal('${item.id}')">
+
+                `;
+
+            }
+            else{
+
+                screenshotHTML = `
+
+                <div class="noScreenshot">
+
+                    ${
+                        item.screenshotName
+                        ?
+                        "Old Screenshot File: " +
+                        escapeHTML(
+                            item.screenshotName
+                        )
+                        :
+                        "Payment Screenshot Not Available"
+                    }
+
+                </div>
+
+                `;
+
+            }
+
+
+            let actions = "";
+
+
+            if(
+                status ===
+                "Pending"
+            ){
+
+                actions = `
+
+                <button
+                class="actionBtn copyBtn"
+                type="button"
+                onclick="copyDepositDetails(${index})">
+
+                    📋 Copy Details
+
+                </button>
+
+
+                <button
+                class="actionBtn approveBtn"
+                type="button"
+                onclick="approveDeposit(${index})">
+
+                    ✓ Approve
+
+                </button>
+
+
+                <button
+                class="actionBtn rejectBtn"
+                type="button"
+                onclick="rejectDeposit(${index})">
+
+                    ✕ Reject
+
+                </button>
+
+                `;
+
+            }
+            else{
+
+                actions = `
+
+                <button
+                class="actionBtn copyBtn"
+                type="button"
+                onclick="copyDepositDetails(${index})">
+
+                    📋 Copy Details
+
+                </button>
+
+
+                <button
+                class="actionBtn disabledBtn"
+                type="button"
+                disabled>
+
+                    ${escapeHTML(status)}
+
+                </button>
+
+                `;
+
+            }
+
+
+            let card =
+            document.createElement(
+                "div"
+            );
+
+
+            card.className =
+            "requestCard " +
+            cardClass;
+
+
+            card.innerHTML = `
+
+
+            <div class="requestTop">
+
+
+                <div class="requestNumber">
+
+                    ${
+                        escapeHTML(
+                            item.requestId ||
+                            ("Request #" + (index + 1))
+                        )
+                    }
+
+                </div>
+
+
+                <div class="amount">
+
+                    ₹ ${money(item.amount)}
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="detailGrid">
+
+
+                <div class="detailItem">
+
+                    <div class="detailLabel">
+                        User Name
+                    </div>
+
+                    <div class="detailValue">
+                        ${escapeHTML(item.name || "-")}
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <div class="detailLabel">
+                        Mobile Number
+                    </div>
+
+                    <div class="detailValue">
+                        ${escapeHTML(item.mobile || "-")}
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <div class="detailLabel">
+                        Deposit Amount
+                    </div>
+
+                    <div class="detailValue">
+                        ₹ ${money(item.amount)}
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <div class="detailLabel">
+                        UTR Number
+                    </div>
+
+                    <div class="detailValue">
+                        ${escapeHTML(item.utr || "-")}
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <div class="detailLabel">
+                        Request Date
+                    </div>
+
+                    <div class="detailValue">
+                        ${escapeHTML(item.date || "-")}
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <div class="detailLabel">
+                        Request Time
+                    </div>
+
+                    <div class="detailValue">
+                        ${escapeHTML(item.time || "-")}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="screenshotBox">
+
+                <h4>
+                    Payment Screenshot
+                </h4>
+
+                ${screenshotHTML}
+
+            </div>
+
+
+
+            <div
+            class="statusBadge ${status.toLowerCase()}">
+
+                ${escapeHTML(status)}
+
+            </div>
+
+
+
+            <div class="actionArea">
+
+                ${actions}
+
+            </div>
+
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    renderSummary();
+
+}
+
+
+
+/* =====================================================
+   7. COPY DETAILS
+===================================================== */
+
+async function copyDepositDetails(index){
+
+    let deposits =
+    getAllDeposits();
+
+
+    let item =
+    deposits[index];
+
+
+    if(!item){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    let text =
+
+`HR MATKA Deposit Request
+
+User Name: ${item.name || "-"}
+Mobile Number: ${item.mobile || "-"}
+Deposit Amount: ₹${money(item.amount)}
+UTR Number: ${item.utr || "-"}
+Request ID: ${item.requestId || "-"}
+Date: ${item.date || "-"}
+Time: ${item.time || "-"}
+Status: ${item.status || "Pending"}`;
+
+
+    try{
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+    }
+    catch(error){
+
+        let textarea =
+        document.createElement(
+            "textarea"
+        );
+
+
+        textarea.value =
+        text;
+
+
+        document.body.appendChild(
+            textarea
+        );
+
+
+        textarea.select();
+
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        textarea.remove();
+
+    }
+
+
+    alert(
+        "Deposit Details Copied Successfully"
+    );
+
+}
+
+
+
+/* =====================================================
+   8. APPROVE DEPOSIT
+===================================================== */
+
+function approveDeposit(index){
+
+    let deposits =
+    getAllDeposits();
+
+
+    let item =
+    deposits[index];
+
+
+    if(!item){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        item.status !==
+        "Pending"
+    ){
+
+        alert(
+            "This Deposit Request Is Already Processed"
+        );
+
+        return;
+
+    }
+
+
+    let amount =
+    Number(
+        item.amount || 0
+    );
+
+
+    if(
+        !amount ||
+        amount <= 0
+    ){
+
+        alert(
+            "Invalid Deposit Amount"
+        );
+
+        return;
+
+    }
+
+
+    let allow =
+    confirm(
+        "Approve Deposit ₹" +
+        money(amount) +
+        " ?"
+    );
+
+
+    if(!allow){
+
+        return;
+
+    }
+
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    let mobile =
+    String(
+        item.mobile || ""
+    );
+
+
+    let previousBalance =
+    Number(
+        balances[mobile] || 0
+    );
+
+
+    let currentBalance =
+    previousBalance +
+    amount;
+
+
+    /* UPDATE WALLET */
+
+    balances[mobile] =
+    currentBalance;
+
+
+    saveStorage(
+        "userBalances",
+        balances
+    );
+
+
+    /* UPDATE DEPOSIT REQUEST */
+
+    let now =
+    new Date();
+
+
+    deposits[index].status =
+    "Approved";
+
+
+    deposits[index].approvedAt =
+    now.toISOString();
+
+
+    deposits[index].approvedDate =
+    now.toLocaleDateString(
+        "en-GB"
+    );
+
+
+    deposits[index].approvedTime =
+    now.toLocaleTimeString(
+    "en-US",
+    {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:true
+    }
+  )
+   .replace(" am"," AM")
+   .replace(" pm"," PM");
+
+
+
+    saveStorage(
+        "deposits",
+        deposits
+    );
+
+
+    /* PASSBOOK */
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    if(
+        !Array.isArray(passbook)
+    ){
+
+        passbook = [];
+
+    }
+
+
+    passbook.push({
+
+        id:
+        Date.now(),
+
+        mobile:
+        mobile,
+
+        date:
+        now.toLocaleDateString(
+            "en-GB"
+        ),
+
+
+        time:
+        now.toLocaleTimeString(
+           "en-US",
+    {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:true
+    }
+   )
+      .replace(" am"," AM")
+      .replace(" pm"," PM"),
+
+        
+        type:
+        "Deposit",
+
+        previousBalance:
+        previousBalance,
+
+        amount:
+        amount,
+
+        currentBalance:
+        currentBalance,
+
+        status:
+        "Success",
+
+        details:
+        "User Deposit Approved"
+
+    });
+
+
+    saveStorage(
+        "passbook",
+        passbook
+    );
+
+
+    /* TODAY ADDED MONEY */
+
+    let today =
+    now.toLocaleDateString(
+        "en-GB"
+    );
+
+
+    let savedDate =
+    localStorage.getItem(
+        "todayAddedMoneyDate"
+    );
+
+
+    let todayAddedMoney =
+    0;
+
+
+    if(
+        savedDate === today
+    ){
+
+        todayAddedMoney =
+        Number(
+            localStorage.getItem(
+                "todayAddedMoney"
+            )
+        ) || 0;
+
+    }
+
+
+    todayAddedMoney +=
+    amount;
+
+
+    localStorage.setItem(
+        "todayAddedMoney",
+        todayAddedMoney
+    );
+
+
+    localStorage.setItem(
+        "todayAddedMoneyDate",
+        today
+    );
+
+
+    alert(
+        "Deposit Approved Successfully"
+    );
+
+
+    renderDeposits();
+
+}
+
+
+
+/* =====================================================
+   9. REJECT DEPOSIT
+===================================================== */
+
+function rejectDeposit(index){
+
+    let deposits =
+    getAllDeposits();
+
+
+    let item =
+    deposits[index];
+
+
+    if(!item){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        item.status !==
+        "Pending"
+    ){
+
+        alert(
+            "This Deposit Request Is Already Processed"
+        );
+
+        return;
+
+    }
+
+
+    let allow =
+    confirm(
+        "Reject This Deposit Request?"
+    );
+
+
+    if(!allow){
+
+        return;
+
+    }
+
+
+    let now =
+    new Date();
+
+
+    deposits[index].status =
+    "Rejected";
+
+
+    deposits[index].rejectedAt =
+    now.toISOString();
+
+
+    deposits[index].rejectedDate =
+    now.toLocaleDateString(
+        "en-GB"
+    );
+
+
+   deposits[index].rejectedTime =
+   now.toLocaleTimeString(
+    "en-US",
+    {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hour12:true
+    }
+  )
+    .replace(" am"," AM")
+    .replace(" pm"," PM");
+
+    saveStorage(
+        "deposits",
+        deposits
+    );
+
+
+    alert(
+        "Deposit Rejected"
+    );
+
+
+    renderDeposits();
+
+}
+
+
+
+/* =====================================================
+   10. IMAGE MODAL
+===================================================== */
+
+function openImageModal(id){
+
+    let deposits =
+    getAllDeposits();
+
+
+    let item =
+    deposits.find(
+        function(deposit){
+
+            return String(
+                deposit.id
+            ) === String(
+                id
+            );
+
+        }
+    );
+
+
+    if(
+        !item ||
+        !item.screenshotData
+    ){
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "modalImage"
+    ).src =
+    item.screenshotData;
+
+
+    document.getElementById(
+        "imageModal"
+    ).classList.add(
+        "show"
+    );
+
+}
+
+
+function forceCloseImageModal(){
+
+    document.getElementById(
+        "imageModal"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+function closeImageModal(event){
+
+    if(
+        event.target.id ===
+        "imageModal"
+    ){
+
+        forceCloseImageModal();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   11. SEARCH
+===================================================== */
+
+document.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    renderDeposits
+);
+
+
+
+/* =====================================================
+   12. LIVE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key ===
+            "deposits"
+        ){
+
+            renderDeposits();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   13. PAGE LOAD
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        renderDeposits();
+
+
+        console.log(
+            "✅ HR MATKA Deposit Request Connected"
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

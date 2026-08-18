@@ -1,0 +1,1304 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Admin Panel - HR MATKA</title>
+
+
+<style>
+
+/* ===================================== */
+/* HR MATKA ADMIN PANEL */
+/* FINAL COMPLETE REPLACEMENT */
+/* ===================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+color:#222;
+min-height:100vh;
+padding-bottom:30px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:15px;
+}
+
+
+/* ===================================== */
+/* MAIN TITLE */
+/* ===================================== */
+
+.container > h1{
+text-align:center;
+background:#111;
+color:#fff;
+padding:18px;
+border-radius:12px;
+margin-bottom:18px;
+font-size:28px;
+box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+
+
+/* ===================================== */
+/* TOP BUTTONS */
+/* ===================================== */
+
+.top-btn{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-bottom:15px;
+}
+
+.btn{
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:55px;
+border-radius:10px;
+font-size:17px;
+font-weight:bold;
+text-decoration:none;
+color:#111;
+box-shadow:0 3px 8px rgba(0,0,0,.20);
+}
+
+.yellow{
+background:#ffc107;
+}
+
+.orange{
+background:#ff9800;
+color:#fff;
+}
+
+
+/* ===================================== */
+/* TOTAL USER BALANCE */
+/* SCREENSHOT TWO-COLOR DESIGN */
+/* ===================================== */
+
+.total-box{
+padding:0;
+text-align:center;
+margin-bottom:18px;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 4px 12px rgba(0,0,0,.22);
+border:1px solid rgba(0,0,0,.08);
+background:#ffffff;
+}
+
+/* TOP LIGHT PURPLE AREA */
+
+.total-box h2{
+margin:0;
+padding:17px 10px;
+background:#8c96f2;
+color:#ffffff;
+font-size:22px;
+font-weight:bold;
+line-height:1.25;
+}
+
+/* BOTTOM DEEP BLUE AREA */
+
+.total-box h1{
+margin:0;
+padding:22px 10px;
+background:#2515f4;
+color:#ffffff;
+font-size:34px;
+font-weight:bold;
+line-height:1.2;
+}
+
+
+/* ===================================== */
+/* FOUR SUMMARY BOXES */
+/* ===================================== */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+margin-bottom:20px;
+}
+
+.card{
+min-height:120px;
+border-radius:14px;
+padding:18px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.20);
+transition:.2s;
+}
+
+.card:active{
+transform:scale(.98);
+}
+
+.card h3{
+font-size:17px;
+margin-bottom:12px;
+}
+
+.card h3 a{
+text-decoration:none;
+color:inherit;
+}
+
+.card p{
+font-size:28px;
+font-weight:bold;
+}
+
+
+/* TODAY PLAY */
+
+.blue{
+background:#2196f3;
+color:#fff;
+}
+
+
+/* TODAY WINNING */
+
+.gold{
+background:#ffc107;
+color:#111;
+}
+
+
+/* TODAY ADDED MONEY */
+
+.green{
+background:#4caf50;
+color:#fff;
+}
+
+
+/* TODAY WITHDRAWAL */
+
+.red{
+background:#f44336;
+color:#fff;
+}
+
+
+/* ===================================== */
+/* LARGE MENU BUTTONS */
+/* ===================================== */
+
+.big-btn{
+width:100%;
+min-height:58px;
+margin-bottom:12px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:12px;
+font-size:17px;
+font-weight:bold;
+box-shadow:0 3px 9px rgba(0,0,0,.18);
+cursor:pointer;
+transition:.2s;
+}
+
+.big-btn:active{
+transform:scale(.99);
+}
+
+.big-btn a{
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+text-decoration:none;
+color:inherit;
+}
+
+
+/* ===================================== */
+/* BUTTON COLORS */
+/* ===================================== */
+
+.purple{
+background:#673ab7;
+color:#fff;
+}
+
+.cyan{
+background:#00bcd4;
+color:#fff;
+}
+
+.yellow2{
+background:#ffca28;
+color:#111;
+}
+
+.dark{
+background:#212121;
+color:#fff;
+}
+
+.violet{
+background:#9c27b0;
+color:#fff;
+}
+
+
+/* ===================================== */
+/* OLD ADMIN STYLE TOUCH */
+/* ===================================== */
+
+.big-btn,
+.card,
+.btn{
+border:1px solid rgba(0,0,0,.08);
+}
+
+.big-btn:hover,
+.card:hover,
+.btn:hover{
+filter:brightness(.96);
+}
+
+
+/* ===================================== */
+/* MOBILE */
+/* ===================================== */
+
+@media(max-width:600px){
+
+.container{
+padding:10px;
+}
+
+.container > h1{
+font-size:23px;
+padding:15px;
+}
+
+.top-btn{
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
+
+.btn{
+font-size:14px;
+min-height:50px;
+padding:8px;
+}
+
+
+/* IMPORTANT:
+   NO OUTER PADDING ON TWO-COLOR BOX */
+
+.total-box{
+padding:0;
+}
+
+
+/* TOP SECTION */
+
+.total-box h2{
+font-size:18px;
+padding:15px 8px;
+}
+
+
+/* BOTTOM SECTION */
+
+.total-box h1{
+font-size:30px;
+padding:20px 8px;
+}
+
+
+.cards{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.card{
+min-height:105px;
+padding:12px 8px;
+}
+
+.card h3{
+font-size:14px;
+}
+
+.card p{
+font-size:22px;
+}
+
+.big-btn{
+font-size:15px;
+min-height:55px;
+padding:10px 8px;
+}
+
+}
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+Admin Panel
+</h1>
+
+
+<!-- ===================================== -->
+<!-- TOP BUTTONS -->
+<!-- ===================================== -->
+
+<div class="top-btn">
+
+<a
+href="newregisterid.html"
+class="btn yellow">
+
+NEW USER REGISTER
+
+</a>
+
+
+<a
+href="liveupdate.html"
+class="btn orange">
+
+LIVE UPDATE
+
+</a>
+
+</div>
+
+
+
+<!-- ===================================== -->
+<!-- TOTAL AMOUNT OF USERS -->
+<!-- SCREENSHOT STYLE TWO COLOR BOX -->
+<!-- ===================================== -->
+
+<div class="total-box">
+
+<h2>
+Total Amount of User's
+</h2>
+
+<h1 id="totalUserBalance">
+₹ 00.00
+</h1>
+
+</div>
+
+
+
+<!-- ===================================== -->
+<!-- DASHBOARD SUMMARY -->
+<!-- ===================================== -->
+
+<div class="cards">
+
+
+<!-- TODAY TOTAL PLAY -->
+
+<div
+class="card blue"
+onclick="window.location.href='todaytotalplay.html'"
+style="cursor:pointer;">
+
+<h3>
+
+<a href="todaytotalplay.html">
+Today's Total Play
+</a>
+
+</h3>
+
+<p id="totalPlay">
+₹ 00.00
+</p>
+
+</div>
+
+
+
+<!-- TODAY TOTAL WINNING -->
+
+<div
+class="card gold"
+onclick="window.location.href='todaytotalwinning.html'"
+style="cursor:pointer;">
+
+<h3>
+
+<a href="todaytotalwinning.html">
+Today's Total Winning
+</a>
+
+</h3>
+
+<p id="totalWinning">
+₹ 00.00
+</p>
+
+</div>
+
+
+
+<!-- TODAY ADDED MONEY -->
+
+<div
+class="card green"
+onclick="window.location.href='todayaddedmoney.html'"
+style="cursor:pointer;">
+
+<h3>
+
+<a href="todayaddedmoney.html">
+Today's Added Money
+</a>
+
+</h3>
+
+<p id="totalMoney">
+₹ 00.00
+</p>
+
+</div>
+
+
+
+<!-- TODAY WITHDRAWAL MONEY -->
+
+<div
+class="card red"
+onclick="window.location.href='allwithdrawalhistory.html'"
+style="cursor:pointer;">
+
+<h3>
+
+<a href="allwithdrawalhistory.html">
+Today's Withdrawal Money
+</a>
+
+</h3>
+
+<p id="totalWithdrawal">
+₹ 00.00
+</p>
+
+</div>
+
+
+</div>
+
+
+
+<!-- ===================================== -->
+<!-- ADMIN MENU -->
+<!-- ===================================== -->
+
+<div class="big-btn purple">
+
+<a href="bookicutting.html">
+BOOKI CUTTING
+</a>
+
+</div>
+
+
+<div class="big-btn cyan">
+
+<a href="marketwisebiddingwinning.html">
+
+Market Wise Total Amount of Bidding / Winning
+
+</a>
+
+</div>
+
+
+<div class="big-btn cyan">
+
+<a href="alldeposithistory.html">
+ALL DEPOSIT HISTORY
+</a>
+
+</div>
+
+
+<div class="big-btn cyan">
+
+<a href="allwithdrawalhistory.html">
+ALL WITHDRAWAL HISTORY
+</a>
+
+</div>
+
+
+<div class="big-btn yellow2">
+
+<a href="manualpayment.html">
+MANUAL PAYMENTS
+</a>
+
+</div>
+
+
+<div class="big-btn dark">
+
+<a href="result.html">
+RESULT
+</a>
+
+</div>
+
+
+<div class="big-btn purple">
+
+<a href="marketsetting.html">
+MARKET TIME SETTING
+</a>
+
+</div>
+
+
+<div class="big-btn violet">
+
+<a href="users.html">
+USER'S
+</a>
+
+</div>
+
+
+<div class="big-btn purple">
+
+<a href="withdrawrequest.html">
+WITHDRAWAL REQUEST
+</a>
+
+</div>
+
+
+<div class="big-btn purple">
+
+<a href="sendnotification.html">
+SEND NOTIFICATION
+</a>
+
+</div>
+
+
+<div class="big-btn purple">
+
+<a href="adminsetting.html">
+ADMIN SETTING
+</a>
+
+</div>
+
+
+<div class="big-btn purple">
+
+<a href="ratelist.html">
+RATE LIST
+</a>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================
+   HR MATKA ADMIN DASHBOARD
+   FINAL COMPLETE ENGINE
+===================================== */
+
+
+/* =====================================
+   SAFE STORAGE
+===================================== */
+
+function getStorage(key, fallback){
+
+    try{
+
+        let data =
+        localStorage.getItem(key);
+
+        if(!data){
+
+            return fallback;
+
+        }
+
+        return JSON.parse(data);
+
+    }
+    catch(error){
+
+        console.log(
+            "Storage Error:",
+            error
+        );
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================
+   TODAY DATE
+===================================== */
+
+function getTodayISO(){
+
+    let d =
+    new Date();
+
+
+    let year =
+    d.getFullYear();
+
+
+    let month =
+    String(
+        d.getMonth() + 1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    let day =
+    String(
+        d.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
+
+}
+
+
+
+/* =====================================
+   DATE NORMALIZER
+===================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    value =
+    String(value)
+    .trim();
+
+
+    /* DD/MM/YYYY */
+
+    let slashMatch =
+    value.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slashMatch){
+
+        let dd =
+        String(
+            slashMatch[1]
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let mm =
+        String(
+            slashMatch[2]
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let yyyy =
+        slashMatch[3];
+
+
+        return (
+            yyyy +
+            "-" +
+            mm +
+            "-" +
+            dd
+        );
+
+    }
+
+
+    /* YYYY-MM-DD */
+
+    let isoMatch =
+    value.match(
+        /^(\d{4})-(\d{2})-(\d{2})/
+    );
+
+
+    if(isoMatch){
+
+        return (
+            isoMatch[1] +
+            "-" +
+            isoMatch[2] +
+            "-" +
+            isoMatch[3]
+        );
+
+    }
+
+
+    /* OTHER VALID DATE */
+
+    let dateObject =
+    new Date(value);
+
+
+    if(
+        !isNaN(
+            dateObject.getTime()
+        )
+    ){
+
+        let yyyy =
+        dateObject.getFullYear();
+
+
+        let mm =
+        String(
+            dateObject.getMonth() + 1
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        let dd =
+        String(
+            dateObject.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        );
+
+
+        return (
+            yyyy +
+            "-" +
+            mm +
+            "-" +
+            dd
+        );
+
+    }
+
+
+    return "";
+
+}
+
+
+
+/* =====================================
+   PAID WITHDRAWAL DATE
+===================================== */
+
+function getWithdrawalPaidDate(item){
+
+    return normalizeDate(
+
+        item.paidDate ||
+
+        item.approvedDate ||
+
+        item.paymentDate ||
+
+        item.updatedAt ||
+
+        item.date
+
+    );
+
+}
+
+
+
+/* =====================================
+   DASHBOARD REFRESH
+===================================== */
+
+function refreshDashboard(){
+
+
+    let today =
+    getTodayISO();
+
+
+
+    /* =====================================
+       TODAY'S TOTAL PLAY
+    ===================================== */
+
+    let todayPlay =
+    getStorage(
+        "todayPlay",
+        []
+    );
+
+
+    if(
+        !Array.isArray(todayPlay)
+    ){
+
+        todayPlay = [];
+
+    }
+
+
+    let totalPlay =
+    0;
+
+
+    todayPlay.forEach(
+        function(item){
+
+            if(
+                normalizeDate(
+                    item.date
+                )
+                ===
+                today
+            ){
+
+                totalPlay +=
+                Number(
+                    item.amount || 0
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "totalPlay"
+    )
+    .innerHTML =
+    "₹ " +
+    totalPlay.toFixed(2);
+
+
+
+    /* =====================================
+       TODAY'S ADDED MONEY
+    ===================================== */
+
+    let totalMoney =
+    0;
+
+
+    let savedMoneyDate =
+    localStorage.getItem(
+        "todayAddedMoneyDate"
+    );
+
+
+    if(
+        !savedMoneyDate ||
+        normalizeDate(
+            savedMoneyDate
+        )
+        ===
+        today
+    ){
+
+        totalMoney =
+        Number(
+            localStorage.getItem(
+                "todayAddedMoney"
+            )
+        )
+        ||
+        0;
+
+    }
+
+
+    document
+    .getElementById(
+        "totalMoney"
+    )
+    .innerHTML =
+    "₹ " +
+    totalMoney.toFixed(2);
+
+
+
+    /* =====================================
+       TODAY'S WITHDRAWAL MONEY
+    ===================================== */
+
+    let withdrawals =
+    getStorage(
+        "withdrawals",
+        []
+    );
+
+
+    if(
+        !Array.isArray(withdrawals)
+    ){
+
+        withdrawals = [];
+
+    }
+
+
+    let totalWithdrawal =
+    0;
+
+
+    withdrawals.forEach(
+        function(item){
+
+            let status =
+            String(
+                item.status || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+            let paidDate =
+            getWithdrawalPaidDate(
+                item
+            );
+
+
+            if(
+                status === "paid"
+                &&
+                paidDate === today
+            ){
+
+                totalWithdrawal +=
+                Number(
+                    item.amount || 0
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "totalWithdrawal"
+    )
+    .innerHTML =
+    "₹ " +
+    totalWithdrawal.toFixed(2);
+
+
+
+    /* =====================================
+       TOTAL AMOUNT OF USERS
+       CONNECTED TO USER BALANCES
+    ===================================== */
+
+    let userBalances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    let totalBalance =
+    0;
+
+
+    if(
+        userBalances &&
+        typeof userBalances === "object"
+    ){
+
+        for(
+            let mobile in userBalances
+        ){
+
+            let amount =
+            Number(
+                userBalances[mobile] || 0
+            );
+
+
+            if(
+                Number.isFinite(amount)
+            ){
+
+                totalBalance +=
+                amount;
+
+            }
+
+        }
+
+    }
+
+
+    document
+    .getElementById(
+        "totalUserBalance"
+    )
+    .innerHTML =
+    "₹ " +
+    totalBalance.toFixed(2);
+
+
+
+    /* =====================================
+       TODAY'S TOTAL WINNING
+    ===================================== */
+
+    let todayWinning =
+    getStorage(
+        "todayWinning",
+        []
+    );
+
+
+    if(
+        !Array.isArray(todayWinning)
+    ){
+
+        todayWinning = [];
+
+    }
+
+
+    let totalWinning =
+    0;
+
+
+    todayWinning.forEach(
+        function(item){
+
+            if(
+                normalizeDate(
+                    item.date
+                )
+                ===
+                today
+            ){
+
+                totalWinning +=
+                Number(
+                    item.amount || 0
+                );
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "totalWinning"
+    )
+    .innerHTML =
+    "₹ " +
+    totalWinning.toFixed(2);
+
+}
+
+
+
+/* =====================================
+   LIVE UPDATE FROM OTHER TAB
+===================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === "withdrawals"
+            ||
+            event.key === "userBalances"
+            ||
+            event.key === "todayAddedMoney"
+            ||
+            event.key === "todayAddedMoneyDate"
+            ||
+            event.key === "todayPlay"
+            ||
+            event.key === "todayWinning"
+        ){
+
+            refreshDashboard();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================
+   WINDOW FOCUS REFRESH
+===================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        refreshDashboard();
+
+    }
+);
+
+
+
+/* =====================================
+   VISIBILITY REFRESH
+===================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            refreshDashboard();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================
+   FIRST LOAD
+===================================== */
+
+refreshDashboard();
+
+
+
+/* =====================================
+   LOCAL LIVE REFRESH
+===================================== */
+
+setInterval(
+    function(){
+
+        refreshDashboard();
+
+    },
+    3000
+);
+
+
+
+console.log(
+    "✅ HR MATKA Admin Dashboard FINAL Complete Replacement Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

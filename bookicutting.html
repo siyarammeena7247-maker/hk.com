@@ -1,0 +1,1196 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booki Cutting</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f5f8;
+color:#222;
+padding:16px;
+}
+
+.container{
+max-width:760px;
+margin:auto;
+}
+
+.header{
+background:#263746;
+color:#fff;
+padding:17px;
+border-radius:10px;
+font-size:24px;
+font-weight:bold;
+text-align:center;
+margin-bottom:18px;
+}
+
+/* DATE */
+
+.date-wrap{
+position:relative;
+margin-bottom:18px;
+}
+
+.date-box{
+width:100%;
+background:#c9df27;
+border:none;
+border-radius:6px;
+padding:18px;
+font-size:23px;
+text-align:center;
+cursor:pointer;
+}
+
+.date-box input{
+position:absolute;
+left:0;
+top:0;
+width:100%;
+height:100%;
+opacity:0;
+cursor:pointer;
+}
+
+/* TOP BUTTONS */
+
+.top-buttons{
+display:flex;
+gap:18px;
+margin-bottom:25px;
+}
+
+.top-buttons button{
+flex:1;
+padding:17px 10px;
+background:#ffc107;
+border:none;
+border-radius:6px;
+font-size:20px;
+cursor:pointer;
+}
+
+/* MARKET */
+
+.market-select{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:7px;
+font-size:17px;
+margin-bottom:22px;
+background:#fff;
+}
+
+/* MARKET CARD */
+
+.market-box{
+background:#fff;
+padding:20px;
+border-radius:10px;
+margin-bottom:24px;
+box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.market-title{
+font-size:30px;
+font-style:italic;
+font-weight:500;
+text-align:center;
+margin-bottom:16px;
+}
+
+.session-title{
+font-size:22px;
+font-weight:bold;
+text-align:center;
+margin-bottom:18px;
+}
+
+.copy-btn{
+display:block;
+margin:0 auto 20px;
+background:#1689ee;
+color:#fff;
+border:none;
+padding:14px 20px;
+border-radius:6px;
+font-size:18px;
+cursor:pointer;
+}
+
+.data-text{
+font-family:monospace;
+font-size:19px;
+line-height:1.55;
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+}
+
+.total-box{
+background:#fafafa;
+padding:16px;
+margin-top:16px;
+font-size:21px;
+text-align:center;
+border-radius:5px;
+}
+
+.back-btn{
+display:block;
+text-align:center;
+text-decoration:none;
+background:#34495e;
+color:#fff;
+padding:14px;
+border-radius:7px;
+font-weight:bold;
+margin-top:15px;
+}
+
+/* POPUP */
+
+.popup{
+display:none;
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.popup-box{
+width:92%;
+max-width:420px;
+background:#f3f4f8;
+padding:25px;
+border-radius:24px;
+}
+
+.popup-box h2{
+font-size:24px;
+margin-bottom:28px;
+}
+
+.popup-box input{
+width:100%;
+font-size:25px;
+padding:10px 5px;
+border:none;
+border-bottom:3px solid #49688f;
+background:transparent;
+outline:none;
+}
+
+.popup-actions{
+display:flex;
+justify-content:flex-end;
+gap:18px;
+margin-top:35px;
+}
+
+.popup-actions button{
+border:none;
+background:transparent;
+font-size:18px;
+font-weight:bold;
+color:#425d83;
+cursor:pointer;
+}
+
+/* INFO */
+
+.cut-info{
+background:#fff3cd;
+border-radius:7px;
+padding:12px;
+margin-bottom:15px;
+text-align:center;
+font-weight:bold;
+display:none;
+}
+
+@media(max-width:600px){
+
+body{
+padding:10px;
+}
+
+.top-buttons{
+gap:10px;
+}
+
+.top-buttons button{
+font-size:17px;
+}
+
+.market-title{
+font-size:27px;
+}
+
+.data-text{
+font-size:17px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+BOOKI CUTTING
+</div>
+
+<div class="date-wrap">
+
+<div class="date-box">
+📅
+<span id="dateText"></span>
+</div>
+
+<input
+type="date"
+id="cuttingDate"
+onchange="dateChanged()">
+
+</div>
+
+<div class="top-buttons">
+
+<button onclick="showMainData()">
+MAIN DATA
+</button>
+
+<button onclick="openCuttingPopup()">
+CUTTING
+</button>
+
+</div>
+
+<div class="cut-info" id="cutInfo"></div>
+
+<select
+id="marketSelect"
+class="market-select"
+onchange="loadMarketCutting()">
+
+<option value="">
+Select Market
+</option>
+
+</select>
+
+<div id="cuttingArea"></div>
+
+<a
+href="index.html"
+class="back-btn">
+← Back To Admin Panel
+</a>
+
+</div>
+
+<!-- CUTTING POPUP -->
+
+<div
+class="popup"
+id="cuttingPopup">
+
+<div class="popup-box">
+
+<h2>
+Enter Cutting Percent %
+</h2>
+
+<input
+type="number"
+id="cutPercent"
+placeholder="30"
+min="0"
+max="100"
+step="1">
+
+<div class="popup-actions">
+
+<button onclick="closeCuttingPopup()">
+Cancel
+</button>
+
+<button onclick="applyCutting()">
+OK
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// =====================================
+// BOOKI CUTTING FINAL
+// =====================================
+
+let activeCutPercent = 0;
+
+
+// =====================================
+// DATE FORMAT
+// =====================================
+
+function getTodayISO(){
+
+let d = new Date();
+
+let y = d.getFullYear();
+
+let m =
+String(d.getMonth()+1)
+.padStart(2,"0");
+
+let day =
+String(d.getDate())
+.padStart(2,"0");
+
+return y+"-"+m+"-"+day;
+
+}
+
+
+function isoToDisplay(iso){
+
+if(!iso){
+return "";
+}
+
+let p = iso.split("-");
+
+return p[2]+"/"+p[1]+"/"+p[0];
+
+}
+
+
+function normalizeDate(value){
+
+if(!value){
+return "";
+}
+
+value = String(value).trim();
+
+
+// DD/MM/YYYY
+
+let match =
+value.match(
+/^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+);
+
+if(match){
+
+return (
+match[3] +
+"-" +
+String(match[2]).padStart(2,"0") +
+"-" +
+String(match[1]).padStart(2,"0")
+);
+
+}
+
+
+// MM/DD/YYYY
+
+let usa =
+value.match(
+/^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+);
+
+if(usa){
+
+return (
+usa[3] +
+"-" +
+String(usa[1]).padStart(2,"0") +
+"-" +
+String(usa[2]).padStart(2,"0")
+);
+
+}
+
+
+// YYYY-MM-DD
+
+if(
+/^\d{4}-\d{2}-\d{2}/
+.test(value)
+){
+
+return value.substring(0,10);
+
+}
+
+
+// Javascript Date
+
+let d = new Date(value);
+
+if(!isNaN(d.getTime())){
+
+let y = d.getFullYear();
+
+let m =
+String(d.getMonth()+1)
+.padStart(2,"0");
+
+let day =
+String(d.getDate())
+.padStart(2,"0");
+
+return y+"-"+m+"-"+day;
+
+}
+
+return "";
+
+}
+
+
+// =====================================
+// SET TODAY DATE
+// =====================================
+
+function setInitialDate(){
+
+let today =
+getTodayISO();
+
+document.getElementById(
+"cuttingDate"
+).value = today;
+
+document.getElementById(
+"dateText"
+).innerHTML =
+isoToDisplay(today);
+
+}
+
+setInitialDate();
+
+
+// =====================================
+// DATE CHANGE
+// =====================================
+
+function dateChanged(){
+
+let value =
+document.getElementById(
+"cuttingDate"
+).value;
+
+document.getElementById(
+"dateText"
+).innerHTML =
+isoToDisplay(value);
+
+activeCutPercent = 0;
+
+hideCutInfo();
+
+loadMarketCutting();
+
+}
+
+
+// =====================================
+// LOAD MARKETS
+// =====================================
+
+function loadMarkets(){
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+let select =
+document.getElementById(
+"marketSelect"
+);
+
+select.innerHTML =
+`<option value="">Select Market</option>`;
+
+markets.forEach(function(item){
+
+if(!item.market){
+return;
+}
+
+select.innerHTML +=
+`
+<option value="${item.market}">
+${item.market}
+</option>
+`;
+
+});
+
+}
+
+loadMarkets();
+
+
+// =====================================
+// GET SELECTED DATE BETS
+// =====================================
+
+function getSelectedBets(){
+
+let market =
+document.getElementById(
+"marketSelect"
+).value;
+
+let selectedDate =
+document.getElementById(
+"cuttingDate"
+).value;
+
+let bets =
+JSON.parse(
+localStorage.getItem("bets")
+) || [];
+
+return bets.filter(function(bet){
+
+let sameMarket =
+String(bet.market || "").trim()
+==
+String(market).trim();
+
+let betDate =
+normalizeDate(bet.date);
+
+let sameDate =
+betDate == selectedDate;
+
+return sameMarket && sameDate;
+
+});
+
+}
+
+
+// =====================================
+// DETECT SESSION
+// =====================================
+
+function getBetSession(bet){
+
+let session =
+String(
+bet.session || ""
+).toLowerCase();
+
+let game =
+String(
+bet.game ||
+bet.gameType ||
+""
+).toLowerCase();
+
+if(
+session=="open" ||
+game.includes("open")
+){
+
+return "Open";
+
+}
+
+if(
+session=="close" ||
+game.includes("close")
+){
+
+return "Close";
+
+}
+
+return "";
+
+}
+
+
+// =====================================
+// CLEAN GAME NAME
+// =====================================
+
+function cleanGameName(bet){
+
+let game =
+String(
+bet.game ||
+bet.gameType ||
+"Other"
+);
+
+game =
+game.replace(
+/\s+Open$/i,
+""
+);
+
+game =
+game.replace(
+/\s+Close$/i,
+""
+);
+
+return game.trim();
+
+}
+
+
+// =====================================
+// GROUP DATA
+// =====================================
+
+function groupBets(bets){
+
+let groups = {};
+
+bets.forEach(function(bet){
+
+let game =
+cleanGameName(bet);
+
+let number =
+String(
+bet.number ?? "-"
+);
+
+let amount =
+Number(
+bet.amount || 0
+);
+
+if(!groups[game]){
+
+groups[game] = {};
+
+}
+
+if(!groups[game][number]){
+
+groups[game][number] = 0;
+
+}
+
+groups[game][number] += amount;
+
+});
+
+return groups;
+
+}
+
+
+// =====================================
+// CUT AMOUNT
+// Example 30% cutting:
+// ₹10 -> ₹7
+// =====================================
+
+function getFinalAmount(amount){
+
+amount =
+Number(amount || 0);
+
+if(activeCutPercent<=0){
+
+return amount;
+
+}
+
+let remainingPercent =
+100 - activeCutPercent;
+
+return (
+amount *
+remainingPercent /
+100
+);
+
+}
+
+
+// =====================================
+// NUMBER FORMAT
+// =====================================
+
+function formatAmount(amount){
+
+let num =
+Number(amount || 0);
+
+if(
+Number.isInteger(num)
+){
+
+return num;
+
+}
+
+return Number(
+num.toFixed(2)
+);
+
+}
+
+
+// =====================================
+// LOAD CUTTING
+// =====================================
+
+function loadMarketCutting(){
+
+let market =
+document.getElementById(
+"marketSelect"
+).value;
+
+let area =
+document.getElementById(
+"cuttingArea"
+);
+
+if(market==""){
+
+area.innerHTML="";
+
+return;
+
+}
+
+let bets =
+getSelectedBets();
+
+let openBets =
+bets.filter(function(bet){
+
+return getBetSession(bet)=="Open";
+
+});
+
+let closeBets =
+bets.filter(function(bet){
+
+return getBetSession(bet)=="Close";
+
+});
+
+area.innerHTML =
+createSession(
+market,
+"Open",
+openBets
+)
++
+createSession(
+market,
+"Close",
+closeBets
+);
+
+}
+
+
+// =====================================
+// CREATE SESSION
+// =====================================
+
+function createSession(
+market,
+session,
+bets
+){
+
+let grouped =
+groupBets(bets);
+
+let text = "";
+
+let total = 0;
+
+Object.keys(grouped)
+.forEach(function(game){
+
+text +=
+`================
+*${game}*
+================
+`;
+
+Object.keys(
+grouped[game]
+).forEach(function(number){
+
+let original =
+grouped[game][number];
+
+let finalAmount =
+getFinalAmount(original);
+
+total += finalAmount;
+
+text +=
+`${number} = ₹ ${formatAmount(finalAmount)}
+`;
+
+});
+
+text += "\n";
+
+});
+
+
+if(
+Object.keys(grouped).length==0
+){
+
+text =
+`================
+No Bidding Found
+================
+
+`;
+
+}
+
+
+text +=
+`================
+*Total : ₹ ${formatAmount(total)}*
+================`;
+
+let safeId =
+(
+market +
+session
+)
+.replace(
+/[^a-zA-Z0-9]/g,
+""
+);
+
+return `
+
+<div class="market-box">
+
+<div class="market-title">
+Market : ${market}
+</div>
+
+<div class="session-title">
+Session : ${session}
+</div>
+
+<button
+class="copy-btn"
+onclick="copyMarketData('${safeId}')">
+
+Copy "${session}" Market Cutting
+
+</button>
+
+<div
+class="data-text"
+id="${safeId}">
+
+*Market : ${market} - ${session.toUpperCase()}*
+
+${text}
+
+</div>
+
+<div class="total-box">
+Total: ₹ ${formatAmount(total)}
+</div>
+
+</div>
+
+`;
+
+}
+
+
+// =====================================
+// MAIN DATA
+// =====================================
+
+function showMainData(){
+
+let market =
+document.getElementById(
+"marketSelect"
+).value;
+
+if(market==""){
+
+alert(
+"Please Select Market"
+);
+
+return;
+
+}
+
+activeCutPercent = 0;
+
+hideCutInfo();
+
+loadMarketCutting();
+
+}
+
+
+// =====================================
+// CUTTING POPUP
+// =====================================
+
+function openCuttingPopup(){
+
+let market =
+document.getElementById(
+"marketSelect"
+).value;
+
+if(market==""){
+
+alert(
+"Please Select Market First"
+);
+
+return;
+
+}
+
+document.getElementById(
+"cuttingPopup"
+).style.display =
+"flex";
+
+document.getElementById(
+"cutPercent"
+).focus();
+
+}
+
+
+function closeCuttingPopup(){
+
+document.getElementById(
+"cuttingPopup"
+).style.display =
+"none";
+
+}
+
+
+// =====================================
+// APPLY CUTTING
+// =====================================
+
+function applyCutting(){
+
+let percent =
+Number(
+document.getElementById(
+"cutPercent"
+).value
+);
+
+if(
+isNaN(percent) ||
+percent < 0 ||
+percent > 100
+){
+
+alert(
+"Please Enter Cutting Percent Between 0 And 100"
+);
+
+return;
+
+}
+
+activeCutPercent = percent;
+
+document.getElementById(
+"cutInfo"
+).style.display =
+"block";
+
+document.getElementById(
+"cutInfo"
+).innerHTML =
+percent +
+"% Cutting Applied — Showing Remaining " +
+(100-percent) +
+"% Amount";
+
+closeCuttingPopup();
+
+loadMarketCutting();
+
+document.getElementById(
+"cutPercent"
+).value="";
+
+}
+
+
+// =====================================
+// HIDE CUT INFO
+// =====================================
+
+function hideCutInfo(){
+
+document.getElementById(
+"cutInfo"
+).style.display =
+"none";
+
+}
+
+
+// =====================================
+// COPY
+// =====================================
+
+function copyMarketData(id){
+
+let el =
+document.getElementById(id);
+
+if(!el){
+
+return;
+
+}
+
+let text =
+el.innerText;
+
+if(
+navigator.clipboard
+){
+
+navigator.clipboard
+.writeText(text)
+.then(function(){
+
+alert(
+"Market Cutting Copied Successfully"
+);
+
+})
+.catch(function(){
+
+fallbackCopy(text);
+
+});
+
+}else{
+
+fallbackCopy(text);
+
+}
+
+}
+
+
+function fallbackCopy(text){
+
+let area =
+document.createElement(
+"textarea"
+);
+
+area.value = text;
+
+document.body.appendChild(
+area
+);
+
+area.select();
+
+document.execCommand(
+"copy"
+);
+
+area.remove();
+
+alert(
+"Market Cutting Copied Successfully"
+);
+
+}
+
+
+// =====================================
+// AUTO SELECT FIRST MARKET
+// =====================================
+
+let marketSelect =
+document.getElementById(
+"marketSelect"
+);
+
+if(
+marketSelect.options.length > 1
+){
+
+marketSelect.selectedIndex = 1;
+
+loadMarketCutting();
+
+}
+
+
+console.log(
+"Booki Cutting Final Connected"
+);
+
+</script>
+
+</body>
+</html>

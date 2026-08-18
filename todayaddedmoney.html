@@ -1,0 +1,2664 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Today's Added Money - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   TODAYADDEDMONEY.HTML
+   FINAL COMPLETE REPLACEMENT
+
+   FEATURES
+
+   1. Today's Approved Deposit Total
+   2. Today's Deposit Users
+   3. Approved Date Based Calculation
+   4. Search User / Mobile / Amount
+   5. Deposit Details
+   6. Wallet Balance Display
+   7. 12 Hour AM / PM Time
+   8. Automatic Live Refresh
+   9. Dashboard Sync
+   10. Mobile Friendly Design
+===================================================== */
+
+
+/* =====================================================
+   1. BASIC
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+
+button,
+input{
+    font:inherit;
+}
+
+
+.container{
+    width:100%;
+    max-width:1000px;
+    margin:auto;
+    padding:15px;
+}
+
+
+
+/* =====================================================
+   2. TITLE
+===================================================== */
+
+.title{
+    background:#111111;
+    color:#ffffff;
+    text-align:center;
+    padding:18px;
+    border-radius:12px;
+    font-size:27px;
+    font-weight:bold;
+    margin-bottom:18px;
+    box-shadow:0 3px 10px rgba(0,0,0,.20);
+}
+
+
+
+/* =====================================================
+   3. MAIN TODAY TOTAL
+===================================================== */
+
+.mainTotal{
+    background:linear-gradient(
+        135deg,
+        #1b8f3a,
+        #4caf50
+    );
+
+    color:#ffffff;
+
+    border-radius:16px;
+
+    padding:22px 15px;
+
+    margin-bottom:15px;
+
+    text-align:center;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.18);
+}
+
+
+.mainTotal p{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+
+.mainTotal h1{
+    font-size:38px;
+}
+
+
+
+/* =====================================================
+   4. SUMMARY GRID
+===================================================== */
+
+.summaryGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+
+.summaryCard{
+    background:#ffffff;
+    border-radius:14px;
+    padding:18px 10px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.14);
+}
+
+
+.summaryCard h3{
+    font-size:14px;
+    color:#666666;
+    margin-bottom:9px;
+}
+
+
+.summaryCard p{
+    font-size:26px;
+    font-weight:bold;
+}
+
+
+.usersCard{
+    border-left:6px solid #2196f3;
+}
+
+
+.usersCard p{
+    color:#2196f3;
+}
+
+
+.depositCard{
+    border-left:6px solid #4caf50;
+}
+
+
+.depositCard p{
+    color:#4caf50;
+}
+
+
+.balanceCard{
+    border-left:6px solid #673ab7;
+}
+
+
+.balanceCard p{
+    color:#673ab7;
+}
+
+
+
+/* =====================================================
+   5. INFORMATION BOX
+===================================================== */
+
+.infoBox{
+    background:#fff8e1;
+    color:#795548;
+    border-left:5px solid #ffb300;
+    padding:12px 14px;
+    border-radius:9px;
+    margin-bottom:15px;
+    font-size:13px;
+    line-height:1.6;
+}
+
+
+
+/* =====================================================
+   6. FILTER
+===================================================== */
+
+.filterBox{
+    background:#ffffff;
+    padding:14px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    margin-bottom:15px;
+
+    display:grid;
+
+    grid-template-columns:
+    1fr
+    2fr
+    auto
+    auto;
+
+    gap:9px;
+}
+
+
+.filterBox input{
+    width:100%;
+    min-height:44px;
+    padding:9px 10px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:14px;
+    outline:none;
+}
+
+
+.filterBox input:focus{
+    border-color:#4caf50;
+}
+
+
+.filterBtn{
+    min-height:44px;
+    border:none;
+    border-radius:8px;
+    padding:9px 15px;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.todayBtn{
+    background:#ff9800;
+}
+
+
+.clearBtn{
+    background:#607d8b;
+}
+
+
+
+/* =====================================================
+   7. SECTION TITLE
+===================================================== */
+
+.sectionTitle{
+    background:#263238;
+    color:#ffffff;
+    padding:13px 15px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+
+.recordCount{
+    background:#ffffff;
+    color:#263238;
+    min-width:34px;
+    height:28px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 8px;
+    font-size:13px;
+}
+
+
+
+/* =====================================================
+   8. DEPOSIT LIST
+===================================================== */
+
+.depositList{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+
+.depositItem{
+    background:#ffffff;
+    border-radius:14px;
+    padding:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.13);
+    border-left:6px solid #4caf50;
+}
+
+
+.topRow{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:10px;
+}
+
+
+.userArea{
+    min-width:0;
+}
+
+
+.userName{
+    font-size:18px;
+    font-weight:bold;
+    color:#333333;
+    margin-bottom:4px;
+}
+
+
+.mobile{
+    font-size:14px;
+    color:#666666;
+}
+
+
+.amount{
+    font-size:23px;
+    font-weight:bold;
+    color:#159447;
+    white-space:nowrap;
+}
+
+
+
+/* =====================================================
+   9. DETAILS
+===================================================== */
+
+.detailsGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:7px 12px;
+    padding-top:10px;
+    border-top:1px solid #eeeeee;
+}
+
+
+.detail{
+    font-size:13px;
+    color:#555555;
+    line-height:1.5;
+}
+
+
+.detail strong{
+    color:#333333;
+}
+
+
+.walletBalance{
+    color:#673ab7;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   10. STATUS
+===================================================== */
+
+.statusRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:12px;
+}
+
+
+.status{
+    display:inline-block;
+    padding:6px 11px;
+    border-radius:20px;
+    background:#e8f5e9;
+    color:#2e7d32;
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+.creditText{
+    color:#159447;
+    font-size:13px;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   11. NO DATA
+===================================================== */
+
+.noData{
+    background:#ffffff;
+    padding:35px 20px;
+    border-radius:14px;
+    text-align:center;
+    color:#777777;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.noDataIcon{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+
+.noData h3{
+    margin-bottom:5px;
+    color:#555555;
+}
+
+
+.noData p{
+    font-size:13px;
+}
+
+
+
+/* =====================================================
+   12. BACK
+===================================================== */
+
+.backBtn{
+    display:block;
+    margin-top:20px;
+    text-align:center;
+    text-decoration:none;
+    background:#34495e;
+    color:#ffffff;
+    padding:13px;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   13. MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .title{
+        font-size:21px;
+        padding:15px 10px;
+    }
+
+
+    .mainTotal h1{
+        font-size:32px;
+    }
+
+
+    .summaryGrid{
+        grid-template-columns:repeat(2,1fr);
+        gap:9px;
+    }
+
+
+    .balanceCard{
+        grid-column:1/-1;
+    }
+
+
+    .summaryCard{
+        padding:14px 8px;
+    }
+
+
+    .summaryCard h3{
+        font-size:12px;
+    }
+
+
+    .summaryCard p{
+        font-size:22px;
+    }
+
+
+    .filterBox{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .filterBox #searchInput{
+        grid-column:1/-1;
+    }
+
+
+    .topRow{
+        align-items:center;
+    }
+
+
+    .userName{
+        font-size:16px;
+    }
+
+
+    .amount{
+        font-size:20px;
+    }
+
+
+    .detailsGrid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     1. TITLE
+===================================================== -->
+
+<div class="title">
+
+    TODAY'S ADDED MONEY
+
+</div>
+
+
+
+<!-- =====================================================
+     2. MAIN TODAY TOTAL
+===================================================== -->
+
+<div class="mainTotal">
+
+    <p>
+        Today's Total Added Money
+    </p>
+
+    <h1>
+
+        ₹
+        <span id="mainTodayTotal">
+            0.00
+        </span>
+
+    </h1>
+
+</div>
+
+
+
+<!-- =====================================================
+     3. SUMMARY
+===================================================== -->
+
+<div class="summaryGrid">
+
+
+    <div class="summaryCard usersCard">
+
+        <h3>
+            Today's Deposit Users
+        </h3>
+
+        <p id="todayUsers">
+            0
+        </p>
+
+    </div>
+
+
+    <div class="summaryCard depositCard">
+
+        <h3>
+            Approved Deposits
+        </h3>
+
+        <p id="approvedRecords">
+            0
+        </p>
+
+    </div>
+
+
+    <div class="summaryCard balanceCard">
+
+        <h3>
+            Total User Wallet Balance
+        </h3>
+
+        <p>
+
+            ₹
+            <span id="totalWalletBalance">
+                0.00
+            </span>
+
+        </p>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     4. INFORMATION
+===================================================== -->
+
+<div class="infoBox">
+
+    Is page par deposit request ki date nahi,
+    balki admin ke deposit APPROVE karne ki date ke
+    hisaab se Today's Added Money calculate hota hai.
+
+</div>
+
+
+
+<!-- =====================================================
+     5. FILTER / SEARCH
+===================================================== -->
+
+<div class="filterBox">
+
+
+    <input
+    type="date"
+    id="filterDate">
+
+
+    <input
+    type="text"
+    id="searchInput"
+    placeholder="Search Name / Mobile / Amount / Reference"
+    autocomplete="off">
+
+
+    <button
+    type="button"
+    class="filterBtn todayBtn"
+    onclick="todayFilter()">
+
+        TODAY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="filterBtn clearBtn"
+    onclick="clearFilter()">
+
+        CLEAR
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     6. LIST TITLE
+===================================================== -->
+
+<div class="sectionTitle">
+
+    <span id="listTitle">
+        Today's Approved Deposits
+    </span>
+
+    <span
+    class="recordCount"
+    id="recordCount">
+
+        0
+
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+     7. DEPOSIT LIST
+===================================================== -->
+
+<div
+class="depositList"
+id="depositList">
+
+</div>
+
+
+
+<!-- =====================================================
+     8. BACK
+===================================================== -->
+
+<a
+href="index.html"
+class="backBtn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   TODAY'S ADDED MONEY
+   FINAL COMPLETE ENGINE
+
+   STORAGE USED:
+
+   deposits
+   userBalances
+   todayAddedMoney
+   todayAddedMoneyDate
+
+   IMPORTANT:
+
+   Approved Deposit =
+   approvedDate ke hisaab se count hoga.
+===================================================== */
+
+
+
+/* =====================================================
+   1. SAFE STORAGE READ
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   2. SAFE VALUE
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+
+/* =====================================================
+   3. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   4. NORMALIZE MOBILE
+===================================================== */
+
+function normalizeMobile(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+}
+
+
+
+/* =====================================================
+   5. TODAY ISO DATE
+===================================================== */
+
+function getTodayISO(){
+
+    let today =
+    new Date();
+
+
+    let yyyy =
+    today.getFullYear();
+
+
+    let mm =
+    String(
+        today.getMonth()+1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    let dd =
+    String(
+        today.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return (
+
+        yyyy +
+        "-" +
+        mm +
+        "-" +
+        dd
+
+    );
+
+}
+
+
+
+/* =====================================================
+   6. NORMALIZE DATE
+
+   Supported:
+
+   DD/MM/YYYY
+   DD-MM-YYYY
+   YYYY-MM-DD
+   ISO Date
+===================================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+
+        return "";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+
+    /* -------------------------------------------------
+       DD/MM/YYYY
+    ------------------------------------------------- */
+
+    let slash =
+    text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slash){
+
+        return (
+
+            slash[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slash[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slash[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+
+    /* -------------------------------------------------
+       DD-MM-YYYY
+    ------------------------------------------------- */
+
+    let dash =
+    text.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})/
+    );
+
+
+    if(dash){
+
+        return (
+
+            dash[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dash[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dash[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+
+    /* -------------------------------------------------
+       YYYY-MM-DD
+    ------------------------------------------------- */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}/
+        .test(
+            text
+        )
+    ){
+
+        return text.substring(
+            0,
+            10
+        );
+
+    }
+
+
+
+    /* -------------------------------------------------
+       OTHER VALID DATE
+    ------------------------------------------------- */
+
+    let parsed =
+    new Date(
+        text
+    );
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    return (
+
+        parsed.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            parsed.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   7. DISPLAY DATE
+===================================================== */
+
+function displayDate(value){
+
+    let normalized =
+    normalizeDate(
+        value
+    );
+
+
+    if(!normalized){
+
+        return safe(
+            value
+        );
+
+    }
+
+
+    let parts =
+    normalized.split(
+        "-"
+    );
+
+
+    return (
+
+        parts[2]
+
+        +
+
+        "/"
+
+        +
+
+        parts[1]
+
+        +
+
+        "/"
+
+        +
+
+        parts[0]
+
+    );
+
+}
+
+
+
+/* =====================================================
+   8. 12 HOUR TIME FORMAT
+
+   Requirement:
+   AM / PM CAPITAL LETTER
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        !value ||
+        value === "-"
+    ){
+
+        return "-";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+
+    /* -------------------------------------------------
+       Already AM / PM
+    ------------------------------------------------- */
+
+    if(
+        /\b(am|pm)\b/i
+        .test(
+            text
+        )
+    ){
+
+        return text
+        .replace(
+            /\bam\b/gi,
+            "AM"
+        )
+        .replace(
+            /\bpm\b/gi,
+            "PM"
+        );
+
+    }
+
+
+
+    /* -------------------------------------------------
+       24 Hour Time
+    ------------------------------------------------- */
+
+    let match =
+    text.match(
+        /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+    if(match){
+
+        let hour =
+        Number(
+            match[1]
+        );
+
+
+        if(
+            hour >= 0 &&
+            hour <= 23
+        ){
+
+            let suffix =
+            hour >= 12
+            ? "PM"
+            : "AM";
+
+
+            let hour12 =
+            hour % 12;
+
+
+            if(
+                hour12 === 0
+            ){
+
+                hour12 = 12;
+
+            }
+
+
+            return (
+
+                String(
+                    hour12
+                )
+                .padStart(
+                    2,
+                    "0"
+                )
+
+                +
+
+                ":"
+
+                +
+
+                match[2]
+
+                +
+
+                (
+                    match[3]
+                    ?
+                    ":" + match[3]
+                    :
+                    ""
+                )
+
+                +
+
+                " "
+
+                +
+
+                suffix
+
+            );
+
+        }
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   9. GET DEPOSITS
+===================================================== */
+
+function getDeposits(){
+
+    let deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    return Array.isArray(
+        deposits
+    )
+    ?
+    deposits
+    :
+    [];
+
+}
+
+
+
+/* =====================================================
+   10. GET USER BALANCES
+===================================================== */
+
+function getUserBalances(){
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    if(
+        !balances ||
+        Array.isArray(
+            balances
+        ) ||
+        typeof balances !==
+        "object"
+    ){
+
+        return {};
+
+    }
+
+
+    return balances;
+
+}
+
+
+
+/* =====================================================
+   11. GET USER WALLET BALANCE
+===================================================== */
+
+function getUserWalletBalance(
+    mobile
+){
+
+    let balances =
+    getUserBalances();
+
+
+    let original =
+    String(
+        mobile || ""
+    )
+    .trim();
+
+
+    let normalized =
+    normalizeMobile(
+        mobile
+    );
+
+
+    let amount =
+    Number(
+
+        balances[original]
+
+        ??
+
+        balances[normalized]
+
+        ??
+
+        0
+
+    );
+
+
+    if(
+        !Number.isFinite(
+            amount
+        )
+    ){
+
+        amount = 0;
+
+    }
+
+
+    return amount;
+
+}
+
+
+
+/* =====================================================
+   12. TOTAL ALL USER WALLET BALANCE
+===================================================== */
+
+function getTotalUserWalletBalance(){
+
+    let balances =
+    getUserBalances();
+
+
+    let total =
+    0;
+
+
+    Object.keys(
+        balances
+    )
+    .forEach(
+        function(key){
+
+            let amount =
+            Number(
+                balances[key] || 0
+            );
+
+
+            if(
+                Number.isFinite(
+                    amount
+                )
+            ){
+
+                total +=
+                amount;
+
+            }
+
+        }
+    );
+
+
+    return total;
+
+}
+
+
+
+/* =====================================================
+   13. APPROVED STATUS CHECK
+===================================================== */
+
+function isApproved(item){
+
+    let status =
+    String(
+        item.status || ""
+    )
+    .trim()
+    .toUpperCase();
+
+
+    return (
+
+        status === "APPROVED"
+
+        ||
+
+        status === "SUCCESS"
+
+        ||
+
+        status === "PAID"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   14. APPROVAL DATE
+
+   New final records:
+   approvedDate
+
+   Old approved records:
+   date fallback
+===================================================== */
+
+function getApprovalDate(item){
+
+    return (
+
+        item.approvedDate
+
+        ||
+
+        item.date
+
+        ||
+
+        ""
+
+    );
+
+}
+
+
+
+/* =====================================================
+   15. APPROVAL TIME
+===================================================== */
+
+function getApprovalTime(item){
+
+    return (
+
+        item.approvedTime
+
+        ||
+
+        item.time
+
+        ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   16. SORT TIME
+===================================================== */
+
+function getSortTime(item){
+
+    let values = [
+
+        item.approvedTimestamp,
+
+        item.updatedTimestamp,
+
+        item.timestamp,
+
+        item.createdTimestamp,
+
+        item.id
+
+    ];
+
+
+    for(
+        let value of values
+    ){
+
+        let number =
+        Number(
+            value
+        );
+
+
+        if(
+            Number.isFinite(
+                number
+            )
+            &&
+            number > 0
+        ){
+
+            return number;
+
+        }
+
+    }
+
+
+    if(
+        item.approvedAt
+    ){
+
+        let parsed =
+        new Date(
+            item.approvedAt
+        );
+
+
+        if(
+            !isNaN(
+                parsed.getTime()
+            )
+        ){
+
+            return parsed.getTime();
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+
+/* =====================================================
+   17. GET APPROVED RECORDS FOR DATE
+===================================================== */
+
+function getApprovedRecords(
+    selectedDate
+){
+
+    let deposits =
+    getDeposits();
+
+
+    return deposits
+    .filter(
+        function(item){
+
+            if(
+                !isApproved(
+                    item
+                )
+            ){
+
+                return false;
+
+            }
+
+
+            let approvalDate =
+            normalizeDate(
+                getApprovalDate(
+                    item
+                )
+            );
+
+
+            return (
+
+                selectedDate === ""
+
+                ||
+
+                approvalDate ===
+                selectedDate
+
+            );
+
+        }
+    )
+    .sort(
+        function(a,b){
+
+            return (
+
+                Number(
+                    getSortTime(b)
+                )
+
+                -
+
+                Number(
+                    getSortTime(a)
+                )
+
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   18. UNIQUE USERS
+===================================================== */
+
+function countUniqueUsers(
+    records
+){
+
+    let users =
+    new Set();
+
+
+    records.forEach(
+        function(item){
+
+            let mobile =
+            normalizeMobile(
+                item.mobile
+            );
+
+
+            if(mobile){
+
+                users.add(
+                    mobile
+                );
+
+            }
+
+        }
+    );
+
+
+    return users.size;
+
+}
+
+
+
+/* =====================================================
+   19. CALCULATE TOTAL
+===================================================== */
+
+function calculateTotal(
+    records
+){
+
+    let total =
+    0;
+
+
+    records.forEach(
+        function(item){
+
+            let amount =
+            Number(
+                item.amount || 0
+            );
+
+
+            if(
+                Number.isFinite(
+                    amount
+                )
+            ){
+
+                total +=
+                amount;
+
+            }
+
+        }
+    );
+
+
+    return total;
+
+}
+
+
+
+/* =====================================================
+   20. SYNC TODAY ADDED MONEY WITH INDEX.HTML
+===================================================== */
+
+function syncDashboardTodayTotal(){
+
+    let today =
+    getTodayISO();
+
+
+    let todayRecords =
+    getApprovedRecords(
+        today
+    );
+
+
+    let total =
+    calculateTotal(
+        todayRecords
+    );
+
+
+    localStorage.setItem(
+        "todayAddedMoney",
+        String(
+            total
+        )
+    );
+
+
+    localStorage.setItem(
+        "todayAddedMoneyDate",
+        today
+    );
+
+}
+
+
+
+/* =====================================================
+   21. CURRENT DISPLAY RECORDS
+===================================================== */
+
+function getCurrentDisplayRecords(){
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    return getApprovedRecords(
+        selectedDate
+    );
+
+}
+
+
+
+/* =====================================================
+   22. RENDER PAGE
+===================================================== */
+
+function renderPage(){
+
+    syncDashboardTodayTotal();
+
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    let records =
+    getCurrentDisplayRecords();
+
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+
+    /* -------------------------------------------------
+       SEARCH FILTER
+    ------------------------------------------------- */
+
+    let filtered =
+    records.filter(
+        function(item){
+
+            if(
+                search === ""
+            ){
+
+                return true;
+
+            }
+
+
+            let searchable =
+            [
+
+                item.name,
+
+                item.mobile,
+
+                item.amount,
+
+                item.utr,
+
+                item.transactionId,
+
+                item.requestId,
+
+                item.id,
+
+                item.paymentMode,
+
+                item.status
+
+            ]
+            .join(
+                " "
+            )
+            .toLowerCase();
+
+
+            return searchable.includes(
+                search
+            );
+
+        }
+    );
+
+
+
+    /* -------------------------------------------------
+       TOTAL
+    ------------------------------------------------- */
+
+    let displayTotal =
+    calculateTotal(
+        filtered
+    );
+
+
+    document
+    .getElementById(
+        "mainTodayTotal"
+    )
+    .innerText =
+    displayTotal.toFixed(
+        2
+    );
+
+
+
+    /* -------------------------------------------------
+       UNIQUE USERS
+    ------------------------------------------------- */
+
+    document
+    .getElementById(
+        "todayUsers"
+    )
+    .innerText =
+    countUniqueUsers(
+        filtered
+    );
+
+
+
+    /* -------------------------------------------------
+       RECORD COUNT
+    ------------------------------------------------- */
+
+    document
+    .getElementById(
+        "approvedRecords"
+    )
+    .innerText =
+    filtered.length;
+
+
+    document
+    .getElementById(
+        "recordCount"
+    )
+    .innerText =
+    filtered.length;
+
+
+
+    /* -------------------------------------------------
+       ALL USERS TOTAL WALLET
+    ------------------------------------------------- */
+
+    document
+    .getElementById(
+        "totalWalletBalance"
+    )
+    .innerText =
+    getTotalUserWalletBalance()
+    .toFixed(
+        2
+    );
+
+
+
+    /* -------------------------------------------------
+       LIST TITLE
+    ------------------------------------------------- */
+
+    let title =
+    document
+    .getElementById(
+        "listTitle"
+    );
+
+
+    if(
+        selectedDate ===
+        getTodayISO()
+    ){
+
+        title.innerText =
+        "Today's Approved Deposits";
+
+    }
+
+    else if(
+        selectedDate
+    ){
+
+        title.innerText =
+
+        "Approved Deposits - "
+
+        +
+
+        displayDate(
+            selectedDate
+        );
+
+    }
+
+    else{
+
+        title.innerText =
+        "All Approved Deposits";
+
+    }
+
+
+
+    /* -------------------------------------------------
+       RENDER LIST
+    ------------------------------------------------- */
+
+    renderDepositList(
+        filtered
+    );
+
+}
+
+
+
+/* =====================================================
+   23. RENDER DEPOSIT LIST
+===================================================== */
+
+function renderDepositList(
+    records
+){
+
+    let list =
+    document
+    .getElementById(
+        "depositList"
+    );
+
+
+    list.innerHTML =
+    "";
+
+
+    if(
+        records.length === 0
+    ){
+
+        list.innerHTML = `
+
+        <div class="noData">
+
+            <div class="noDataIcon">
+                💰
+            </div>
+
+            <h3>
+                No Approved Deposit Found
+            </h3>
+
+            <p>
+                Selected date ya search ke liye
+                koi approved deposit available nahi hai.
+            </p>
+
+        </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    records.forEach(
+        function(item){
+
+            let name =
+            item.name ||
+            "User";
+
+
+            let mobile =
+            item.mobile ||
+            "-";
+
+
+            let amount =
+            Number(
+                item.amount || 0
+            );
+
+
+            if(
+                !Number.isFinite(
+                    amount
+                )
+            ){
+
+                amount = 0;
+
+            }
+
+
+            let date =
+            displayDate(
+                getApprovalDate(
+                    item
+                )
+            );
+
+
+            let time =
+            formatTime12(
+                getApprovalTime(
+                    item
+                )
+            );
+
+
+            let walletBalance =
+            getUserWalletBalance(
+                item.mobile
+            );
+
+
+            let reference =
+
+            item.utr
+
+            ||
+
+            item.transactionId
+
+            ||
+
+            item.requestId
+
+            ||
+
+            item.id
+
+            ||
+
+            "-";
+
+
+            let paymentMode =
+
+            item.paymentMode
+
+            ||
+
+            item.type
+
+            ||
+
+            "Deposit";
+
+
+            let card =
+            document.createElement(
+                "div"
+            );
+
+
+            card.className =
+            "depositItem";
+
+
+            card.innerHTML = `
+
+            <div class="topRow">
+
+
+                <div class="userArea">
+
+                    <div class="userName">
+
+                        ${escapeHTML(
+                            safe(
+                                name
+                            )
+                        )}
+
+                    </div>
+
+
+                    <div class="mobile">
+
+                        📱
+                        ${escapeHTML(
+                            safe(
+                                mobile
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="amount">
+
+                    + ₹ ${amount.toFixed(2)}
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="detailsGrid">
+
+
+                <div class="detail">
+
+                    <strong>
+                        Approved Date:
+                    </strong>
+
+                    ${escapeHTML(
+                        date
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Approved Time:
+                    </strong>
+
+                    ${escapeHTML(
+                        time
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Payment Type:
+                    </strong>
+
+                    ${escapeHTML(
+                        safe(
+                            paymentMode
+                        )
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Reference:
+                    </strong>
+
+                    ${escapeHTML(
+                        safe(
+                            reference
+                        )
+                    )}
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Current Wallet:
+                    </strong>
+
+                    <span class="walletBalance">
+
+                        ₹ ${walletBalance.toFixed(2)}
+
+                    </span>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <strong>
+                        Status:
+                    </strong>
+
+                    Approved
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="statusRow">
+
+
+                <span class="status">
+
+                    ✓ Approved
+
+                </span>
+
+
+                <span class="creditText">
+
+                    Wallet Credit + ₹ ${amount.toFixed(2)}
+
+                </span>
+
+
+            </div>
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   24. TODAY FILTER
+===================================================== */
+
+function todayFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    renderPage();
+
+}
+
+
+
+/* =====================================================
+   25. CLEAR FILTER
+
+   Clear karne par all approved deposits
+   show honge.
+===================================================== */
+
+function clearFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    renderPage();
+
+}
+
+
+
+/* =====================================================
+   26. DATE EVENT
+===================================================== */
+
+document
+.getElementById(
+    "filterDate"
+)
+.addEventListener(
+    "change",
+    renderPage
+);
+
+
+
+/* =====================================================
+   27. SEARCH EVENT
+===================================================== */
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    renderPage
+);
+
+
+
+/* =====================================================
+   28. LIVE STORAGE UPDATE
+
+   Dusre browser tab mein deposit approve hone
+   par ye page automatically refresh hoga.
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === "deposits"
+
+            ||
+
+            event.key === "userBalances"
+
+            ||
+
+            event.key === "todayAddedMoney"
+
+            ||
+
+            event.key === "todayAddedMoneyDate"
+
+            ||
+
+            event.key === "passbook"
+        ){
+
+            renderPage();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   29. PAGE FOCUS
+
+   Dusre admin page se wapas aane par
+   fresh data show hoga.
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        renderPage();
+
+    }
+);
+
+
+
+/* =====================================================
+   30. VISIBILITY CHANGE
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            renderPage();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   31. FIRST LOAD
+===================================================== */
+
+function startPage(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    syncDashboardTodayTotal();
+
+
+    renderPage();
+
+}
+
+
+startPage();
+
+
+
+/* =====================================================
+   32. LOCAL TEST AUTO REFRESH
+
+   LocalStorage project testing ke time same
+   page par data fresh rakhne ke liye.
+===================================================== */
+
+setInterval(
+    function(){
+
+        renderPage();
+
+    },
+    3000
+);
+
+
+
+console.log(
+    "✅ HR MATKA Today's Added Money FINAL Complete Replacement Connected"
+);
+
+
+console.log(
+    "✅ Approved Date Based Deposit Calculation Connected"
+);
+
+
+console.log(
+    "✅ Admin Dashboard + Deposits + User Wallet Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,427 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>User Passbook</title>
+
+<style>
+
+
+
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+padding:20px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 10px rgba(0,0,0,.15);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#2c3e50;
+}
+
+select,
+input{
+padding:10px;
+margin:5px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+button{
+padding:10px 18px;
+margin:5px;
+background:#27ae60;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#219150;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th{
+background:#3498db;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border:1px solid #ddd;
+text-align:center;
+}
+
+tr:nth-child(even){
+background:#f9f9f9;
+}
+
+a{
+display:block;
+text-align:center;
+margin-top:20px;
+text-decoration:none;
+font-weight:bold;
+color:#3498db;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+
+
+
+</style>
+
+</head>
+
+<body>
+
+
+
+
+    <div class="container">
+
+<h1>User Passbook</h1>
+
+<div class="card">
+
+<h2 style="text-align:center;color:#2c3e50;">
+Current Balance :
+₹ <span id="currentBalance">0</span>
+</h2>
+
+<br>
+
+<select id="typeFilter">
+<option value="ALL">All Transaction</option>
+<option value="Deposit">Deposit</option>
+<option value="Withdraw">Withdraw</option>
+<option value="Manual Payment">Manual Payment</option>
+</select>
+
+<input type="date" id="dateFilter">
+
+<button onclick="todayFilter()">
+Today
+</button>
+
+<button onclick="searchPassbook()">
+Search
+</button>
+
+<br><br>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+
+<th>Date & Time</th>
+
+<th>Type</th>
+
+<th>Previous Balance</th>
+
+<th>Amount</th>
+
+<th>Current Balance</th>
+
+<th>Status</th>
+
+<th>Details</th>
+
+</tr>
+
+<tbody id="passbookTable">
+
+</tbody>
+
+</table>
+
+<br>
+
+<a href="userdetails.html">
+← Back To User Details
+</a>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+
+// ===============================
+// LOAD PASSBOOK
+// ===============================
+
+let user =
+JSON.parse(localStorage.getItem("selectedUser"));
+
+let balances =
+JSON.parse(localStorage.getItem("userBalances")) || {};
+
+document.getElementById("currentBalance").innerHTML =
+balances[user.mobile] || 0;
+
+loadPassbook();
+
+function loadPassbook(){
+
+let passbook =
+JSON.parse(localStorage.getItem("passbook")) || [];
+
+let table =
+document.getElementById("passbookTable");
+
+table.innerHTML = "";
+
+let userPassbook =
+passbook.filter(function(item){
+
+return item.mobile == user.mobile;
+
+});
+
+if(userPassbook.length==0){
+
+table.innerHTML = `
+<tr>
+<td colspan="8">
+No Transaction Found
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+userPassbook.forEach(function(item,index){
+
+table.innerHTML += `
+
+<tr>
+
+<td>${index+1}</td>
+
+<td>${item.date}</td>
+
+<td>${item.type}</td>
+
+<td>₹ ${item.previousBalance}</td>
+
+<td>₹ ${item.amount}</td>
+
+<td>₹ ${item.currentBalance}</td>
+
+<td>${item.status}</td>
+
+<td>${item.details}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+
+
+
+// ===============================
+// TODAY FILTER
+// ===============================
+
+function todayFilter(){
+
+let today = new Date();
+
+let yyyy = today.getFullYear();
+
+let mm = String(today.getMonth()+1).padStart(2,"0");
+
+let dd = String(today.getDate()).padStart(2,"0");
+
+document.getElementById("dateFilter").value =
+yyyy + "-" + mm + "-" + dd;
+
+document.getElementById("typeFilter").value = "ALL";
+
+searchPassbook();
+
+}
+
+
+
+// ===============================
+// SEARCH PASSBOOK
+// ===============================
+
+function searchPassbook(){
+
+let passbook =
+JSON.parse(localStorage.getItem("passbook")) || [];
+
+let table =
+document.getElementById("passbookTable");
+
+table.innerHTML = "";
+
+let selectedDate =
+document.getElementById("dateFilter").value;
+
+let selectedType =
+document.getElementById("typeFilter").value;
+
+let id = 1;
+
+passbook.forEach(function(item){
+
+if(item.mobile != user.mobile){
+
+return;
+
+}
+
+let passbookDate =
+new Date(item.date).toISOString().split("T")[0];
+
+if(
+
+(selectedDate=="" || passbookDate==selectedDate)
+
+&&
+
+(selectedType=="ALL" || item.type==selectedType)
+
+){
+
+table.innerHTML += `
+
+<tr>
+
+<td>${id++}</td>
+
+<td>${item.date}</td>
+
+<td>${item.type}</td>
+
+<td>₹ ${item.previousBalance}</td>
+
+<td>₹ ${item.amount}</td>
+
+<td>₹ ${item.currentBalance}</td>
+
+<td>${item.status}</td>
+
+<td>${item.details}</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(table.innerHTML==""){
+
+table.innerHTML = `
+<tr>
+<td colspan="8">
+No Transaction Found
+</td>
+</tr>
+`;
+
+}
+
+}
+
+
+
+// ===============================
+// REFRESH PASSBOOK
+// ===============================
+
+function refreshPassbook(){
+
+loadPassbook();
+
+}
+
+// ===============================
+// CLEAR FILTER
+// ===============================
+
+function clearFilter(){
+
+document.getElementById("dateFilter").value="";
+
+document.getElementById("typeFilter").value="ALL";
+
+loadPassbook();
+
+}
+
+// ===============================
+// AUTO LOAD
+// ===============================
+
+window.onload=function(){
+
+document.getElementById("currentBalance").innerHTML=
+
+balances[user.mobile] || 0;
+
+loadPassbook();
+
+};
+
+
+</script>
+
+
+</body>
+</html>

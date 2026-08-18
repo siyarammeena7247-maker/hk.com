@@ -1,0 +1,5713 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>All Deposit History - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   ALLDEPOSITHISTORY.HTML
+
+   FINAL DEPOSIT VERIFICATION SYSTEM
+
+   CONNECTED:
+   - Deposit Request
+   - UTR Verification
+   - Payment Screenshot
+   - Screenshot Preview Popup
+   - Safe Approval
+   - Wallet Credit
+   - Passbook Credit
+   - Today Added Money
+   - Duplicate Approval Protection
+   - Old Record Compatibility
+===================================================== */
+
+
+/* =====================================================
+   1. BASIC
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:35px;
+}
+
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+
+button{
+    -webkit-tap-highlight-color:transparent;
+}
+
+
+.header{
+    background:#263238;
+    color:#ffffff;
+    padding:18px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 3px 10px rgba(0,0,0,.20);
+}
+
+
+.container{
+    width:100%;
+    max-width:1250px;
+    margin:auto;
+    padding:15px;
+}
+
+
+
+/* =====================================================
+   2. SUMMARY
+===================================================== */
+
+.summaryGrid{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+
+.summaryBox{
+    min-height:110px;
+    padding:18px 12px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.todaySummary{
+    background:#26a69a;
+    color:#ffffff;
+}
+
+
+.pendingSummary{
+    background:#ffb300;
+    color:#222222;
+}
+
+
+.approvedSummary{
+    background:#2e7d32;
+    color:#ffffff;
+}
+
+
+.summaryBox p{
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+
+.summaryAmount{
+    font-size:31px;
+    font-weight:bold;
+}
+
+
+.summaryCount{
+    font-size:29px;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   3. INFORMATION BOX
+===================================================== */
+
+.infoBox{
+    background:#fff8e1;
+    color:#795548;
+    border-left:5px solid #ffb300;
+    padding:13px 15px;
+    border-radius:8px;
+    margin-bottom:15px;
+    font-size:13px;
+    line-height:1.7;
+}
+
+
+.infoBox b{
+    color:#5d4037;
+}
+
+
+
+/* =====================================================
+   4. FILTER
+===================================================== */
+
+.filterBox{
+    background:#ffffff;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr auto auto auto;
+    gap:10px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.filterBox select,
+.filterBox input{
+    width:100%;
+    min-height:44px;
+    border:1px solid #cccccc;
+    border-radius:7px;
+    padding:0 10px;
+    font-size:15px;
+    outline:none;
+    background:#ffffff;
+}
+
+
+.filterBox select:focus,
+.filterBox input:focus{
+    border-color:#26a69a;
+    box-shadow:0 0 0 2px rgba(38,166,154,.10);
+}
+
+
+.smallBtn{
+    min-height:44px;
+    padding:0 18px;
+    border:none;
+    border-radius:7px;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.todayBtn{
+    background:#ff9800;
+}
+
+
+.searchBtn{
+    background:#26a69a;
+}
+
+
+.clearBtn{
+    background:#607d8b;
+}
+
+
+
+/* =====================================================
+   5. TOOLS
+===================================================== */
+
+.toolsBox{
+    background:#ffffff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+
+
+.toolBtn{
+    border:none;
+    background:#455a64;
+    color:#ffffff;
+    padding:9px 14px;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.refreshBtn{
+    background:#00acc1;
+}
+
+
+.searchBox{
+    margin-left:auto;
+    min-width:330px;
+    padding:10px;
+    border:1px solid #cccccc;
+    border-radius:7px;
+    outline:none;
+}
+
+
+.searchBox:focus{
+    border-color:#26a69a;
+}
+
+
+
+/* =====================================================
+   6. TABLE
+===================================================== */
+
+.tableBox{
+    background:#ffffff;
+    border-radius:12px;
+    overflow:auto;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    -webkit-overflow-scrolling:touch;
+}
+
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1450px;
+    font-size:13px;
+}
+
+
+th{
+    background:#26a69a;
+    color:#ffffff;
+    padding:11px 8px;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+td{
+    padding:10px 8px;
+    text-align:center;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+tbody tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+
+tbody tr:hover{
+    background:#f1fbfa;
+}
+
+
+.noData{
+    padding:32px !important;
+    color:#777777;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   7. STATUS
+===================================================== */
+
+.status{
+    display:inline-block;
+    min-width:82px;
+    padding:5px 9px;
+    border-radius:18px;
+    font-weight:bold;
+}
+
+
+.pending{
+    background:#fff3df;
+    color:#b36900;
+}
+
+
+.approved{
+    background:#e4f8ea;
+    color:#159447;
+}
+
+
+
+/* =====================================================
+   8. UTR
+===================================================== */
+
+.utrNumber{
+    font-weight:bold;
+    color:#3949ab;
+}
+
+
+.utrMissing{
+    color:#d32f2f;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   9. SCREENSHOT BUTTON
+===================================================== */
+
+.viewScreenshotBtn{
+    border:none;
+    background:#1565c0;
+    color:#ffffff;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+}
+
+
+.viewScreenshotBtn:hover{
+    background:#0d47a1;
+}
+
+
+.noScreenshot{
+    color:#d32f2f;
+    font-weight:bold;
+    font-size:12px;
+}
+
+
+
+/* =====================================================
+   10. APPROVE BUTTON
+===================================================== */
+
+.approveBtn{
+    border:none;
+    background:#28a745;
+    color:#ffffff;
+    padding:8px 13px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+.approveBtn:hover{
+    background:#218838;
+}
+
+
+.approveBtn:disabled{
+    background:#aaaaaa;
+    cursor:not-allowed;
+}
+
+
+/* =====================================================
+   11. VERIFICATION INDICATOR
+===================================================== */
+
+.verifyOk{
+    color:#159447;
+    font-weight:bold;
+}
+
+
+.verifyWarning{
+    color:#e65100;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   12. SCREENSHOT POPUP
+===================================================== */
+
+.screenshotPopup{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:rgba(0,0,0,.72);
+
+    align-items:center;
+    justify-content:center;
+
+    padding:15px;
+}
+
+
+.screenshotPopup.show{
+    display:flex;
+}
+
+
+.screenshotPopupBox{
+    width:100%;
+    max-width:700px;
+    max-height:94vh;
+    overflow:auto;
+
+    background:#ffffff;
+    border-radius:16px;
+    padding:18px;
+
+    box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.40);
+}
+
+
+.popupTitle{
+    text-align:center;
+    font-size:21px;
+    font-weight:bold;
+    color:#263238;
+    margin-bottom:14px;
+}
+
+
+.popupDepositInfo{
+    background:#f5f5f5;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:13px;
+    font-size:14px;
+    line-height:1.7;
+}
+
+
+.popupDepositInfo b{
+    color:#333333;
+}
+
+
+.popupImageBox{
+    width:100%;
+    text-align:center;
+    background:#eeeeee;
+    border-radius:12px;
+    padding:10px;
+    min-height:250px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.popupImageBox img{
+    display:block;
+    width:auto;
+    max-width:100%;
+    max-height:65vh;
+    margin:auto;
+    border-radius:8px;
+    background:#ffffff;
+    object-fit:contain;
+}
+
+
+.popupMissing{
+    color:#d32f2f;
+    font-size:16px;
+    font-weight:bold;
+    padding:35px 10px;
+}
+
+
+.popupCloseBtn{
+    width:100%;
+    min-height:46px;
+    border:none;
+    border-radius:8px;
+    margin-top:14px;
+    background:#455a64;
+    color:#ffffff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   13. APPROVAL CONFIRM POPUP
+===================================================== */
+
+.approvalPopup{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100000;
+
+    background:rgba(0,0,0,.68);
+
+    align-items:center;
+    justify-content:center;
+
+    padding:15px;
+}
+
+
+.approvalPopup.show{
+    display:flex;
+}
+
+
+.approvalBox{
+    width:100%;
+    max-width:480px;
+    background:#ffffff;
+    border-radius:15px;
+    padding:20px;
+
+    box-shadow:
+    0 10px 30px
+    rgba(0,0,0,.35);
+}
+
+
+.approvalBox h2{
+    text-align:center;
+    color:#263238;
+    margin-bottom:15px;
+}
+
+
+.approvalDetails{
+    background:#f7f7f7;
+    padding:13px;
+    border-radius:9px;
+    line-height:1.8;
+    font-size:14px;
+}
+
+
+.approvalWarning{
+    margin-top:12px;
+    background:#fff3cd;
+    color:#795548;
+    padding:11px;
+    border-radius:8px;
+    line-height:1.5;
+    font-size:13px;
+}
+
+
+.approvalButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+
+.confirmApproveBtn,
+.cancelApproveBtn{
+    min-height:45px;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.confirmApproveBtn{
+    background:#28a745;
+    color:#ffffff;
+}
+
+
+.cancelApproveBtn{
+    background:#607d8b;
+    color:#ffffff;
+}
+
+
+
+/* =====================================================
+   14. BACK
+===================================================== */
+
+.backBtn{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    padding:13px;
+    background:#455a64;
+    color:#ffffff;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   15. MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .header{
+        font-size:20px;
+        padding:15px 10px;
+    }
+
+
+    .summaryGrid{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .todaySummary{
+        grid-column:1/-1;
+    }
+
+
+    .filterBox{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .toolsBox{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+    }
+
+
+    .searchBox{
+        grid-column:1/-1;
+        width:100%;
+        min-width:0;
+        margin-left:0;
+    }
+
+
+    .summaryAmount{
+        font-size:27px;
+    }
+
+
+    .approvalButtons{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+
+/* =====================================================
+   16. PRINT
+===================================================== */
+
+@media print{
+
+    body{
+        background:#ffffff;
+    }
+
+
+    .filterBox,
+    .toolsBox,
+    .backBtn,
+    .infoBox,
+    .approveBtn,
+    .viewScreenshotBtn,
+    .screenshotPopup,
+    .approvalPopup{
+        display:none !important;
+    }
+
+
+    .container{
+        max-width:none;
+        padding:0;
+    }
+
+
+    .tableBox{
+        box-shadow:none;
+        overflow:visible;
+    }
+
+
+    table{
+        min-width:0;
+        font-size:9px;
+    }
+
+
+    th,
+    td{
+        padding:5px 3px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    ALL DEPOSIT HISTORY
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     SUMMARY
+===================================================== -->
+
+<div class="summaryGrid">
+
+
+    <div class="summaryBox todaySummary">
+
+        <p>
+            Today's Total Approved Deposit
+        </p>
+
+        <div class="summaryAmount">
+
+            ₹
+            <span id="todayDepositTotal">
+                0.00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="summaryBox pendingSummary">
+
+        <p>
+            Pending Requests
+        </p>
+
+        <div
+        class="summaryCount"
+        id="pendingCount">
+
+            0
+
+        </div>
+
+    </div>
+
+
+    <div class="summaryBox approvedSummary">
+
+        <p>
+            Approved Records
+        </p>
+
+        <div
+        class="summaryCount"
+        id="approvedCount">
+
+            0
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     INFORMATION
+===================================================== -->
+
+<div class="infoBox">
+
+    <b>Deposit Verification:</b>
+
+    Customer ke deposit ko APPROVE karne se pehle
+    <b>UTR Number</b> aur
+    <b>Payment Screenshot</b>
+    verify karein.
+
+    <br>
+
+    Approval ke baad amount customer wallet me
+    sirf ek baar credit hoga aur Wallet Passbook me
+    Deposit Credit entry automatically create hogi.
+
+</div>
+
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="filterBox">
+
+
+    <select id="statusFilter">
+
+        <option value="ALL">
+            All Status
+        </option>
+
+        <option value="Pending">
+            Pending
+        </option>
+
+        <option value="Approved">
+            Approved
+        </option>
+
+    </select>
+
+
+    <input
+    type="date"
+    id="filterDate">
+
+
+    <button
+    type="button"
+    class="smallBtn todayBtn"
+    onclick="todayFilter()">
+
+        TODAY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="smallBtn searchBtn"
+    onclick="searchDeposit()">
+
+        SEARCH
+
+    </button>
+
+
+    <button
+    type="button"
+    class="smallBtn clearBtn"
+    onclick="clearFilter()">
+
+        CLEAR
+
+    </button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     TOOLS
+===================================================== -->
+
+<div class="toolsBox">
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="copyData()">
+
+        COPY
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="downloadCSV()">
+
+        CSV
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn"
+    onclick="window.print()">
+
+        PRINT
+
+    </button>
+
+
+    <button
+    type="button"
+    class="toolBtn refreshBtn"
+    onclick="refreshData()">
+
+        REFRESH
+
+    </button>
+
+
+    <input
+    type="text"
+    id="searchInput"
+    class="searchBox"
+    placeholder="Search Name / Mobile / Amount / UTR / Status"
+    autocomplete="off">
+
+
+</div>
+
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="tableBox">
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+    <th>ID</th>
+
+    <th>User Name</th>
+
+    <th>Mobile</th>
+
+    <th>Amount</th>
+
+    <th>UTR Number</th>
+
+    <th>Screenshot</th>
+
+    <th>Request Date</th>
+
+    <th>Request Time</th>
+
+    <th>Approved Date</th>
+
+    <th>Approved Time</th>
+
+    <th>Status</th>
+
+    <th>Action</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="depositTable">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     BACK
+===================================================== -->
+
+<a
+href="index.html"
+class="backBtn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SCREENSHOT POPUP
+===================================================== -->
+
+<div
+class="screenshotPopup"
+id="screenshotPopup">
+
+
+<div class="screenshotPopupBox">
+
+
+    <div class="popupTitle">
+
+        Payment Screenshot
+
+    </div>
+
+
+    <div
+    class="popupDepositInfo"
+    id="popupDepositInfo">
+
+    </div>
+
+
+    <div
+    class="popupImageBox"
+    id="popupImageBox">
+
+        <img
+        id="popupScreenshot"
+        src=""
+        alt="Payment Screenshot">
+
+        <div
+        id="popupMissing"
+        class="popupMissing"
+        style="display:none;">
+
+            Payment Screenshot Not Available
+
+        </div>
+
+    </div>
+
+
+    <button
+    type="button"
+    class="popupCloseBtn"
+    onclick="closeScreenshotPopup()">
+
+        CLOSE
+
+    </button>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     APPROVAL CONFIRM POPUP
+===================================================== -->
+
+<div
+class="approvalPopup"
+id="approvalPopup">
+
+
+<div class="approvalBox">
+
+
+    <h2>
+        Confirm Deposit
+    </h2>
+
+
+    <div
+    class="approvalDetails"
+    id="approvalDetails">
+
+    </div>
+
+
+    <div class="approvalWarning">
+
+        Amount, UTR Number aur Payment Screenshot
+        verify karne ke baad hi APPROVE karein.
+
+    </div>
+
+
+    <div class="approvalButtons">
+
+
+        <button
+        type="button"
+        class="cancelApproveBtn"
+        onclick="closeApprovalPopup()">
+
+            CANCEL
+
+        </button>
+
+
+        <button
+        type="button"
+        class="confirmApproveBtn"
+        id="finalApproveBtn">
+
+            ✓ CONFIRM APPROVE
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+
+/* =====================================================
+   HR MATKA
+   ALL DEPOSIT HISTORY
+
+   PART 2 / 4
+
+   DATA + UTR + SCREENSHOT ENGINE
+===================================================== */
+
+
+/* =====================================================
+   1. SAFE STORAGE READ
+===================================================== */
+
+function getStorage(key, fallback){
+
+    try{
+
+        let raw = localStorage.getItem(key);
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+            return fallback;
+        }
+
+        return JSON.parse(raw);
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+        return fallback;
+    }
+}
+
+
+
+/* =====================================================
+   2. SAFE STORAGE SAVE
+===================================================== */
+
+function saveStorage(key, value){
+
+    try{
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+        return true;
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Save Error:",
+            key,
+            error
+        );
+
+        return false;
+    }
+}
+
+
+
+/* =====================================================
+   3. SAFE VALUE
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+        return "-";
+    }
+
+    return String(value);
+}
+
+
+
+/* =====================================================
+   4. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+
+/* =====================================================
+   5. NORMALIZE MOBILE
+===================================================== */
+
+function normalizeMobile(value){
+
+    return String(value || "")
+    .replace(/\D/g,"");
+}
+
+
+
+/* =====================================================
+   6. GET UTR NUMBER
+
+   New records:
+   payment.utr
+
+   Old / alternate records:
+   utrNumber
+   transactionId
+   reference
+   referenceNumber
+===================================================== */
+
+function getDepositUTR(payment){
+
+    if(!payment){
+        return "";
+    }
+
+    let utr =
+
+        payment.utr ||
+
+        payment.utrNumber ||
+
+        payment.UTR ||
+
+        payment.transactionId ||
+
+        payment.transactionID ||
+
+        payment.reference ||
+
+        payment.referenceNumber ||
+
+        payment.paymentReference ||
+
+        "";
+
+
+    return String(utr).trim();
+}
+
+
+
+/* =====================================================
+   7. GET SCREENSHOT DATA
+
+   Main expected field:
+   screenshotData
+
+   Compatibility fields are also checked.
+===================================================== */
+
+function getDepositScreenshot(payment){
+
+    if(!payment){
+        return "";
+    }
+
+
+    let screenshot =
+
+        payment.screenshotData ||
+
+        payment.paymentScreenshot ||
+
+        payment.screenshot ||
+
+        payment.imageData ||
+
+        payment.image ||
+
+        payment.receiptImage ||
+
+        payment.paymentImage ||
+
+        "";
+
+
+    if(
+        typeof screenshot !== "string"
+    ){
+        return "";
+    }
+
+
+    return screenshot.trim();
+}
+
+
+
+/* =====================================================
+   8. CHECK SCREENSHOT
+===================================================== */
+
+function hasDepositScreenshot(payment){
+
+    let screenshot =
+    getDepositScreenshot(payment);
+
+
+    if(!screenshot){
+        return false;
+    }
+
+
+    /*
+       Base64 image
+    */
+
+    if(
+        screenshot.startsWith("data:image/")
+    ){
+        return true;
+    }
+
+
+    /*
+       Blob / local compatible URL
+    */
+
+    if(
+        screenshot.startsWith("blob:")
+    ){
+        return true;
+    }
+
+
+    /*
+       Normal URL / relative image path compatibility
+    */
+
+    if(
+        screenshot.startsWith("http://") ||
+        screenshot.startsWith("https://") ||
+        screenshot.startsWith("./") ||
+        screenshot.startsWith("../") ||
+        screenshot.startsWith("/")
+    ){
+        return true;
+    }
+
+
+    return false;
+}
+
+
+
+/* =====================================================
+   9. TODAY ISO
+===================================================== */
+
+function getTodayISO(){
+
+    let d = new Date();
+
+    let yyyy =
+    d.getFullYear();
+
+    let mm =
+    String(
+        d.getMonth() + 1
+    ).padStart(2,"0");
+
+    let dd =
+    String(
+        d.getDate()
+    ).padStart(2,"0");
+
+
+    return (
+        yyyy +
+        "-" +
+        mm +
+        "-" +
+        dd
+    );
+}
+
+
+
+/* =====================================================
+   10. CURRENT DATE + TIME
+===================================================== */
+
+function getCurrentDateTime(){
+
+    let now = new Date();
+
+
+    return {
+
+        date:
+        now.toLocaleDateString(
+            "en-GB"
+        ),
+
+        time:
+        now.toLocaleTimeString(
+            "en-US",
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit",
+                hour12:true
+            }
+        )
+        .replace(/\bam\b/gi,"AM")
+        .replace(/\bpm\b/gi,"PM"),
+
+        timestamp:
+        now.getTime(),
+
+        iso:
+        now.toISOString()
+
+    };
+}
+
+
+
+/* =====================================================
+   11. NORMALIZE DATE
+===================================================== */
+
+function normalizeDate(value){
+
+    if(!value){
+        return "";
+    }
+
+
+    let text =
+    String(value).trim();
+
+
+    /* -----------------------------------------
+       DD/MM/YYYY
+    ----------------------------------------- */
+
+    let slash =
+    text.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slash){
+
+        return (
+            slash[3] +
+            "-" +
+            String(slash[2]).padStart(2,"0") +
+            "-" +
+            String(slash[1]).padStart(2,"0")
+        );
+    }
+
+
+    /* -----------------------------------------
+       DD-MM-YYYY
+    ----------------------------------------- */
+
+    let dash =
+    text.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})/
+    );
+
+
+    if(dash){
+
+        return (
+            dash[3] +
+            "-" +
+            String(dash[2]).padStart(2,"0") +
+            "-" +
+            String(dash[1]).padStart(2,"0")
+        );
+    }
+
+
+    /* -----------------------------------------
+       YYYY-MM-DD
+    ----------------------------------------- */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}/
+        .test(text)
+    ){
+        return text.substring(0,10);
+    }
+
+
+    /* -----------------------------------------
+       Browser / ISO
+    ----------------------------------------- */
+
+    let parsed =
+    new Date(text);
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+        return "";
+    }
+
+
+    return (
+        parsed.getFullYear() +
+        "-" +
+        String(
+            parsed.getMonth()+1
+        ).padStart(2,"0") +
+        "-" +
+        String(
+            parsed.getDate()
+        ).padStart(2,"0")
+    );
+}
+
+
+
+/* =====================================================
+   12. DISPLAY DATE
+===================================================== */
+
+function displayDate(value){
+
+    let normalized =
+    normalizeDate(value);
+
+
+    if(!normalized){
+        return safe(value);
+    }
+
+
+    let parts =
+    normalized.split("-");
+
+
+    return (
+        parts[2] +
+        "/" +
+        parts[1] +
+        "/" +
+        parts[0]
+    );
+}
+
+
+
+/* =====================================================
+   13. 12 HOUR TIME
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        !value ||
+        value === "-"
+    ){
+        return "-";
+    }
+
+
+    let text =
+    String(value).trim();
+
+
+    if(
+        /\b(am|pm)\b/i.test(text)
+    ){
+
+        return text
+        .replace(/\bam\b/gi,"AM")
+        .replace(/\bpm\b/gi,"PM");
+    }
+
+
+    let match =
+    text.match(
+        /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+    if(match){
+
+        let hour =
+        Number(match[1]);
+
+
+        if(
+            hour >= 0 &&
+            hour <= 23
+        ){
+
+            let suffix =
+            hour >= 12
+            ? "PM"
+            : "AM";
+
+
+            let hour12 =
+            hour % 12;
+
+
+            if(hour12 === 0){
+                hour12 = 12;
+            }
+
+
+            return (
+                String(hour12).padStart(2,"0") +
+                ":" +
+                match[2] +
+                (
+                    match[3]
+                    ? ":" + match[3]
+                    : ""
+                ) +
+                " " +
+                suffix
+            );
+        }
+    }
+
+
+    return text;
+}
+
+
+
+/* =====================================================
+   14. EFFECTIVE DATE
+===================================================== */
+
+function getEffectiveDate(payment){
+
+    let status =
+    String(
+        payment.status || ""
+    )
+    .trim()
+    .toUpperCase();
+
+
+    if(status === "APPROVED"){
+
+        return (
+            payment.approvedDate ||
+            payment.date ||
+            ""
+        );
+    }
+
+
+    return (
+        payment.date ||
+        ""
+    );
+}
+
+
+
+/* =====================================================
+   15. SORT TIME
+===================================================== */
+
+function getSortTime(item){
+
+    let values = [
+
+        item.approvedTimestamp,
+
+        item.updatedTimestamp,
+
+        item.timestamp,
+
+        item.createdTimestamp,
+
+        item.id
+
+    ];
+
+
+    for(let value of values){
+
+        let number =
+        Number(value);
+
+
+        if(
+            Number.isFinite(number) &&
+            number > 0
+        ){
+            return number;
+        }
+    }
+
+
+    if(item.approvedAt){
+
+        let parsed =
+        new Date(
+            item.approvedAt
+        );
+
+
+        if(
+            !isNaN(
+                parsed.getTime()
+            )
+        ){
+            return parsed.getTime();
+        }
+    }
+
+
+    if(item.createdAt){
+
+        let parsed =
+        new Date(
+            item.createdAt
+        );
+
+
+        if(
+            !isNaN(
+                parsed.getTime()
+            )
+        ){
+            return parsed.getTime();
+        }
+    }
+
+
+    return 0;
+}
+
+
+
+/* =====================================================
+   16. PAGE DATA
+===================================================== */
+
+let allDeposits = [];
+
+let filteredDeposits = [];
+
+let pendingApprovalId = null;
+
+
+
+/* =====================================================
+   17. LOAD DEPOSIT DATA
+===================================================== */
+
+function loadDepositData(){
+
+    let deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    if(
+        !Array.isArray(deposits)
+    ){
+        deposits = [];
+    }
+
+
+    allDeposits =
+    deposits;
+
+
+    allDeposits.sort(
+        function(a,b){
+
+            return (
+                Number(
+                    getSortTime(b)
+                )
+                -
+                Number(
+                    getSortTime(a)
+                )
+            );
+        }
+    );
+
+
+    updateSummary();
+}
+
+
+
+/* =====================================================
+   18. TODAY APPROVED TOTAL
+===================================================== */
+
+function updateTodayTotal(){
+
+    let today =
+    getTodayISO();
+
+
+    let total = 0;
+
+
+    allDeposits.forEach(
+        function(payment){
+
+            let status =
+            String(
+                payment.status || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+            if(
+                status !== "APPROVED"
+            ){
+                return;
+            }
+
+
+            let approvedDate =
+            normalizeDate(
+                payment.approvedDate ||
+                payment.date
+            );
+
+
+            if(
+                approvedDate === today
+            ){
+
+                let amount =
+                Number(
+                    payment.amount || 0
+                );
+
+
+                if(
+                    Number.isFinite(amount)
+                ){
+                    total += amount;
+                }
+            }
+        }
+    );
+
+
+    document
+    .getElementById(
+        "todayDepositTotal"
+    )
+    .innerText =
+    total.toFixed(2);
+
+
+    /*
+       ADMIN DASHBOARD SYNC
+    */
+
+    localStorage.setItem(
+        "todayAddedMoney",
+        String(total)
+    );
+
+
+    localStorage.setItem(
+        "todayAddedMoneyDate",
+        today
+    );
+}
+
+
+
+/* =====================================================
+   19. SUMMARY COUNTS
+===================================================== */
+
+function updateSummary(){
+
+    let pending = 0;
+
+    let approved = 0;
+
+
+    allDeposits.forEach(
+        function(item){
+
+            let status =
+            String(
+                item.status || ""
+            )
+            .trim()
+            .toUpperCase();
+
+
+            if(status === "APPROVED"){
+                approved++;
+            }
+            else{
+                pending++;
+            }
+        }
+    );
+
+
+    document
+    .getElementById(
+        "pendingCount"
+    )
+    .innerText =
+    pending;
+
+
+    document
+    .getElementById(
+        "approvedCount"
+    )
+    .innerText =
+    approved;
+
+
+    updateTodayTotal();
+}
+
+
+
+/* =====================================================
+   20. FIND DEPOSIT BY ID
+===================================================== */
+
+function findDepositById(id){
+
+    return allDeposits.find(
+        function(item){
+
+            return (
+                String(item.id)
+                ===
+                String(id)
+            );
+        }
+    ) || null;
+}
+
+
+
+/* =====================================================
+   21. OPEN SCREENSHOT POPUP
+===================================================== */
+
+function openScreenshotPopup(id){
+
+    let payment =
+    findDepositById(id);
+
+
+    if(!payment){
+
+        alert(
+            "Deposit Record Not Found"
+        );
+
+        return;
+    }
+
+
+    let popup =
+    document.getElementById(
+        "screenshotPopup"
+    );
+
+
+    let image =
+    document.getElementById(
+        "popupScreenshot"
+    );
+
+
+    let missing =
+    document.getElementById(
+        "popupMissing"
+    );
+
+
+    let info =
+    document.getElementById(
+        "popupDepositInfo"
+    );
+
+
+    let utr =
+    getDepositUTR(payment);
+
+
+    let screenshot =
+    getDepositScreenshot(payment);
+
+
+    info.innerHTML =
+
+        "<b>User Name:</b> " +
+        escapeHTML(
+            safe(payment.name)
+        ) +
+
+        "<br>" +
+
+        "<b>Mobile:</b> " +
+        escapeHTML(
+            safe(payment.mobile)
+        ) +
+
+        "<br>" +
+
+        "<b>Amount:</b> ₹ " +
+        Number(
+            payment.amount || 0
+        ).toFixed(2) +
+
+        "<br>" +
+
+        "<b>UTR Number:</b> " +
+        (
+            utr
+            ?
+            escapeHTML(utr)
+            :
+            '<span class="utrMissing">NOT AVAILABLE</span>'
+        ) +
+
+        "<br>" +
+
+        "<b>Request Date:</b> " +
+        escapeHTML(
+            displayDate(
+                payment.date
+            )
+        ) +
+
+        "<br>" +
+
+        "<b>Request Time:</b> " +
+        escapeHTML(
+            formatTime12(
+                payment.time
+            )
+        );
+
+
+    if(
+        hasDepositScreenshot(payment)
+    ){
+
+        image.style.display =
+        "block";
+
+
+        missing.style.display =
+        "none";
+
+
+        image.src =
+        screenshot;
+    }
+
+    else{
+
+        image.removeAttribute(
+            "src"
+        );
+
+
+        image.style.display =
+        "none";
+
+
+        missing.style.display =
+        "block";
+    }
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+    "hidden";
+}
+
+
+
+/* =====================================================
+   22. CLOSE SCREENSHOT POPUP
+===================================================== */
+
+function closeScreenshotPopup(){
+
+    let popup =
+    document.getElementById(
+        "screenshotPopup"
+    );
+
+
+    let image =
+    document.getElementById(
+        "popupScreenshot"
+    );
+
+
+    popup.classList.remove(
+        "show"
+    );
+
+
+    image.removeAttribute(
+        "src"
+    );
+
+
+    document.body.style.overflow =
+    "";
+}
+
+
+
+/* =====================================================
+   23. SCREENSHOT IMAGE ERROR
+===================================================== */
+
+document
+.getElementById(
+    "popupScreenshot"
+)
+.addEventListener(
+    "error",
+    function(){
+
+        this.style.display =
+        "none";
+
+
+        document
+        .getElementById(
+            "popupMissing"
+        )
+        .style.display =
+        "block";
+    }
+);
+
+
+
+/* =====================================================
+   24. CLOSE SCREENSHOT BY BACKGROUND CLICK
+===================================================== */
+
+document
+.getElementById(
+    "screenshotPopup"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === this
+        ){
+            closeScreenshotPopup();
+        }
+    }
+);
+
+
+
+/* =====================================================
+   25. OPEN APPROVAL CONFIRMATION
+===================================================== */
+
+function requestDepositApproval(id){
+
+    let payment =
+    findDepositById(id);
+
+
+    if(!payment){
+
+        alert(
+            "Deposit Record Not Found"
+        );
+
+        return;
+    }
+
+
+    let status =
+    String(
+        payment.status || ""
+    )
+    .trim()
+    .toUpperCase();
+
+
+    if(status === "APPROVED"){
+
+        alert(
+            "This Deposit Is Already Approved"
+        );
+
+        return;
+    }
+
+
+    let utr =
+    getDepositUTR(payment);
+
+
+    let screenshotAvailable =
+    hasDepositScreenshot(payment);
+
+
+    /*
+       New Deposit Verification Rule
+
+       UTR aur Screenshot dono hona zaroori hai.
+    */
+
+    if(!utr){
+
+        alert(
+            "UTR Number Not Found.\n\nDeposit ko approve karne se pehle UTR verify karein."
+        );
+
+        return;
+    }
+
+
+    if(!screenshotAvailable){
+
+        alert(
+            "Payment Screenshot Not Found.\n\nDeposit ko approve karne se pehle screenshot verify karein."
+        );
+
+        return;
+    }
+
+
+    pendingApprovalId =
+    String(id);
+
+
+    let details =
+    document.getElementById(
+        "approvalDetails"
+    );
+
+
+    details.innerHTML =
+
+        "<b>User Name:</b> " +
+        escapeHTML(
+            safe(payment.name)
+        ) +
+
+        "<br>" +
+
+        "<b>Mobile:</b> " +
+        escapeHTML(
+            safe(payment.mobile)
+        ) +
+
+        "<br>" +
+
+        "<b>Amount:</b> ₹ " +
+        Number(
+            payment.amount || 0
+        ).toFixed(2) +
+
+        "<br>" +
+
+        "<b>UTR Number:</b> " +
+        escapeHTML(utr) +
+
+        "<br>" +
+
+        '<b>Screenshot:</b> <span class="verifyOk">AVAILABLE ✓</span>';
+
+
+    document
+    .getElementById(
+        "approvalPopup"
+    )
+    .classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+    "hidden";
+}
+
+
+
+/* =====================================================
+   26. CLOSE APPROVAL POPUP
+===================================================== */
+
+function closeApprovalPopup(){
+
+    document
+    .getElementById(
+        "approvalPopup"
+    )
+    .classList.remove(
+        "show"
+    );
+
+
+    pendingApprovalId =
+    null;
+
+
+    document.body.style.overflow =
+    "";
+}
+
+
+
+/* =====================================================
+   27. APPROVAL POPUP BACKGROUND CLICK
+===================================================== */
+
+document
+.getElementById(
+    "approvalPopup"
+)
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === this
+        ){
+            closeApprovalPopup();
+        }
+    }
+);
+
+
+
+/* =====================================================
+   28. ESC KEY POPUP CLOSE
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            if(
+                document
+                .getElementById(
+                    "approvalPopup"
+                )
+                .classList
+                .contains("show")
+            ){
+                closeApprovalPopup();
+                return;
+            }
+
+
+            if(
+                document
+                .getElementById(
+                    "screenshotPopup"
+                )
+                .classList
+                .contains("show")
+            ){
+                closeScreenshotPopup();
+            }
+        }
+    }
+);
+
+
+
+
+
+/* =====================================================
+   PART 3/4
+
+   DEPOSIT APPROVAL ENGINE
+   UTR + SCREENSHOT VERIFICATION
+   WALLET CREDIT + PASSBOOK
+===================================================== */
+
+
+/* =====================================================
+   18. SCREENSHOT HELPER
+===================================================== */
+
+function getDepositScreenshot(payment){
+
+    return (
+
+        payment.screenshot ||
+
+        payment.paymentScreenshot ||
+
+        payment.screenshotData ||
+
+        payment.image ||
+
+        payment.imageData ||
+
+        payment.receipt ||
+
+        payment.receiptImage ||
+
+        ""
+
+    );
+
+}
+
+
+
+/* =====================================================
+   19. UTR HELPER
+===================================================== */
+
+function getDepositUTR(payment){
+
+    return (
+
+        payment.utr ||
+
+        payment.utrNumber ||
+
+        payment.transactionId ||
+
+        payment.transactionID ||
+
+        payment.referenceNumber ||
+
+        payment.referenceId ||
+
+        payment.refNo ||
+
+        ""
+
+    );
+
+}
+
+
+
+/* =====================================================
+   20. PAYMENT MODE
+===================================================== */
+
+function getPaymentMode(payment){
+
+    return (
+
+        payment.paymentMode ||
+
+        payment.mode ||
+
+        payment.paymentType ||
+
+        "UPI"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   21. SCREENSHOT AVAILABLE
+===================================================== */
+
+function hasDepositScreenshot(payment){
+
+    let screenshot =
+    String(
+        getDepositScreenshot(
+            payment
+        ) || ""
+    )
+    .trim();
+
+
+    return (
+        screenshot !== ""
+    );
+
+}
+
+
+
+/* =====================================================
+   22. UTR AVAILABLE
+===================================================== */
+
+function hasDepositUTR(payment){
+
+    let utr =
+    String(
+        getDepositUTR(
+            payment
+        ) || ""
+    )
+    .trim();
+
+
+    return (
+        utr !== ""
+    );
+
+}
+
+
+
+/* =====================================================
+   23. OPEN SCREENSHOT
+===================================================== */
+
+function openDepositScreenshot(id){
+
+    let deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            deposits
+        )
+    ){
+
+        deposits = [];
+
+    }
+
+
+    let payment =
+    deposits.find(
+        function(item){
+
+            return (
+
+                String(
+                    item.id
+                )
+
+                ===
+
+                String(
+                    id
+                )
+
+            );
+
+        }
+    );
+
+
+    if(!payment){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    let screenshot =
+    getDepositScreenshot(
+        payment
+    );
+
+
+    if(!screenshot){
+
+        alert(
+            "Customer Ne Payment Screenshot Upload Nahi Kiya Hai"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Screenshot data URL / blob / normal URL
+       ko new tab me open karega.
+    */
+
+    try{
+
+        let newWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+        if(!newWindow){
+
+            alert(
+                "Browser Popup Block Kar Raha Hai"
+            );
+
+            return;
+
+        }
+
+
+        newWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+        <meta charset="UTF-8">
+
+        <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+        <title>
+            Payment Screenshot
+        </title>
+
+
+        <style>
+
+        *{
+            box-sizing:border-box;
+        }
+
+        body{
+            margin:0;
+            padding:20px;
+            background:#111111;
+            color:#ffffff;
+            font-family:Arial,Helvetica,sans-serif;
+            text-align:center;
+        }
+
+        h2{
+            margin-bottom:8px;
+        }
+
+        p{
+            color:#cccccc;
+            margin-bottom:18px;
+        }
+
+        img{
+            display:block;
+            width:auto;
+            max-width:100%;
+            max-height:85vh;
+            margin:auto;
+            border-radius:10px;
+            background:#ffffff;
+        }
+
+        </style>
+
+        </head>
+
+
+        <body>
+
+        <h2>
+            Payment Screenshot
+        </h2>
+
+        <p>
+            Verify screenshot before approving deposit.
+        </p>
+
+        <img
+        src="${escapeHTML(
+            screenshot
+        )}"
+        alt="Payment Screenshot">
+
+        </body>
+
+        </html>
+
+        `);
+
+
+        newWindow.document.close();
+
+    }
+    catch(error){
+
+        console.error(
+            "Screenshot Open Error:",
+            error
+        );
+
+
+        alert(
+            "Screenshot Open Nahi Ho Saka"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   24. COPY UTR
+===================================================== */
+
+function copyDepositUTR(id){
+
+    let deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            deposits
+        )
+    ){
+
+        deposits = [];
+
+    }
+
+
+    let payment =
+    deposits.find(
+        function(item){
+
+            return (
+
+                String(
+                    item.id
+                )
+
+                ===
+
+                String(
+                    id
+                )
+
+            );
+
+        }
+    );
+
+
+    if(!payment){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    let utr =
+    String(
+        getDepositUTR(
+            payment
+        ) || ""
+    )
+    .trim();
+
+
+    if(!utr){
+
+        alert(
+            "UTR Number Not Available"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            utr
+        )
+        .then(
+            function(){
+
+                alert(
+                    "UTR Copied Successfully"
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+                    utr
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+            utr
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   25. PASSBOOK DUPLICATE CHECK
+===================================================== */
+
+function depositPassbookExists(
+    passbook,
+    depositId
+){
+
+    let transactionKey =
+    "DEPOSIT:" +
+    String(
+        depositId || ""
+    );
+
+
+    return passbook.some(
+        function(item){
+
+            if(
+                String(
+                    item.transactionKey || ""
+                )
+                ===
+                transactionKey
+            ){
+
+                return true;
+
+            }
+
+
+            if(
+                String(
+                    item.depositId || ""
+                )
+                ===
+                String(
+                    depositId || ""
+                )
+            ){
+
+                let type =
+                String(
+                    item.type || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+                if(
+                    type.includes(
+                        "DEPOSIT"
+                    )
+                ){
+
+                    return true;
+
+                }
+
+            }
+
+
+            return false;
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   26. CREATE DEPOSIT PASSBOOK ENTRY
+===================================================== */
+
+function createDepositPassbookEntry(
+    payment,
+    oldBalance,
+    newBalance,
+    dateTime
+){
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            passbook
+        )
+    ){
+
+        passbook = [];
+
+    }
+
+
+    if(
+        depositPassbookExists(
+            passbook,
+            payment.id
+        )
+    ){
+
+        return true;
+
+    }
+
+
+    let depositId =
+    String(
+        payment.id || ""
+    );
+
+
+    let amount =
+    Number(
+        payment.amount || 0
+    );
+
+
+    passbook.push({
+
+        id:
+        Date.now()
+        .toString()
+        +
+        "-"
+        +
+        Math.random()
+        .toString(36)
+        .slice(
+            2,
+            10
+        ),
+
+
+        transactionKey:
+        "DEPOSIT:" +
+        depositId,
+
+
+        depositId:
+        depositId,
+
+
+        requestId:
+        payment.requestId ||
+        payment.id ||
+        "",
+
+
+        mobile:
+        payment.mobile ||
+        "",
+
+
+        name:
+        payment.name ||
+        "",
+
+
+        type:
+        "Deposit",
+
+
+        transactionType:
+        "Credit",
+
+
+        details:
+        "User Deposit Approved",
+
+
+        paymentMode:
+        getPaymentMode(
+            payment
+        ),
+
+
+        utr:
+        getDepositUTR(
+            payment
+        ),
+
+
+        previousBalance:
+        Number(
+            oldBalance || 0
+        ),
+
+
+        amount:
+        amount,
+
+
+        currentBalance:
+        Number(
+            newBalance || 0
+        ),
+
+
+        date:
+        dateTime.date,
+
+
+        time:
+        dateTime.time,
+
+
+        status:
+        "Success",
+
+
+        timestamp:
+        dateTime.timestamp,
+
+
+        createdAt:
+        dateTime.iso
+
+    });
+
+
+    return saveStorage(
+        "passbook",
+        passbook
+    );
+
+}
+
+
+
+/* =====================================================
+   27. APPROVE DEPOSIT
+
+   IMPORTANT:
+
+   Approve tabhi hoga jab:
+
+   1. Request Pending ho
+   2. Valid amount ho
+   3. Mobile available ho
+   4. UTR available ho
+   5. Screenshot available ho
+   6. Deposit pehle approve na hua ho
+   7. Passbook duplicate na ho
+===================================================== */
+
+function approveDeposit(id){
+
+
+    /* ===============================================
+       FRESH DATA
+    =============================================== */
+
+    let deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            deposits
+        )
+    ){
+
+        deposits = [];
+
+    }
+
+
+    let index =
+    deposits.findIndex(
+        function(item){
+
+            return (
+
+                String(
+                    item.id
+                )
+
+                ===
+
+                String(
+                    id
+                )
+
+            );
+
+        }
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    let payment =
+    deposits[index];
+
+
+
+    /* ===============================================
+       ALREADY APPROVED CHECK
+    =============================================== */
+
+    let status =
+    String(
+        payment.status ||
+        "Pending"
+    )
+    .trim()
+    .toUpperCase();
+
+
+    if(
+        status ===
+        "APPROVED"
+    ){
+
+        alert(
+            "This Deposit Is Already Approved"
+        );
+
+
+        refreshData();
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       MOBILE CHECK
+    =============================================== */
+
+    let mobile =
+    String(
+        payment.mobile || ""
+    )
+    .trim();
+
+
+    if(!mobile){
+
+        alert(
+            "Customer Mobile Number Not Found"
+        );
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       AMOUNT CHECK
+    =============================================== */
+
+    let amount =
+    Number(
+        payment.amount || 0
+    );
+
+
+    if(
+        !Number.isFinite(
+            amount
+        )
+        ||
+        amount <= 0
+    ){
+
+        alert(
+            "Invalid Deposit Amount"
+        );
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       UTR CHECK
+    =============================================== */
+
+    let utr =
+    String(
+        getDepositUTR(
+            payment
+        ) || ""
+    )
+    .trim();
+
+
+    if(!utr){
+
+        alert(
+
+            "Deposit Approve Nahi Ho Sakta.\n\n"
+
+            +
+
+            "Customer Ka UTR / Transaction Number Missing Hai."
+
+        );
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       SCREENSHOT CHECK
+    =============================================== */
+
+    let screenshot =
+    String(
+        getDepositScreenshot(
+            payment
+        ) || ""
+    )
+    .trim();
+
+
+    if(!screenshot){
+
+        alert(
+
+            "Deposit Approve Nahi Ho Sakta.\n\n"
+
+            +
+
+            "Customer Ne Payment Screenshot Upload Nahi Kiya Hai."
+
+        );
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       CONFIRMATION
+    =============================================== */
+
+    let confirmed =
+    confirm(
+
+        "DEPOSIT VERIFY KARKE APPROVE KAREN?\n\n"
+
+        +
+
+        "User: "
+
+        +
+
+        safe(
+            payment.name
+        )
+
+        +
+
+        "\nMobile: "
+
+        +
+
+        mobile
+
+        +
+
+        "\nAmount: ₹ "
+
+        +
+
+        amount.toFixed(
+            2
+        )
+
+        +
+
+        "\nUTR: "
+
+        +
+
+        utr
+
+        +
+
+        "\nScreenshot: Available"
+
+    );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       CONFIRM KE BAAD FRESH READ
+
+       Double click / duplicate approval protection
+    =============================================== */
+
+    deposits =
+    getStorage(
+        "deposits",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            deposits
+        )
+    ){
+
+        deposits = [];
+
+    }
+
+
+    index =
+    deposits.findIndex(
+        function(item){
+
+            return (
+
+                String(
+                    item.id
+                )
+
+                ===
+
+                String(
+                    id
+                )
+
+            );
+
+        }
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Deposit Request Not Found"
+        );
+
+        return;
+
+    }
+
+
+    payment =
+    deposits[index];
+
+
+    status =
+    String(
+        payment.status ||
+        "Pending"
+    )
+    .trim()
+    .toUpperCase();
+
+
+    if(
+        status ===
+        "APPROVED"
+    ){
+
+        alert(
+            "This Deposit Is Already Approved"
+        );
+
+
+        refreshData();
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       WALLET DATA
+    =============================================== */
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    if(
+        !balances ||
+        Array.isArray(
+            balances
+        ) ||
+        typeof balances !==
+        "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    let normalizedMobile =
+    normalizeMobile(
+        mobile
+    );
+
+
+    let balanceKey =
+    mobile;
+
+
+    if(
+        Object.prototype
+        .hasOwnProperty
+        .call(
+            balances,
+            mobile
+        )
+    ){
+
+        balanceKey =
+        mobile;
+
+    }
+
+    else if(
+        Object.prototype
+        .hasOwnProperty
+        .call(
+            balances,
+            normalizedMobile
+        )
+    ){
+
+        balanceKey =
+        normalizedMobile;
+
+    }
+
+
+
+    /* ===============================================
+       OLD BALANCE
+    =============================================== */
+
+    let oldBalance =
+    Number(
+        balances[
+            balanceKey
+        ] || 0
+    );
+
+
+    if(
+        !Number.isFinite(
+            oldBalance
+        )
+    ){
+
+        oldBalance = 0;
+
+    }
+
+
+
+    /* ===============================================
+       PASSBOOK FRESH CHECK
+    =============================================== */
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            passbook
+        )
+    ){
+
+        passbook = [];
+
+    }
+
+
+    if(
+        depositPassbookExists(
+            passbook,
+            payment.id
+        )
+    ){
+
+        alert(
+
+            "Safety Block:\n\n"
+
+            +
+
+            "Is Deposit Ki Passbook Entry Pehle Se Maujood Hai.\n"
+
+            +
+
+            "Wallet Ko Dobara Credit Nahi Kiya Gaya."
+
+        );
+
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       DATE TIME
+    =============================================== */
+
+    let dateTime =
+    getCurrentDateTime();
+
+
+
+    /* ===============================================
+       NEW BALANCE
+    =============================================== */
+
+    let newBalance =
+    oldBalance +
+    amount;
+
+
+
+    /* ===============================================
+       UPDATE PAYMENT RECORD
+    =============================================== */
+
+    payment.status =
+    "Approved";
+
+
+    payment.approvedDate =
+    dateTime.date;
+
+
+    payment.approvedTime =
+    dateTime.time;
+
+
+    payment.approvedTimestamp =
+    dateTime.timestamp;
+
+
+    payment.approvedAt =
+    dateTime.iso;
+
+
+    payment.updatedTimestamp =
+    dateTime.timestamp;
+
+
+    payment.updatedAt =
+    dateTime.iso;
+
+
+    payment.walletCredited =
+    true;
+
+
+    payment.walletCreditAmount =
+    amount;
+
+
+    payment.previousBalance =
+    oldBalance;
+
+
+    payment.currentBalance =
+    newBalance;
+
+
+    payment.verifiedUTR =
+    utr;
+
+
+    payment.screenshotVerified =
+    true;
+
+
+    deposits[index] =
+    payment;
+
+
+
+    /* ===============================================
+       WALLET CREDIT
+    =============================================== */
+
+    balances[
+        balanceKey
+    ] =
+    newBalance;
+
+
+
+    /* ===============================================
+       SAVE DEPOSIT
+    =============================================== */
+
+    let depositSaved =
+    saveStorage(
+        "deposits",
+        deposits
+    );
+
+
+    if(!depositSaved){
+
+        alert(
+            "Deposit Save Failed"
+        );
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       SAVE WALLET
+    =============================================== */
+
+    let walletSaved =
+    saveStorage(
+        "userBalances",
+        balances
+    );
+
+
+    if(!walletSaved){
+
+        alert(
+            "Wallet Save Failed"
+        );
+
+        return;
+
+    }
+
+
+
+    /* ===============================================
+       PASSBOOK CREDIT
+    =============================================== */
+
+    createDepositPassbookEntry(
+
+        payment,
+
+        oldBalance,
+
+        newBalance,
+
+        dateTime
+
+    );
+
+
+
+    /* ===============================================
+       LIVE UPDATE SIGNALS
+    =============================================== */
+
+    saveStorage(
+        "lastDepositUpdate",
+        {
+
+            depositId:
+            payment.id,
+
+            mobile:
+            mobile,
+
+            amount:
+            amount,
+
+            status:
+            "Approved",
+
+            utr:
+            utr,
+
+            time:
+            dateTime.timestamp
+
+        }
+    );
+
+
+    saveStorage(
+        "lastWalletUpdate",
+        {
+
+            mobile:
+            mobile,
+
+            previousBalance:
+            oldBalance,
+
+            amount:
+            amount,
+
+            currentBalance:
+            newBalance,
+
+            type:
+            "Deposit",
+
+            time:
+            dateTime.timestamp
+
+        }
+    );
+
+
+
+    /* ===============================================
+       SAME TAB EVENT
+    =============================================== */
+
+    window.dispatchEvent(
+        new Event(
+            "depositUpdated"
+        )
+    );
+
+
+
+    /* ===============================================
+       DASHBOARD + TABLE REFRESH
+    =============================================== */
+
+    loadDepositData();
+
+
+    searchDeposit();
+
+
+
+    /* ===============================================
+       SUCCESS
+    =============================================== */
+
+    alert(
+
+        "Deposit Approved Successfully"
+
+        +
+
+        "\n\nAmount: ₹ "
+
+        +
+
+        amount.toFixed(
+            2
+        )
+
+        +
+
+        "\nUTR: "
+
+        +
+
+        utr
+
+        +
+
+        "\nOld Wallet: ₹ "
+
+        +
+
+        oldBalance.toFixed(
+            2
+        )
+
+        +
+
+        "\nNew Wallet: ₹ "
+
+        +
+
+        newBalance.toFixed(
+            2
+        )
+
+    );
+
+}
+
+
+
+
+
+/* =====================================================
+   HR MATKA
+   ALL DEPOSIT HISTORY
+
+   PART 4 / 4 FINAL
+
+   TABLE + FILTER + SEARCH + EXPORT
+   SCREENSHOT VIEW + APPROVAL POPUP
+   LIVE SYNC + PAGE INITIALIZATION
+===================================================== */
+
+
+/* =====================================================
+   28. FINAL APPROVE POPUP BUTTON
+
+   Part 2 me pendingApprovalId set hota hai.
+   Final button click par Part 3 ka safe
+   approveDeposit() chalega.
+===================================================== */
+
+document
+.getElementById(
+    "finalApproveBtn"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        if(
+            !pendingApprovalId
+        ){
+
+            alert(
+                "Deposit Approval Record Not Found"
+            );
+
+            closeApprovalPopup();
+
+            return;
+
+        }
+
+
+        let id =
+        pendingApprovalId;
+
+
+        /*
+           Popup pehle close kar denge.
+           approveDeposit ke andar final confirmation
+           aur duplicate checks dobara honge.
+        */
+
+        closeApprovalPopup();
+
+
+        approveDeposit(
+            id
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   29. FILTER SEARCH
+===================================================== */
+
+function searchDeposit(){
+
+    let selectedDate =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    let selectedStatus =
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value;
+
+
+    filteredDeposits =
+    allDeposits.filter(
+        function(payment){
+
+            /* =========================================
+               DATE FILTER
+            ========================================= */
+
+            let dateMatch =
+            true;
+
+
+            if(selectedDate){
+
+                dateMatch =
+
+                normalizeDate(
+                    getEffectiveDate(
+                        payment
+                    )
+                )
+
+                ===
+
+                selectedDate;
+
+            }
+
+
+            /* =========================================
+               STATUS FILTER
+            ========================================= */
+
+            let statusMatch =
+            true;
+
+
+            if(
+                selectedStatus !==
+                "ALL"
+            ){
+
+                statusMatch =
+
+                String(
+                    payment.status ||
+                    "Pending"
+                )
+                .trim()
+                .toUpperCase()
+
+                ===
+
+                selectedStatus
+                .toUpperCase();
+
+            }
+
+
+            return (
+                dateMatch &&
+                statusMatch
+            );
+
+        }
+    );
+
+
+    renderDepositTable();
+
+}
+
+
+
+/* =====================================================
+   30. GET DISPLAY DATA
+   SEARCH INCLUDES UTR
+===================================================== */
+
+function getDisplayData(){
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    return filteredDeposits
+    .filter(
+        function(payment){
+
+            if(!search){
+
+                return true;
+
+            }
+
+
+            let utr =
+            getDepositUTR(
+                payment
+            );
+
+
+            let screenshotText =
+            hasDepositScreenshot(
+                payment
+            )
+            ?
+            "screenshot available uploaded yes"
+            :
+            "screenshot missing not uploaded no";
+
+
+            let searchable =
+            [
+
+                payment.name,
+
+                payment.mobile,
+
+                payment.amount,
+
+                payment.status,
+
+                payment.type,
+
+                payment.paymentMode,
+
+                payment.requestId,
+
+                payment.id,
+
+                utr,
+
+                payment.date,
+
+                payment.time,
+
+                payment.approvedDate,
+
+                payment.approvedTime,
+
+                screenshotText
+
+            ]
+            .join(
+                " "
+            )
+            .toLowerCase();
+
+
+            return searchable.includes(
+                search
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   31. FINAL TABLE RENDER
+
+   COLUMNS:
+
+   1. ID
+   2. User Name
+   3. Mobile
+   4. Amount
+   5. UTR
+   6. Screenshot
+   7. Request Date
+   8. Request Time
+   9. Approved Date
+   10. Approved Time
+   11. Status
+   12. Action
+===================================================== */
+
+function renderDepositTable(){
+
+    let table =
+    document
+    .getElementById(
+        "depositTable"
+    );
+
+
+    let displayData =
+    getDisplayData();
+
+
+    table.innerHTML =
+    "";
+
+
+    /* =================================================
+       NO DATA
+    ================================================= */
+
+    if(
+        displayData.length === 0
+    ){
+
+        table.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="12"
+            class="noData">
+
+                No Deposit Record Found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       CREATE RECORDS
+    ================================================= */
+
+    displayData.forEach(
+        function(payment,index){
+
+            let status =
+            String(
+                payment.status ||
+                "Pending"
+            )
+            .trim();
+
+
+            let approved =
+            status
+            .toUpperCase()
+            ===
+            "APPROVED";
+
+
+            let statusClass =
+            approved
+            ?
+            "approved"
+            :
+            "pending";
+
+
+            let utr =
+            String(
+                getDepositUTR(
+                    payment
+                ) || ""
+            )
+            .trim();
+
+
+            let screenshotAvailable =
+            hasDepositScreenshot(
+                payment
+            );
+
+
+            let requestDate =
+
+            payment.requestDate ||
+
+            payment.date ||
+
+            "-";
+
+
+            let requestTime =
+
+            payment.requestTime ||
+
+            payment.time ||
+
+            "-";
+
+
+            let approvedDate =
+            approved
+            ?
+            (
+                payment.approvedDate ||
+                payment.date ||
+                "-"
+            )
+            :
+            "-";
+
+
+            let approvedTime =
+            approved
+            ?
+            (
+                payment.approvedTime ||
+                payment.time ||
+                "-"
+            )
+            :
+            "-";
+
+
+            let id =
+            String(
+                payment.id ||
+                payment.requestId ||
+                ""
+            );
+
+
+            /* =========================================
+               UTR HTML
+            ========================================= */
+
+            let utrHTML =
+            "";
+
+
+            if(utr){
+
+                utrHTML = `
+
+                <span class="utrNumber">
+
+                    ${escapeHTML(
+                        utr
+                    )}
+
+                </span>
+
+                `;
+
+            }
+
+            else{
+
+                utrHTML = `
+
+                <span class="utrMissing">
+
+                    NOT AVAILABLE
+
+                </span>
+
+                `;
+
+            }
+
+
+
+            /* =========================================
+               SCREENSHOT HTML
+            ========================================= */
+
+            let screenshotHTML =
+            "";
+
+
+            if(screenshotAvailable){
+
+                screenshotHTML = `
+
+                <button
+                type="button"
+                class="viewScreenshotBtn"
+                data-screenshot-id="${escapeHTML(
+                    id
+                )}">
+
+                    👁 VIEW
+
+                </button>
+
+                `;
+
+            }
+
+            else{
+
+                screenshotHTML = `
+
+                <span class="noScreenshot">
+
+                    NOT UPLOADED
+
+                </span>
+
+                `;
+
+            }
+
+
+
+            /* =========================================
+               ACTION HTML
+            ========================================= */
+
+            let actionHTML =
+            "";
+
+
+            if(approved){
+
+                actionHTML = `
+
+                <button
+                type="button"
+                class="approveBtn"
+                disabled>
+
+                    APPROVED
+
+                </button>
+
+                `;
+
+            }
+
+            else{
+
+                /*
+                   Pending record me UTR/Screenshot missing
+                   hone par button available rahega,
+                   lekin click karne par verification
+                   engine approval ko rok dega.
+                */
+
+                actionHTML = `
+
+                <button
+                type="button"
+                class="approveBtn"
+                data-approve-id="${escapeHTML(
+                    id
+                )}">
+
+                    VERIFY & APPROVE
+
+                </button>
+
+                `;
+
+            }
+
+
+
+            /* =========================================
+               ROW
+            ========================================= */
+
+            let row =
+            document.createElement(
+                "tr"
+            );
+
+
+            row.innerHTML = `
+
+            <td>
+
+                ${index + 1}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    safe(
+                        payment.name
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    safe(
+                        payment.mobile
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                ₹ ${Number(
+                    payment.amount || 0
+                )
+                .toFixed(
+                    2
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${utrHTML}
+
+            </td>
+
+
+            <td>
+
+                ${screenshotHTML}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    displayDate(
+                        requestDate
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    formatTime12(
+                        requestTime
+                    )
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    approved
+                    ?
+                    displayDate(
+                        approvedDate
+                    )
+                    :
+                    "-"
+                )}
+
+            </td>
+
+
+            <td>
+
+                ${escapeHTML(
+                    approved
+                    ?
+                    formatTime12(
+                        approvedTime
+                    )
+                    :
+                    "-"
+                )}
+
+            </td>
+
+
+            <td>
+
+                <span
+                class="
+                status
+                ${statusClass}
+                ">
+
+                    ${escapeHTML(
+                        approved
+                        ?
+                        "Approved"
+                        :
+                        status
+                    )}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                ${actionHTML}
+
+            </td>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+
+    /* =================================================
+       SCREENSHOT BUTTON EVENTS
+    ================================================= */
+
+    table
+    .querySelectorAll(
+        ".viewScreenshotBtn"
+    )
+    .forEach(
+        function(button){
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    let id =
+                    this.getAttribute(
+                        "data-screenshot-id"
+                    );
+
+
+                    /*
+                       Part 2 ka popup use karenge.
+                    */
+
+                    openScreenshotPopup(
+                        id
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+
+    /* =================================================
+       APPROVE BUTTON EVENTS
+    ================================================= */
+
+    table
+    .querySelectorAll(
+        ".approveBtn[data-approve-id]"
+    )
+    .forEach(
+        function(button){
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    let id =
+                    this.getAttribute(
+                        "data-approve-id"
+                    );
+
+
+                    /*
+                       Pehle verification popup.
+                       UTR + Screenshot missing hua
+                       to Part 2 approval ko block karega.
+                    */
+
+                    requestDepositApproval(
+                        id
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   32. TODAY FILTER
+===================================================== */
+
+function todayFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    searchDeposit();
+
+}
+
+
+
+/* =====================================================
+   33. CLEAR FILTER
+===================================================== */
+
+function clearFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    filteredDeposits =
+    [...allDeposits];
+
+
+    renderDepositTable();
+
+}
+
+
+
+/* =====================================================
+   34. REFRESH
+===================================================== */
+
+function refreshData(){
+
+    loadDepositData();
+
+
+    searchDeposit();
+
+}
+
+
+
+/* =====================================================
+   35. SEARCH INPUT
+===================================================== */
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    function(){
+
+        renderDepositTable();
+
+    }
+);
+
+
+
+/* =====================================================
+   36. FILTER EVENTS
+===================================================== */
+
+document
+.getElementById(
+    "filterDate"
+)
+.addEventListener(
+    "change",
+    searchDeposit
+);
+
+
+document
+.getElementById(
+    "statusFilter"
+)
+.addEventListener(
+    "change",
+    searchDeposit
+);
+
+
+
+/* =====================================================
+   37. EXPORT RECORDS
+===================================================== */
+
+function getExportRecords(){
+
+    return getDisplayData();
+
+}
+
+
+
+/* =====================================================
+   38. BUILD EXPORT ROWS
+===================================================== */
+
+function buildExportRows(){
+
+    let records =
+    getExportRecords();
+
+
+    let rows = [[
+
+        "ID",
+
+        "User Name",
+
+        "Mobile",
+
+        "Amount",
+
+        "UTR Number",
+
+        "Screenshot",
+
+        "Request Date",
+
+        "Request Time",
+
+        "Approved Date",
+
+        "Approved Time",
+
+        "Status"
+
+    ]];
+
+
+    records.forEach(
+        function(payment,index){
+
+            let approved =
+            String(
+                payment.status || ""
+            )
+            .trim()
+            .toUpperCase()
+            ===
+            "APPROVED";
+
+
+            rows.push([
+
+                index + 1,
+
+
+                safe(
+                    payment.name
+                ),
+
+
+                safe(
+                    payment.mobile
+                ),
+
+
+                Number(
+                    payment.amount || 0
+                )
+                .toFixed(
+                    2
+                ),
+
+
+                safe(
+                    getDepositUTR(
+                        payment
+                    )
+                ),
+
+
+                hasDepositScreenshot(
+                    payment
+                )
+                ?
+                "Uploaded"
+                :
+                "Not Uploaded",
+
+
+                displayDate(
+
+                    payment.requestDate ||
+
+                    payment.date
+
+                ),
+
+
+                formatTime12(
+
+                    payment.requestTime ||
+
+                    payment.time
+
+                ),
+
+
+                approved
+                ?
+                displayDate(
+
+                    payment.approvedDate ||
+
+                    payment.date
+
+                )
+                :
+                "-",
+
+
+                approved
+                ?
+                formatTime12(
+
+                    payment.approvedTime ||
+
+                    payment.time
+
+                )
+                :
+                "-",
+
+
+                safe(
+                    payment.status ||
+                    "Pending"
+                )
+
+            ]);
+
+        }
+    );
+
+
+    return rows;
+
+}
+
+
+
+/* =====================================================
+   39. COPY DATA
+===================================================== */
+
+function copyData(){
+
+    let rows =
+    buildExportRows();
+
+
+    if(
+        rows.length <= 1
+    ){
+
+        alert(
+            "Copy Karne Ke Liye Koi Deposit Record Nahi Hai"
+        );
+
+        return;
+
+    }
+
+
+    let text =
+    rows
+    .map(
+        function(row){
+
+            return row.join(
+                "\t"
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            text
+        )
+        .then(
+            function(){
+
+                alert(
+                    "Deposit History Copied Successfully"
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+                    text
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+            text
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   40. FALLBACK COPY
+===================================================== */
+
+function fallbackCopy(text){
+
+    let area =
+    document.createElement(
+        "textarea"
+    );
+
+
+    area.value =
+    text;
+
+
+    area.style.position =
+    "fixed";
+
+
+    area.style.left =
+    "-9999px";
+
+
+    document.body.appendChild(
+        area
+    );
+
+
+    area.focus();
+
+    area.select();
+
+
+    try{
+
+        let copied =
+        document.execCommand(
+            "copy"
+        );
+
+
+        if(copied){
+
+            alert(
+                "Deposit History Copied Successfully"
+            );
+
+        }
+
+        else{
+
+            alert(
+                "Copy Failed"
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "Copy Error:",
+            error
+        );
+
+
+        alert(
+            "Copy Failed"
+        );
+
+    }
+
+
+    area.remove();
+
+}
+
+
+
+/* =====================================================
+   41. CSV DOWNLOAD
+===================================================== */
+
+function downloadCSV(){
+
+    let rows =
+    buildExportRows();
+
+
+    if(
+        rows.length <= 1
+    ){
+
+        alert(
+            "CSV Download Ke Liye Koi Deposit Record Nahi Hai"
+        );
+
+        return;
+
+    }
+
+
+    let csv =
+    rows
+    .map(
+        function(row){
+
+            return row
+            .map(
+                function(value){
+
+                    return (
+
+                        '"'
+
+                        +
+
+                        String(
+                            value
+                        )
+                        .replace(
+                            /"/g,
+                            '""'
+                        )
+
+                        +
+
+                        '"'
+
+                    );
+
+                }
+            )
+            .join(
+                ","
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    let blob =
+    new Blob(
+        [
+            "\uFEFF" +
+            csv
+        ],
+        {
+            type:
+            "text/csv;charset=utf-8;"
+        }
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href =
+    url;
+
+
+    link.download =
+    "HR-MATKA-All-Deposit-History.csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+
+/* =====================================================
+   42. LIVE STORAGE UPDATE
+
+   User deposit request,
+   wallet,
+   passbook update hone par page refresh.
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+
+            event.key ===
+            "deposits"
+
+            ||
+
+            event.key ===
+            "userBalances"
+
+            ||
+
+            event.key ===
+            "passbook"
+
+            ||
+
+            event.key ===
+            "lastDepositUpdate"
+
+            ||
+
+            event.key ===
+            "lastWalletUpdate"
+
+        ){
+
+            refreshData();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   43. SAME TAB DEPOSIT EVENT
+===================================================== */
+
+window.addEventListener(
+    "depositUpdated",
+    function(){
+
+        refreshData();
+
+    }
+);
+
+
+
+/* =====================================================
+   44. PAGE FOCUS
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        refreshData();
+
+    }
+);
+
+
+
+/* =====================================================
+   45. VISIBILITY
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            refreshData();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   46. PAGE START
+===================================================== */
+
+function startDepositHistoryPage(){
+
+    /*
+       Default:
+       Aaj ke records dikhenge.
+    */
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "statusFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    loadDepositData();
+
+
+    searchDeposit();
+
+
+    console.log(
+        "✅ HR MATKA Deposit Verification Page Started"
+    );
+
+}
+
+
+
+/* =====================================================
+   47. DOM READY
+===================================================== */
+
+if(
+    document.readyState ===
+    "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        startDepositHistoryPage
+    );
+
+}
+
+else{
+
+    startDepositHistoryPage();
+
+}
+
+
+
+/* =====================================================
+   48. LOCAL TEST AUTO REFRESH
+===================================================== */
+
+setInterval(
+    function(){
+
+        /*
+           Popup khula ho to table refresh se
+           verification disturb nahi karenge.
+        */
+
+        let screenshotOpen =
+        document
+        .getElementById(
+            "screenshotPopup"
+        )
+        .classList
+        .contains(
+            "show"
+        );
+
+
+        let approvalOpen =
+        document
+        .getElementById(
+            "approvalPopup"
+        )
+        .classList
+        .contains(
+            "show"
+        );
+
+
+        if(
+            !screenshotOpen &&
+            !approvalOpen
+        ){
+
+            refreshData();
+
+        }
+
+    },
+    3000
+);
+
+
+
+/* =====================================================
+   49. FINAL CONNECTION STATUS
+===================================================== */
+
+console.log(
+    "✅ HR MATKA All Deposit History FINAL Connected"
+);
+
+
+console.log(
+    "✅ Customer UTR Number Connected"
+);
+
+
+console.log(
+    "✅ Customer Payment Screenshot Connected"
+);
+
+
+console.log(
+    "✅ Screenshot VIEW Popup Connected"
+);
+
+
+console.log(
+    "✅ UTR + Screenshot Verification Before Approval Connected"
+);
+
+
+console.log(
+    "✅ Deposit Wallet Credit Connected"
+);
+
+
+console.log(
+    "✅ Deposit Passbook Credit Connected"
+);
+
+
+console.log(
+    "✅ Duplicate Deposit Approval Protection Connected"
+);
+
+
+console.log(
+    "✅ Today's Added Money Dashboard Sync Connected"
+);
+
+
+console.log(
+    "✅ Search + Filter + Copy + CSV + Print Connected"
+);
+
+
+/* =====================================================
+   ALLDEPOSITHISTORY.HTML
+   COMPLETE FILE END
+===================================================== */
+
+</script>
+
+</body>
+
+</html>

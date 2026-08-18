@@ -1,0 +1,3886 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Today's Total Play - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   TODAYTOTALPLAY.HTML
+   FINAL COMPLETE REPLACEMENT
+
+   CONNECTED WITH:
+   - bets
+   - markets
+   - userBalances
+   - passbook
+   - cancelledBets
+   - todayPlay
+   - result.html settlement protection
+
+   FEATURES:
+   - Today's total bidding
+   - Total records
+   - Selected records
+   - Market filter
+   - Date filter
+   - Search
+   - Copy
+   - CSV
+   - Print
+   - Refresh
+   - Select one / select all
+   - Delete Pending Bid
+   - Wallet Refund
+   - Passbook Credit
+   - Cancelled Backup
+   - Win/Lose Protection
+   - Result Settlement Protection
+===================================================== */
+
+
+/* =====================================================
+   1. BASIC
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+body{
+    background:#f2f2f2;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:35px;
+}
+
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+
+.header{
+    width:100%;
+    background:#111111;
+    color:#ffffff;
+    padding:18px 15px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:15px;
+}
+
+
+
+/* =====================================================
+   2. SUMMARY
+===================================================== */
+
+.summaryGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+
+.summaryBox{
+    color:#ffffff;
+    padding:18px 12px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.16);
+}
+
+
+.summaryBox p{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+
+.summaryBox strong{
+    display:block;
+    font-size:28px;
+}
+
+
+.totalSummary{
+    background:#00a9c7;
+}
+
+
+.recordSummary{
+    background:#3949ab;
+}
+
+
+.selectedSummary{
+    background:#7b1fa2;
+}
+
+
+
+/* =====================================================
+   3. DELETE SECTION
+===================================================== */
+
+.deleteSection{
+    background:#ffffff;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    margin-bottom:15px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+
+.deleteSelectedBtn{
+    background:#e53935;
+    color:#ffffff;
+    border:none;
+    border-radius:9px;
+    padding:13px 20px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.deleteSelectedBtn:hover{
+    background:#c62828;
+}
+
+
+.deleteSelectedBtn:disabled{
+    background:#aaaaaa;
+    cursor:not-allowed;
+}
+
+
+.deleteHelp{
+    color:#666666;
+    font-size:13px;
+    line-height:1.6;
+    flex:1;
+}
+
+
+
+/* =====================================================
+   4. FILTER
+===================================================== */
+
+.filterBox{
+    background:#ffffff;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    margin-bottom:15px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr auto auto auto;
+    gap:10px;
+}
+
+
+.filterBox select,
+.filterBox input{
+    width:100%;
+    height:45px;
+    padding:0 10px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+    background:#ffffff;
+}
+
+
+.filterBox select:focus,
+.filterBox input:focus{
+    border-color:#00a9c7;
+}
+
+
+.smallBtn{
+    height:45px;
+    padding:0 18px;
+    border:none;
+    border-radius:8px;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.todayBtn{
+    background:#ff9800;
+}
+
+
+.searchBtn{
+    background:#0097a7;
+}
+
+
+.clearBtn{
+    background:#607d8b;
+}
+
+
+
+/* =====================================================
+   5. TOOLS
+===================================================== */
+
+.toolsBox{
+    background:#ffffff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+
+.toolBtn{
+    padding:10px 14px;
+    border:none;
+    border-radius:7px;
+    background:#333333;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.refreshBtn{
+    background:#009688;
+}
+
+
+.searchInput{
+    margin-left:auto;
+    min-width:260px;
+    padding:10px;
+    border:1px solid #cccccc;
+    border-radius:7px;
+    outline:none;
+}
+
+
+
+/* =====================================================
+   6. TABLE
+===================================================== */
+
+.tableBox{
+    background:#ffffff;
+    border-radius:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+
+.playTable{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1120px;
+    font-size:14px;
+}
+
+
+.playTable th{
+    background:#00a9c7;
+    color:#ffffff;
+    padding:12px 8px;
+    border:1px solid #dddddd;
+    white-space:nowrap;
+}
+
+
+.playTable td{
+    padding:10px 8px;
+    border:1px solid #dddddd;
+    text-align:center;
+    white-space:nowrap;
+}
+
+
+.playTable tbody tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+
+.playTable tbody tr:hover{
+    background:#eaf9fc;
+}
+
+
+.selectBox{
+    width:20px;
+    height:20px;
+    cursor:pointer;
+}
+
+
+.selectBox:disabled{
+    cursor:not-allowed;
+    opacity:.35;
+}
+
+
+.pendingStatus{
+    color:#e67e00;
+    font-weight:bold;
+}
+
+
+.winStatus{
+    color:#159447;
+    font-weight:bold;
+}
+
+
+.loseStatus{
+    color:#e53935;
+    font-weight:bold;
+}
+
+
+.cancelledStatus{
+    color:#777777;
+    font-weight:bold;
+}
+
+
+.noData{
+    padding:30px!important;
+    color:#777777;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   7. BACK BUTTON
+===================================================== */
+
+.back-btn{
+    margin-top:18px;
+    text-align:center;
+}
+
+
+.back-btn a{
+    display:block;
+    padding:13px;
+    background:#34495e;
+    color:#ffffff;
+    border-radius:9px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+
+/* =====================================================
+   8. SUCCESS POPUP
+===================================================== */
+
+.popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+}
+
+
+.popupBox{
+    width:100%;
+    max-width:420px;
+    background:#ffffff;
+    border-radius:18px;
+    padding:25px 20px;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,.28);
+}
+
+
+.popupIcon{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    margin:0 auto 14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#22a559;
+    color:#ffffff;
+    font-size:34px;
+}
+
+
+.popupBox h2{
+    margin-bottom:12px;
+}
+
+
+.popupMessage{
+    white-space:pre-line;
+    line-height:1.7;
+    color:#555555;
+}
+
+
+.popupClose{
+    width:100%;
+    margin-top:18px;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#34495e;
+    color:#ffffff;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+
+/* =====================================================
+   9. PRINT
+===================================================== */
+
+@media print{
+
+    .header,
+    .deleteSection,
+    .filterBox,
+    .toolsBox,
+    .back-btn{
+        display:none!important;
+    }
+
+
+    body{
+        background:#ffffff;
+    }
+
+
+    .tableBox{
+        box-shadow:none;
+    }
+
+}
+
+
+
+/* =====================================================
+   10. MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .header{
+        font-size:20px;
+    }
+
+
+    .summaryGrid{
+        grid-template-columns:1fr;
+    }
+
+
+    .summaryBox strong{
+        font-size:25px;
+    }
+
+
+    .filterBox{
+        grid-template-columns:1fr 1fr;
+    }
+
+
+    .filterBox select,
+    .filterBox input{
+        grid-column:span 1;
+    }
+
+
+    .smallBtn{
+        width:100%;
+    }
+
+
+    .toolsBox{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+    }
+
+
+    .searchInput{
+        grid-column:1/-1;
+        margin-left:0;
+        min-width:0;
+        width:100%;
+    }
+
+
+    .deleteSelectedBtn{
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="header">
+
+    TODAY'S TOTAL PLAY
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     SUMMARY
+===================================================== -->
+
+<div class="summaryGrid">
+
+
+<div class="summaryBox totalSummary">
+
+    <p>
+        Today's Total Bidding
+    </p>
+
+    <strong>
+
+        ₹ <span id="todayTotal">0.00</span>
+
+    </strong>
+
+</div>
+
+
+
+<div class="summaryBox recordSummary">
+
+    <p>
+        Total Records
+    </p>
+
+    <strong id="totalRecords">
+        0
+    </strong>
+
+</div>
+
+
+
+<div class="summaryBox selectedSummary">
+
+    <p>
+        Selected Rows
+    </p>
+
+    <strong id="selectedCount">
+        0
+    </strong>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     DELETE SELECTED
+===================================================== -->
+
+<div class="deleteSection">
+
+
+<button
+type="button"
+id="deleteSelectedBtn"
+class="deleteSelectedBtn"
+onclick="deleteSelectedRows()"
+disabled>
+
+    🗑 DELETE SELECTED ROWS
+
+</button>
+
+
+<div class="deleteHelp">
+
+    Sirf <b>Pending</b> aur <b>Unsettled</b> bid cancel hogi.
+    Cancel karte hi bid amount customer ke wallet me automatically
+    refund hoga aur Wallet Passbook me <b>Credit</b> entry बनेगी.
+    Win, Lose ya Result Settled bid delete nahi hogi.
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     FILTER
+===================================================== -->
+
+<div class="filterBox">
+
+
+<select id="marketFilter">
+
+    <option value="ALL">
+        All Market
+    </option>
+
+</select>
+
+
+<input
+type="date"
+id="filterDate">
+
+
+<button
+type="button"
+class="smallBtn todayBtn"
+onclick="todayFilter()">
+
+    TODAY
+
+</button>
+
+
+<button
+type="button"
+class="smallBtn searchBtn"
+onclick="searchPlay()">
+
+    SEARCH
+
+</button>
+
+
+<button
+type="button"
+class="smallBtn clearBtn"
+onclick="clearFilter()">
+
+    CLEAR
+
+</button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     REPORT TOOLS
+===================================================== -->
+
+<div class="toolsBox">
+
+
+<button
+type="button"
+class="toolBtn"
+onclick="copyTable()">
+
+    COPY
+
+</button>
+
+
+<button
+type="button"
+class="toolBtn"
+onclick="downloadCSV()">
+
+    CSV
+
+</button>
+
+
+<button
+type="button"
+class="toolBtn"
+onclick="printReport()">
+
+    PRINT
+
+</button>
+
+
+<button
+type="button"
+class="toolBtn refreshBtn"
+onclick="refreshData()">
+
+    REFRESH
+
+</button>
+
+
+<input
+type="text"
+class="searchInput"
+id="searchInput"
+placeholder="Search Mobile / Name / Market / Game / Number"
+autocomplete="off"
+oninput="renderTable()">
+
+
+</div>
+
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="tableBox">
+
+
+<table
+class="playTable"
+id="playTable">
+
+
+<thead>
+
+
+<tr>
+
+
+<th>
+
+    <input
+    type="checkbox"
+    id="selectAll"
+    class="selectBox"
+    onchange="toggleSelectAll(this)">
+
+</th>
+
+
+<th>ID</th>
+
+<th>Mobile</th>
+
+<th>User Name</th>
+
+<th>Market</th>
+
+<th>Game</th>
+
+<th>Session</th>
+
+<th>Number</th>
+
+<th>Bid Amount</th>
+
+<th>Date</th>
+
+<th>Time</th>
+
+<th>Status</th>
+
+
+</tr>
+
+
+</thead>
+
+
+<tbody id="playTableBody">
+
+
+<tr>
+
+<td
+colspan="12"
+class="noData">
+
+    No Data Found
+
+</td>
+
+</tr>
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     BACK
+===================================================== -->
+
+<div class="back-btn">
+
+<a href="index.html">
+
+    ⬅ Back To Admin Panel
+
+</a>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SUCCESS POPUP
+===================================================== -->
+
+<div
+id="popup"
+class="popup">
+
+
+<div class="popupBox">
+
+
+<div class="popupIcon">
+    ✓
+</div>
+
+
+<h2>
+
+    Bid Cancelled Successfully
+
+</h2>
+
+
+<div
+id="popupMessage"
+class="popupMessage">
+
+    Wallet refund completed.
+
+</div>
+
+
+<button
+type="button"
+class="popupClose"
+onclick="closePopup()">
+
+    CLOSE
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA
+   TODAY'S TOTAL PLAY
+   FINAL COMPLETE ENGINE
+===================================================== */
+
+
+
+/* =====================================================
+   1. SAFE STORAGE
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+function saveStorage(
+    key,
+    value
+){
+
+    try{
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(
+                value
+            )
+        );
+
+
+        return true;
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Storage Save Error:",
+            key,
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   2. GLOBAL DATA
+===================================================== */
+
+let allBets = [];
+
+let filteredBets = [];
+
+let displayedBets = [];
+
+
+let selectedIndexes =
+new Set();
+
+
+
+/* =====================================================
+   3. SAFE VALUE
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+
+/* =====================================================
+   4. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   5. NORMALIZE TEXT
+===================================================== */
+
+function normalizeUpper(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toUpperCase();
+
+}
+
+
+
+/* =====================================================
+   6. NORMALIZE DATE
+===================================================== */
+
+function normalizeDate(dateValue){
+
+    if(!dateValue){
+
+        return "";
+
+    }
+
+
+    let value =
+    String(
+        dateValue
+    )
+    .trim();
+
+
+    /*
+       DD/MM/YYYY
+       DD/MM/YYYY, TIME
+    */
+
+    let slashMatch =
+    value.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    );
+
+
+    if(slashMatch){
+
+        return (
+
+            slashMatch[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slashMatch[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                slashMatch[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    /*
+       DD-MM-YYYY
+    */
+
+    let dashMatch =
+    value.match(
+        /^(\d{1,2})-(\d{1,2})-(\d{4})/
+    );
+
+
+    if(dashMatch){
+
+        return (
+
+            dashMatch[3]
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dashMatch[2]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+            +
+
+            "-"
+
+            +
+
+            String(
+                dashMatch[1]
+            )
+            .padStart(
+                2,
+                "0"
+            )
+
+        );
+
+    }
+
+
+    /*
+       YYYY-MM-DD
+    */
+
+    if(
+        /^\d{4}-\d{2}-\d{2}/
+        .test(
+            value
+        )
+    ){
+
+        return value.substring(
+            0,
+            10
+        );
+
+    }
+
+
+    let parsed =
+    new Date(
+        value
+    );
+
+
+    if(
+        isNaN(
+            parsed.getTime()
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    let yyyy =
+    parsed.getFullYear();
+
+
+    let mm =
+    String(
+        parsed.getMonth()+1
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    let dd =
+    String(
+        parsed.getDate()
+    )
+    .padStart(
+        2,
+        "0"
+    );
+
+
+    return (
+
+        yyyy
+
+        +
+
+        "-"
+
+        +
+
+        mm
+
+        +
+
+        "-"
+
+        +
+
+        dd
+
+    );
+
+}
+
+
+
+/* =====================================================
+   7. TODAY DATE
+===================================================== */
+
+function getTodayISO(){
+
+    let today =
+    new Date();
+
+
+    return (
+
+        today.getFullYear()
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            today.getMonth()+1
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+        +
+
+        "-"
+
+        +
+
+        String(
+            today.getDate()
+        )
+        .padStart(
+            2,
+            "0"
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   8. CURRENT DATE + TIME
+===================================================== */
+
+function getDateTime(){
+
+    let now =
+    new Date();
+
+
+    return {
+
+        date:
+        now.toLocaleDateString(
+            "en-GB"
+        ),
+
+
+        time:
+        now.toLocaleTimeString(
+            "en-US",
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit",
+                hour12:true
+            }
+        ),
+
+
+        timestamp:
+        now.getTime(),
+
+
+        iso:
+        now.toISOString()
+
+    };
+
+}
+
+
+
+/* =====================================================
+   9. FORMAT TIME
+   CAPITAL AM / PM
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        !value ||
+        value === "-"
+    ){
+
+        return "-";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    text =
+    text
+    .replace(
+        /\bam\b/gi,
+        "AM"
+    )
+    .replace(
+        /\bpm\b/gi,
+        "PM"
+    );
+
+
+    let match =
+    text.match(
+        /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+    );
+
+
+    if(match){
+
+        let hour =
+        Number(
+            match[1]
+        );
+
+
+        if(
+            hour >= 0 &&
+            hour <= 23
+        ){
+
+            let suffix =
+            hour >= 12
+            ? "PM"
+            : "AM";
+
+
+            let hour12 =
+            hour % 12;
+
+
+            if(
+                hour12 === 0
+            ){
+
+                hour12 =
+                12;
+
+            }
+
+
+            return (
+
+                String(
+                    hour12
+                )
+                .padStart(
+                    2,
+                    "0"
+                )
+
+                +
+
+                ":"
+
+                +
+
+                match[2]
+
+                +
+
+                (
+                    match[3]
+                    ?
+                    ":" + match[3]
+                    :
+                    ""
+                )
+
+                +
+
+                " "
+
+                +
+
+                suffix
+
+            );
+
+        }
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   10. GET BID DISPLAY DATE
+===================================================== */
+
+function getBidDate(item){
+
+    return (
+
+        item.bidDate ||
+
+        item.gameDate ||
+
+        item.date ||
+
+        ""
+
+    );
+
+}
+
+
+
+/* =====================================================
+   11. GET BID DISPLAY TIME
+===================================================== */
+
+function getBidTime(item){
+
+    return formatTime12(
+
+        item.bidTime ||
+
+        item.time ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   12. LOAD MARKETS
+===================================================== */
+
+function loadMarkets(){
+
+    let marketSelect =
+    document.getElementById(
+        "marketFilter"
+    );
+
+
+    let previous =
+    marketSelect.value ||
+    "ALL";
+
+
+    let markets =
+    getStorage(
+        "markets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            markets
+        )
+    ){
+
+        markets = [];
+
+    }
+
+
+    marketSelect.innerHTML = `
+
+        <option value="ALL">
+            All Market
+        </option>
+
+    `;
+
+
+    let used =
+    new Set();
+
+
+    markets.forEach(
+        function(item){
+
+            let name = "";
+
+
+            if(
+                typeof item === "string"
+            ){
+
+                name =
+                item.trim();
+
+            }
+
+            else if(item){
+
+                name =
+                String(
+
+                    item.market ||
+
+                    item.marketName ||
+
+                    item.name ||
+
+                    ""
+
+                )
+                .trim();
+
+            }
+
+
+            if(!name){
+
+                return;
+
+            }
+
+
+            let key =
+            normalizeUpper(
+                name
+            );
+
+
+            if(
+                used.has(
+                    key
+                )
+            ){
+
+                return;
+
+            }
+
+
+            used.add(
+                key
+            );
+
+
+            let option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value =
+            name;
+
+
+            option.textContent =
+            name;
+
+
+            marketSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if(
+        [...marketSelect.options]
+        .some(
+            function(option){
+
+                return (
+                    option.value ===
+                    previous
+                );
+
+            }
+        )
+    ){
+
+        marketSelect.value =
+        previous;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   13. LOAD BET DATA
+===================================================== */
+
+function loadBetData(){
+
+    let bets =
+    getStorage(
+        "bets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            bets
+        )
+    ){
+
+        bets = [];
+
+    }
+
+
+    allBets =
+    bets.map(
+        function(item,index){
+
+            return {
+
+                item:
+                item,
+
+                originalIndex:
+                index
+
+            };
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   14. SYNC TODAYPLAY
+   Admin index.html compatibility
+===================================================== */
+
+function syncTodayPlay(){
+
+    let bets =
+    getStorage(
+        "bets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            bets
+        )
+    ){
+
+        bets = [];
+
+    }
+
+
+    let today =
+    getTodayISO();
+
+
+    let todayPlay =
+    bets.filter(
+        function(item){
+
+            return (
+
+                normalizeDate(
+                    getBidDate(
+                        item
+                    )
+                )
+
+                ===
+
+                today
+
+            );
+
+        }
+    );
+
+
+    saveStorage(
+        "todayPlay",
+        todayPlay
+    );
+
+}
+
+
+
+/* =====================================================
+   15. FILTER DATA
+===================================================== */
+
+function searchPlay(){
+
+    selectedIndexes.clear();
+
+
+    let market =
+    document
+    .getElementById(
+        "marketFilter"
+    )
+    .value;
+
+
+    let date =
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value;
+
+
+    filteredBets =
+    allBets.filter(
+        function(record){
+
+            let item =
+            record.item;
+
+
+            let marketMatch =
+
+            market === "ALL"
+
+            ||
+
+            normalizeUpper(
+                item.market
+            )
+
+            ===
+
+            normalizeUpper(
+                market
+            );
+
+
+            let dateMatch =
+
+            date === ""
+
+            ||
+
+            normalizeDate(
+                getBidDate(
+                    item
+                )
+            )
+
+            ===
+
+            date;
+
+
+            return (
+
+                marketMatch
+
+                &&
+
+                dateMatch
+
+            );
+
+        }
+    );
+
+
+    renderTable();
+
+}
+
+
+
+/* =====================================================
+   16. TODAY FILTER
+===================================================== */
+
+function todayFilter(){
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    document
+    .getElementById(
+        "marketFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    searchPlay();
+
+}
+
+
+
+/* =====================================================
+   17. CLEAR FILTER
+===================================================== */
+
+function clearFilter(){
+
+    document
+    .getElementById(
+        "marketFilter"
+    )
+    .value =
+    "ALL";
+
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value =
+    "";
+
+
+    searchPlay();
+
+}
+
+
+
+/* =====================================================
+   18. STATUS CLASS
+===================================================== */
+
+function statusClass(status){
+
+    let value =
+    normalizeUpper(
+        status || "Pending"
+    );
+
+
+    if(
+        value === "PENDING"
+    ){
+
+        return "pendingStatus";
+
+    }
+
+
+    if(
+        value === "WIN" ||
+        value === "WON"
+    ){
+
+        return "winStatus";
+
+    }
+
+
+    if(
+        value === "LOSE" ||
+        value === "LOST"
+    ){
+
+        return "loseStatus";
+
+    }
+
+
+    return "cancelledStatus";
+
+}
+
+
+
+/* =====================================================
+   19. CAN DELETE BID
+
+   Result.html compatibility:
+   settlementKey
+   settlementResultId
+   settlementPhase
+===================================================== */
+
+function canDeleteBid(item){
+
+    let status =
+    normalizeUpper(
+        item.status ||
+        "Pending"
+    );
+
+
+    /*
+       Only Pending
+    */
+
+    if(
+        status !==
+        "PENDING"
+    ){
+
+        return false;
+
+    }
+
+
+    /*
+       Result already attached
+    */
+
+    if(
+        item.settlementKey
+        ||
+        item.settlementResultId
+        ||
+        item.settlementPhase
+    ){
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+
+/* =====================================================
+   20. RENDER TABLE
+===================================================== */
+
+function renderTable(){
+
+    let body =
+    document.getElementById(
+        "playTableBody"
+    );
+
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    displayedBets =
+    filteredBets.filter(
+        function(record){
+
+            let item =
+            record.item;
+
+
+            if(
+                search === ""
+            ){
+
+                return true;
+
+            }
+
+
+            let searchable =
+            [
+
+                item.mobile,
+
+                item.name,
+
+                item.market,
+
+                item.game,
+
+                item.gameType,
+
+                item.session,
+
+                item.number,
+
+                item.amount,
+
+                getBidDate(item),
+
+                getBidTime(item),
+
+                item.status
+
+            ]
+            .join(
+                " "
+            )
+            .toLowerCase();
+
+
+            return searchable.includes(
+                search
+            );
+
+        }
+    );
+
+
+    body.innerHTML =
+    "";
+
+
+    let total =
+    0;
+
+
+    if(
+        displayedBets.length === 0
+    ){
+
+        body.innerHTML = `
+
+        <tr>
+
+            <td
+            colspan="12"
+            class="noData">
+
+                No Data Found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
+        document
+        .getElementById(
+            "todayTotal"
+        )
+        .innerText =
+        "0.00";
+
+
+        document
+        .getElementById(
+            "totalRecords"
+        )
+        .innerText =
+        "0";
+
+
+        selectedIndexes.clear();
+
+
+        updateSelectionUI();
+
+
+        return;
+
+    }
+
+
+    displayedBets.forEach(
+        function(record,index){
+
+            let item =
+            record.item;
+
+
+            let originalIndex =
+            record.originalIndex;
+
+
+            let amount =
+            Number(
+                item.amount ||
+                item.bidAmount ||
+                0
+            );
+
+
+            total +=
+            amount;
+
+
+            let deletable =
+            canDeleteBid(
+                item
+            );
+
+
+            let checked =
+            selectedIndexes.has(
+                originalIndex
+            );
+
+
+            body.innerHTML += `
+
+            <tr>
+
+
+                <td>
+
+                    <input
+                    type="checkbox"
+                    class="selectBox rowSelect"
+                    data-index="${originalIndex}"
+                    ${checked ? "checked" : ""}
+                    ${deletable ? "" : "disabled"}
+                    onchange="toggleRowSelection(this)">
+
+                </td>
+
+
+                <td>
+                    ${index + 1}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        safe(
+                            item.mobile
+                        )
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        safe(
+                            item.name
+                        )
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        safe(
+                            item.market
+                        )
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        safe(
+                            item.game ||
+                            item.gameType
+                        )
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        safe(
+                            item.session
+                        )
+                    )}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        safe(
+                            item.number
+                        )
+                    )}
+                </td>
+
+
+                <td>
+
+                    ₹ ${amount.toFixed(2)}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        safe(
+                            getBidDate(
+                                item
+                            )
+                        )
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapeHTML(
+                        getBidTime(
+                            item
+                        )
+                    )}
+
+                </td>
+
+
+                <td
+                class="${statusClass(
+                    item.status
+                )}">
+
+                    ${escapeHTML(
+                        safe(
+                            item.status ||
+                            "Pending"
+                        )
+                    )}
+
+                </td>
+
+
+            </tr>
+
+            `;
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "todayTotal"
+    )
+    .innerText =
+    total.toFixed(
+        2
+    );
+
+
+    document
+    .getElementById(
+        "totalRecords"
+    )
+    .innerText =
+    displayedBets.length;
+
+
+    updateSelectionUI();
+
+}
+
+
+
+/* =====================================================
+   21. ROW SELECTION
+===================================================== */
+
+function toggleRowSelection(
+    checkbox
+){
+
+    let index =
+    Number(
+        checkbox.dataset.index
+    );
+
+
+    if(
+        checkbox.checked
+    ){
+
+        selectedIndexes.add(
+            index
+        );
+
+    }
+
+    else{
+
+        selectedIndexes.delete(
+            index
+        );
+
+    }
+
+
+    updateSelectionUI();
+
+}
+
+
+
+/* =====================================================
+   22. SELECT ALL
+===================================================== */
+
+function toggleSelectAll(
+    checkbox
+){
+
+    let boxes =
+    document.querySelectorAll(
+        ".rowSelect:not(:disabled)"
+    );
+
+
+    boxes.forEach(
+        function(box){
+
+            let index =
+            Number(
+                box.dataset.index
+            );
+
+
+            box.checked =
+            checkbox.checked;
+
+
+            if(
+                checkbox.checked
+            ){
+
+                selectedIndexes.add(
+                    index
+                );
+
+            }
+
+            else{
+
+                selectedIndexes.delete(
+                    index
+                );
+
+            }
+
+        }
+    );
+
+
+    updateSelectionUI();
+
+}
+
+
+
+/* =====================================================
+   23. UPDATE SELECTION UI
+===================================================== */
+
+function updateSelectionUI(){
+
+    let count =
+    selectedIndexes.size;
+
+
+    document
+    .getElementById(
+        "selectedCount"
+    )
+    .innerText =
+    count;
+
+
+    document
+    .getElementById(
+        "deleteSelectedBtn"
+    )
+    .disabled =
+    count === 0;
+
+
+    let selectAll =
+    document.getElementById(
+        "selectAll"
+    );
+
+
+    let available =
+    document.querySelectorAll(
+        ".rowSelect:not(:disabled)"
+    );
+
+
+    let checked =
+    document.querySelectorAll(
+        ".rowSelect:not(:disabled):checked"
+    );
+
+
+    selectAll.checked =
+
+    available.length > 0
+
+    &&
+
+    available.length ===
+    checked.length;
+
+}
+
+
+
+/* =====================================================
+   24. CREATE REFUND PASSBOOK ENTRY
+
+   IMPORTANT:
+   Type intentionally "Cancellation Credit"
+   rakha gaya hai taki history.html isko
+   CREDIT ki tarah calculate kare.
+===================================================== */
+
+function makeCancellationPassbookEntry(
+    bet,
+    previousBalance,
+    refundAmount,
+    currentBalance
+){
+
+    let dt =
+    getDateTime();
+
+
+    return {
+
+        id:
+        dt.timestamp +
+        Math.random(),
+
+
+        betId:
+        bet.id || "",
+
+
+        cancellationId:
+        "CANCEL-"
+        +
+        dt.timestamp
+        +
+        "-"
+        +
+        Math.floor(
+            Math.random() *
+            100000
+        ),
+
+
+        mobile:
+        bet.mobile || "",
+
+
+        name:
+        bet.name || "",
+
+
+        market:
+        bet.market || "",
+
+
+        game:
+        bet.game ||
+        bet.gameType ||
+        "",
+
+
+        date:
+        dt.date,
+
+
+        time:
+        dt.time,
+
+
+        type:
+        "Cancellation Credit",
+
+
+        previousBalance:
+        previousBalance,
+
+
+        amount:
+        refundAmount,
+
+
+        currentBalance:
+        currentBalance,
+
+
+        status:
+        "Success",
+
+
+        details:
+
+        String(
+            bet.market || ""
+        )
+
+        +
+
+        " - "
+
+        +
+
+        String(
+            bet.game ||
+            bet.gameType ||
+            ""
+        )
+
+        +
+
+        " Bid Cancel Refund"
+
+    };
+
+}
+
+
+
+/* =====================================================
+   25. CANCELLED BID BACKUP
+===================================================== */
+
+function makeCancelledBet(
+    bet,
+    refundAmount
+){
+
+    let dt =
+    getDateTime();
+
+
+    return {
+
+        ...bet,
+
+
+        originalStatus:
+        bet.status ||
+        "Pending",
+
+
+        status:
+        "Cancelled",
+
+
+        cancellationReason:
+        "Cancelled By Admin",
+
+
+        refundedAmount:
+        refundAmount,
+
+
+        cancelledDate:
+        dt.date,
+
+
+        cancelledTime:
+        dt.time,
+
+
+        cancelledAt:
+        dt.iso,
+
+
+        cancelledTimestamp:
+        dt.timestamp
+
+    };
+
+}
+
+
+
+/* =====================================================
+   26. DELETE SELECTED ROWS
+===================================================== */
+
+function deleteSelectedRows(){
+
+    if(
+        selectedIndexes.size === 0
+    ){
+
+        alert(
+            "Please Select Pending Bid"
+        );
+
+
+        return;
+
+    }
+
+
+    let bets =
+    getStorage(
+        "bets",
+        []
+    );
+
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    let cancelledBets =
+    getStorage(
+        "cancelledBets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            bets
+        )
+    ){
+
+        bets = [];
+
+    }
+
+
+    if(
+        !balances ||
+        Array.isArray(
+            balances
+        ) ||
+        typeof balances !== "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    if(
+        !Array.isArray(
+            passbook
+        )
+    ){
+
+        passbook = [];
+
+    }
+
+
+    if(
+        !Array.isArray(
+            cancelledBets
+        )
+    ){
+
+        cancelledBets = [];
+
+    }
+
+
+    /*
+       Highest index first.
+       Array splice ke time wrong row delete
+       hone se protection.
+    */
+
+    let indexes =
+    Array.from(
+        selectedIndexes
+    )
+    .sort(
+        function(a,b){
+
+            return b-a;
+
+        }
+    );
+
+
+    let valid =
+    [];
+
+
+    let blockedCount =
+    0;
+
+
+    indexes.forEach(
+        function(index){
+
+            let bet =
+            bets[index];
+
+
+            if(
+                !bet ||
+                !canDeleteBid(
+                    bet
+                )
+            ){
+
+                blockedCount++;
+
+                return;
+
+            }
+
+
+            valid.push({
+
+                index:
+                index,
+
+                bet:
+                bet
+
+            });
+
+        }
+    );
+
+
+    if(
+        valid.length === 0
+    ){
+
+        alert(
+
+            "Selected Bid Cancel Nahi Ho Sakti."
+            +
+            "\n\nSirf Pending aur Unsettled Bid Cancel Ki Ja Sakti Hai."
+
+        );
+
+
+        selectedIndexes.clear();
+
+
+        renderTable();
+
+
+        return;
+
+    }
+
+
+    let totalRefund =
+    valid.reduce(
+        function(total,entry){
+
+            return (
+
+                total
+
+                +
+
+                Number(
+                    entry.bet.amount ||
+                    entry.bet.bidAmount ||
+                    0
+                )
+
+            );
+
+        },
+        0
+    );
+
+
+    let confirmMessage =
+
+    valid.length
+    +
+    " Pending Bid Cancel Karni Hai?"
+    +
+    "\n\nWallet Refund: ₹ "
+    +
+    totalRefund.toFixed(2);
+
+
+    if(
+        blockedCount > 0
+    ){
+
+        confirmMessage +=
+
+        "\n\n"
+        +
+        blockedCount
+        +
+        " Settled / Non-Pending Row Skip Hogi.";
+
+    }
+
+
+    if(
+        !confirm(
+            confirmMessage
+        )
+    ){
+
+        return;
+
+    }
+
+
+    let deletedCount =
+    0;
+
+
+    let refundTotal =
+    0;
+
+
+    /*
+       valid already highest index first.
+    */
+
+    valid.forEach(
+        function(entry){
+
+            let index =
+            entry.index;
+
+
+            let liveBet =
+            bets[index];
+
+
+            if(
+                !liveBet ||
+                !canDeleteBid(
+                    liveBet
+                )
+            ){
+
+                return;
+
+            }
+
+
+            let mobile =
+            String(
+                liveBet.mobile || ""
+            )
+            .trim();
+
+
+            let refundAmount =
+            Number(
+                liveBet.amount ||
+                liveBet.bidAmount ||
+                0
+            );
+
+
+            if(
+                !mobile ||
+                !Number.isFinite(
+                    refundAmount
+                ) ||
+                refundAmount <= 0
+            ){
+
+                return;
+
+            }
+
+
+            let previousBalance =
+            Number(
+                balances[mobile] || 0
+            );
+
+
+            if(
+                !Number.isFinite(
+                    previousBalance
+                )
+            ){
+
+                previousBalance =
+                0;
+
+            }
+
+
+            let currentBalance =
+            previousBalance +
+            refundAmount;
+
+
+            /*
+               WALLET REFUND
+            */
+
+            balances[mobile] =
+            currentBalance;
+
+
+            /*
+               PASSBOOK CREDIT
+            */
+
+            passbook.push(
+
+                makeCancellationPassbookEntry(
+
+                    liveBet,
+
+                    previousBalance,
+
+                    refundAmount,
+
+                    currentBalance
+
+                )
+
+            );
+
+
+            /*
+               PERMANENT CANCELLED BACKUP
+            */
+
+            cancelledBets.push(
+
+                makeCancelledBet(
+
+                    liveBet,
+
+                    refundAmount
+
+                )
+
+            );
+
+
+            /*
+               REMOVE FROM ACTIVE BETS
+            */
+
+            bets.splice(
+                index,
+                1
+            );
+
+
+            refundTotal +=
+            refundAmount;
+
+
+            deletedCount++;
+
+        }
+    );
+
+
+    /*
+       SAVE MAIN DATA
+    */
+
+    saveStorage(
+        "bets",
+        bets
+    );
+
+
+    saveStorage(
+        "userBalances",
+        balances
+    );
+
+
+    saveStorage(
+        "passbook",
+        passbook
+    );
+
+
+    saveStorage(
+        "cancelledBets",
+        cancelledBets
+    );
+
+
+    /*
+       DASHBOARD TODAY PLAY SYNC
+    */
+
+    syncTodayPlay();
+
+
+    /*
+       UPDATE SIGNAL
+    */
+
+    saveStorage(
+        "lastBidCancellation",
+        {
+
+            deletedCount:
+            deletedCount,
+
+
+            refundTotal:
+            refundTotal,
+
+
+            date:
+            getDateTime().date,
+
+
+            time:
+            getDateTime().time,
+
+
+            timestamp:
+            Date.now()
+
+        }
+    );
+
+
+    window.dispatchEvent(
+        new Event(
+            "betsUpdated"
+        )
+    );
+
+
+    selectedIndexes.clear();
+
+
+    refreshData();
+
+
+    showPopup(
+
+        deletedCount
+        +
+        " Bid Cancelled Successfully"
+        +
+        "\n\nWallet Refund: ₹ "
+        +
+        refundTotal.toFixed(2)
+        +
+        "\n\nPassbook Credit Added"
+        +
+        "\nCancelled Bid Backup Saved"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   27. POPUP
+===================================================== */
+
+function showPopup(message){
+
+    document
+    .getElementById(
+        "popupMessage"
+    )
+    .innerText =
+    message;
+
+
+    document
+    .getElementById(
+        "popup"
+    )
+    .style.display =
+    "flex";
+
+}
+
+
+
+function closePopup(){
+
+    document
+    .getElementById(
+        "popup"
+    )
+    .style.display =
+    "none";
+
+}
+
+
+
+/* =====================================================
+   28. COPY TABLE
+===================================================== */
+
+function copyTable(){
+
+    let rows = [
+
+        [
+            "ID",
+            "Mobile",
+            "User Name",
+            "Market",
+            "Game",
+            "Session",
+            "Number",
+            "Bid Amount",
+            "Date",
+            "Time",
+            "Status"
+        ]
+
+    ];
+
+
+    displayedBets.forEach(
+        function(record,index){
+
+            let item =
+            record.item;
+
+
+            rows.push([
+
+                index + 1,
+
+                safe(
+                    item.mobile
+                ),
+
+                safe(
+                    item.name
+                ),
+
+                safe(
+                    item.market
+                ),
+
+                safe(
+                    item.game ||
+                    item.gameType
+                ),
+
+                safe(
+                    item.session
+                ),
+
+                safe(
+                    item.number
+                ),
+
+                Number(
+                    item.amount ||
+                    item.bidAmount ||
+                    0
+                )
+                .toFixed(
+                    2
+                ),
+
+                safe(
+                    getBidDate(
+                        item
+                    )
+                ),
+
+                getBidTime(
+                    item
+                ),
+
+                safe(
+                    item.status ||
+                    "Pending"
+                )
+
+            ]);
+
+        }
+    );
+
+
+    let text =
+    rows
+    .map(
+        function(row){
+
+            return row.join(
+                "\t"
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            text
+        )
+        .then(
+            function(){
+
+                alert(
+                    "Today's Total Play Data Copied"
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+                    text
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+            text
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   29. FALLBACK COPY
+===================================================== */
+
+function fallbackCopy(text){
+
+    let textarea =
+    document.createElement(
+        "textarea"
+    );
+
+
+    textarea.value =
+    text;
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.select();
+
+
+    try{
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        alert(
+            "Today's Total Play Data Copied"
+        );
+
+    }
+
+    catch(error){
+
+        alert(
+            "Copy Failed"
+        );
+
+    }
+
+
+    textarea.remove();
+
+}
+
+
+
+/* =====================================================
+   30. CSV DOWNLOAD
+===================================================== */
+
+function downloadCSV(){
+
+    let rows = [
+
+        [
+            "ID",
+            "Mobile",
+            "User Name",
+            "Market",
+            "Game",
+            "Session",
+            "Number",
+            "Bid Amount",
+            "Date",
+            "Time",
+            "Status"
+        ]
+
+    ];
+
+
+    displayedBets.forEach(
+        function(record,index){
+
+            let item =
+            record.item;
+
+
+            rows.push([
+
+                index + 1,
+
+                safe(
+                    item.mobile
+                ),
+
+                safe(
+                    item.name
+                ),
+
+                safe(
+                    item.market
+                ),
+
+                safe(
+                    item.game ||
+                    item.gameType
+                ),
+
+                safe(
+                    item.session
+                ),
+
+                safe(
+                    item.number
+                ),
+
+                Number(
+                    item.amount ||
+                    item.bidAmount ||
+                    0
+                )
+                .toFixed(
+                    2
+                ),
+
+                safe(
+                    getBidDate(
+                        item
+                    )
+                ),
+
+                getBidTime(
+                    item
+                ),
+
+                safe(
+                    item.status ||
+                    "Pending"
+                )
+
+            ]);
+
+        }
+    );
+
+
+    let csv =
+    rows
+    .map(
+        function(row){
+
+            return row
+            .map(
+                function(value){
+
+                    let text =
+                    String(
+                        value
+                    )
+                    .replace(
+                        /"/g,
+                        '""'
+                    );
+
+
+                    return (
+
+                        '"'
+
+                        +
+
+                        text
+
+                        +
+
+                        '"'
+
+                    );
+
+                }
+            )
+            .join(
+                ","
+            );
+
+        }
+    )
+    .join(
+        "\n"
+    );
+
+
+    let blob =
+    new Blob(
+        [
+            "\uFEFF" +
+            csv
+        ],
+        {
+            type:
+            "text/csv;charset=utf-8;"
+        }
+    );
+
+
+    let url =
+    URL.createObjectURL(
+        blob
+    );
+
+
+    let link =
+    document.createElement(
+        "a"
+    );
+
+
+    link.href =
+    url;
+
+
+    link.download =
+    "today-total-play.csv";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+
+/* =====================================================
+   31. PRINT
+===================================================== */
+
+function printReport(){
+
+    window.print();
+
+}
+
+
+
+/* =====================================================
+   32. REFRESH
+===================================================== */
+
+function refreshData(){
+
+    selectedIndexes.clear();
+
+
+    syncTodayPlay();
+
+
+    loadBetData();
+
+
+    loadMarkets();
+
+
+    searchPlay();
+
+}
+
+
+
+/* =====================================================
+   33. FILTER EVENTS
+===================================================== */
+
+document
+.getElementById(
+    "marketFilter"
+)
+.addEventListener(
+    "change",
+    searchPlay
+);
+
+
+
+document
+.getElementById(
+    "filterDate"
+)
+.addEventListener(
+    "change",
+    searchPlay
+);
+
+
+
+/* =====================================================
+   34. STORAGE LIVE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === "bets"
+            ||
+            event.key === "markets"
+            ||
+            event.key === "userBalances"
+            ||
+            event.key === "passbook"
+            ||
+            event.key === "lastResultSync"
+        ){
+
+            refreshData();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   35. SAME PAGE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "betsUpdated",
+    function(){
+
+        refreshData();
+
+    }
+);
+
+
+
+/* =====================================================
+   36. PAGE FOCUS
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        refreshData();
+
+    }
+);
+
+
+
+/* =====================================================
+   37. FIRST LOAD
+===================================================== */
+
+function startPage(){
+
+    /*
+       Dashboard mirror first sync.
+    */
+
+    syncTodayPlay();
+
+
+    loadMarkets();
+
+
+    loadBetData();
+
+
+    /*
+       Page open होते ही today's data.
+    */
+
+    document
+    .getElementById(
+        "filterDate"
+    )
+    .value =
+    getTodayISO();
+
+
+    searchPlay();
+
+}
+
+
+
+startPage();
+
+
+
+/* =====================================================
+   38. CONSOLE CHECK
+===================================================== */
+
+console.log(
+    "✅ HR MATKA Today's Total Play FINAL Complete Replacement Connected"
+);
+
+
+console.log(
+    "✅ Pending Delete + Wallet Refund + Passbook Credit + Cancelled Backup Connected"
+);
+
+
+console.log(
+    "✅ Result Settlement Protection Connected"
+);
+
+
+console.log(
+    "✅ Dashboard todayPlay Sync Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

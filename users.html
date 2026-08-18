@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users Management</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#333;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:12px;
+text-align:center;
+}
+
+th{
+background:#3498db;
+color:white;
+}
+
+tr:nth-child(even){
+background:#f9f9f9;
+}
+
+.back{
+display:block;
+text-align:center;
+margin-top:20px;
+color:#555;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Users Management</h1>
+
+<h2 style="text-align:center;color:#e74c3c;">
+Total Users :
+<span id="totalUsers">0</span>
+</h2>
+
+
+<div class="card">
+
+<label>Search User</label>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Enter Mobile Number or User Name">
+
+<button onclick="searchUser()">
+Search
+</button>
+
+<button onclick="clearSearch()">
+Clear
+</button>
+
+<br><br>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>User Name</th>
+<th>Mobile Number</th>
+<th>City</th>
+<th>Balance</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+<tbody id="userTable"></tbody>
+
+</table>
+
+<a href="index.html" class="back">
+← Back To Admin Panel
+</a>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let table =
+document.getElementById("userTable");
+
+let balances =
+JSON.parse(localStorage.getItem("userBalances")) || {};
+
+
+document.getElementById("totalUsers").innerHTML =
+users.length;
+
+users.forEach(function(user,index){
+
+table.innerHTML += `
+<tr>
+<td>${index + 1}</td>
+<td>${user.name}</td>
+<td>${user.mobile}</td>
+<td>${user.city}</td>
+
+
+
+<td>₹ ${balances[user.mobile] || 0}</td>
+
+<td>
+<span style="color:green;font-weight:bold;">
+Active
+</span>
+</td>
+
+<td>
+<button onclick="openUser('${user.mobile}')">
+Open
+</button>
+</td>
+
+
+
+</tr>
+`;
+
+});
+
+
+function searchUser(){
+
+let search =
+document.getElementById("searchInput").value.trim().toLowerCase();
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let balances =
+JSON.parse(localStorage.getItem("userBalances")) || {};
+
+let table =
+document.getElementById("userTable");
+
+table.innerHTML="";
+
+let count=0;
+
+users.forEach(function(user,index){
+
+if(
+
+user.name.toLowerCase().includes(search)
+
+||
+
+user.mobile.includes(search)
+
+){
+
+count++;
+
+table.innerHTML += `
+
+<tr>
+
+<td>${index+1}</td>
+
+<td>${user.name}</td>
+
+<td>${user.mobile}</td>
+
+<td>${user.city}</td>
+
+<td>₹ ${balances[user.mobile] || 0}</td>
+
+<td>
+
+<button onclick="openUser('${user.mobile}')">
+
+Open
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+});
+
+if(count==0){
+
+table.innerHTML=`
+
+<tr>
+
+<td colspan="6">
+
+No User Found
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+}
+
+
+
+function openUser(mobile){
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let user =
+users.find(u => u.mobile == mobile);
+
+localStorage.setItem(
+"selectedUser",
+JSON.stringify(user)
+);
+
+window.location.href = "userdetails.html";
+
+}
+
+
+function clearSearch(){
+
+document.getElementById("searchInput").value="";
+
+location.reload();
+
+}
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>User Bank Details</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+padding:20px;
+margin:0;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.2);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#1976d2;
+color:white;
+}
+
+a{
+display:block;
+text-align:center;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+
+User Bank Details
+
+</h1>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+
+<th>Name</th>
+
+<th>Mobile</th>
+
+<th>Bank Name</th>
+
+<th>Account No.</th>
+
+<th>IFSC</th>
+
+<th>UPI</th>
+
+</tr>
+
+<tbody id="bankTable">
+
+</tbody>
+
+</table>
+
+<a href="index.html">
+
+← Back To Admin
+
+</a>
+
+</div>
+
+
+<script>
+
+// =========================
+// LOAD USER BANK DETAILS
+// =========================
+
+function loadUserBankDetails(){
+
+let users =
+JSON.parse(localStorage.getItem("users")) || [];
+
+let bankDetails =
+JSON.parse(localStorage.getItem("bankDetails")) || {};
+
+let table =
+document.getElementById("bankTable");
+
+if(!table) return;
+
+table.innerHTML = "";
+
+users.forEach(function(user,index){
+
+let bank =
+bankDetails[user.mobile] || {};
+
+table.innerHTML += `
+<tr>
+<td>${index+1}</td>
+<td>${user.name}</td>
+<td>${user.mobile}</td>
+<td>${bank.bankName || "-"}</td>
+<td>${bank.accountNumber || "-"}</td>
+<td>${bank.ifscCode || "-"}</td>
+<td>${bank.upiId || "-"}</td>
+</tr>
+`;
+
+});
+
+}
+
+if(document.getElementById("bankTable")){
+
+loadUserBankDetails();
+
+}
+
+
+</script>
+
+</body>
+
+</html>

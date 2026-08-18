@@ -1,0 +1,4757 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Result Management - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   RESULT.HTML
+   FINAL COMPLETE REPLACEMENT
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+body{
+    background:#f2f3f5;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:35px;
+}
+
+
+.header{
+    width:100%;
+    background:#182433;
+    color:#ffffff;
+    padding:18px 15px;
+    text-align:center;
+    font-size:25px;
+    font-weight:bold;
+    letter-spacing:.3px;
+}
+
+
+.container{
+    width:100%;
+    max-width:950px;
+    margin:auto;
+    padding:16px;
+}
+
+
+.card{
+    background:#ffffff;
+    padding:21px;
+    border-radius:16px;
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
+    margin-bottom:21px;
+}
+
+
+.sectionTitle{
+    text-align:center;
+    font-size:22px;
+    margin-bottom:12px;
+    color:#34495e;
+}
+
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:7px;
+    font-weight:bold;
+    color:#333333;
+}
+
+
+select,
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #c8cdd3;
+    border-radius:9px;
+    font-size:16px;
+    outline:none;
+    background:#ffffff;
+}
+
+
+select:focus,
+input:focus{
+    border-color:#3498db;
+    box-shadow:0 0 0 2px rgba(52,152,219,.10);
+}
+
+
+input[readonly]{
+    background:#f3f5f7;
+    color:#555555;
+}
+
+
+.helpText{
+    margin-top:7px;
+    color:#777777;
+    font-size:13px;
+}
+
+
+.previewBox{
+    display:none;
+    margin-top:18px;
+    padding:14px;
+    border-radius:10px;
+    background:#eef7ff;
+    border-left:5px solid #2196f3;
+    line-height:1.6;
+}
+
+
+.previewTitle{
+    font-weight:bold;
+    color:#1565c0;
+}
+
+
+.previewResult{
+    font-size:21px;
+    font-weight:bold;
+    margin-top:3px;
+    color:#263238;
+}
+
+
+.declareBtn{
+    width:100%;
+    padding:15px;
+    margin-top:22px;
+    background:#2196f3;
+    color:#ffffff;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.declareBtn:hover{
+    background:#1976d2;
+}
+
+
+.declareBtn:active{
+    transform:scale(.995);
+}
+
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:15px;
+    padding:13px;
+    background:#34495e;
+    color:#ffffff;
+    text-decoration:none;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+
+.historyCard{
+    background:#ffffff;
+    padding:18px;
+    border-radius:16px;
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
+}
+
+
+.historyCard h2{
+    margin-bottom:15px;
+    text-align:center;
+    color:#34495e;
+}
+
+
+.searchBox{
+    margin-bottom:15px;
+}
+
+
+.tableWrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+
+table{
+    width:100%;
+    min-width:920px;
+    border-collapse:collapse;
+    font-size:14px;
+}
+
+
+th{
+    background:#34495e;
+    color:#ffffff;
+    padding:11px 7px;
+    border:1px solid #d6d6d6;
+    white-space:nowrap;
+}
+
+
+td{
+    padding:9px 7px;
+    border:1px solid #dddddd;
+    text-align:center;
+    white-space:nowrap;
+}
+
+
+tbody tr:nth-child(even){
+    background:#f8f9fa;
+}
+
+
+.completeStatus{
+    color:#159447;
+    font-weight:bold;
+}
+
+
+.pendingStatus{
+    color:#d39a00;
+    font-weight:bold;
+}
+
+
+.actionBtn{
+    padding:7px 10px;
+    border:none;
+    border-radius:6px;
+    color:#ffffff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+.editBtn{
+    background:#2196f3;
+}
+
+
+.reverseBtn{
+    background:#ff9800;
+}
+
+
+.deleteBtn{
+    background:#e53935;
+}
+
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+.popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:18px;
+}
+
+
+.popupBox{
+    width:100%;
+    max-width:400px;
+    background:#ffffff;
+    padding:26px 22px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+
+.successIcon{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:#22a559;
+    color:#ffffff;
+    font-size:36px;
+    margin:0 auto 15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.popupBox h2{
+    margin-bottom:12px;
+    color:#283747;
+}
+
+
+.popupMessage{
+    white-space:pre-line;
+    line-height:1.6;
+    color:#444444;
+    font-weight:bold;
+}
+
+
+.popupBox button{
+    width:100%;
+    padding:13px;
+    margin-top:20px;
+    border:none;
+    border-radius:9px;
+    background:#34495e;
+    color:#ffffff;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+@media(max-width:600px){
+
+    .container{
+        padding:10px;
+    }
+
+
+    .header{
+        font-size:21px;
+    }
+
+
+    .card,
+    .historyCard{
+        padding:15px;
+    }
+
+
+    .sectionTitle{
+        font-size:20px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+    RESULT MANAGEMENT
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     RESULT FORM
+===================================================== -->
+
+<div class="card">
+
+
+<h2 class="sectionTitle">
+    Declare Market Result
+</h2>
+
+
+<label for="market">
+    Market Name
+</label>
+
+<select id="market">
+
+    <option value="">
+        Select Market
+    </option>
+
+</select>
+
+
+
+<label for="resultType">
+    Result Type
+</label>
+
+<select
+id="resultType"
+onchange="changeResultType()">
+
+    <option value="open">
+        Open Result
+    </option>
+
+    <option value="close">
+        Close Result
+    </option>
+
+</select>
+
+
+
+<div id="openBox">
+
+    <label for="openPanel">
+        Open Panel (3 Digit)
+    </label>
+
+    <input
+    type="text"
+    id="openPanel"
+    maxlength="3"
+    inputmode="numeric"
+    autocomplete="off"
+    placeholder="Example: 470">
+
+</div>
+
+
+
+<div
+id="closeBox"
+style="display:none;">
+
+    <label for="closePanel">
+        Close Panel (3 Digit)
+    </label>
+
+    <input
+    type="text"
+    id="closePanel"
+    maxlength="3"
+    inputmode="numeric"
+    autocomplete="off"
+    placeholder="Example: 348">
+
+</div>
+
+
+<div class="helpText">
+
+    Open/Close Ank entered panel ke digit total se
+    automatically calculate hoga.
+
+</div>
+
+
+
+<div
+id="previewBox"
+class="previewBox">
+
+    <div class="previewTitle">
+        Result Preview
+    </div>
+
+    <div
+    id="previewResult"
+    class="previewResult">
+
+        -
+
+    </div>
+
+</div>
+
+
+
+<button
+type="button"
+class="declareBtn"
+onclick="saveResult()">
+
+    DECLARE RESULT
+
+</button>
+
+
+
+<a
+href="index.html"
+class="back">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     RESULT HISTORY
+===================================================== -->
+
+<div class="historyCard">
+
+
+<h2>
+    Result History
+</h2>
+
+
+<input
+class="searchBox"
+type="text"
+id="searchResult"
+placeholder="Search Market..."
+oninput="loadResultHistory()">
+
+
+
+<div class="tableWrap">
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+    <th>ID</th>
+
+    <th>Market</th>
+
+    <th>Result</th>
+
+    <th>Status</th>
+
+    <th>Date</th>
+
+    <th>Time</th>
+
+    <th>Edit</th>
+
+    <th>Reverse</th>
+
+    <th>Delete</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="resultHistoryBody">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SUCCESS POPUP
+===================================================== -->
+
+<div
+class="popup"
+id="popup">
+
+
+<div class="popupBox">
+
+
+<div class="successIcon">
+    ✓
+</div>
+
+
+<h2>
+    Result Declared Successfully
+</h2>
+
+
+<div
+id="popupMessage"
+class="popupMessage">
+
+    Result Updated
+
+</div>
+
+
+<button
+type="button"
+onclick="closePopup()">
+
+    CLOSE
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA
+   RESULT MANAGEMENT
+   FINAL COMPLETE ENGINE
+
+   STORAGE CONNECTIONS
+
+   markets
+   results
+   chartHistory
+   bets
+   userBalances
+   passbook
+   todayWinning
+   lastResultSync
+   marketStatus
+   liveMarketStatus
+   lastMarketUpdate
+===================================================== */
+
+
+/* =====================================================
+   1. SAFE STORAGE
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+function saveStorage(
+    key,
+    value
+){
+
+    try{
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(
+                value
+            )
+        );
+
+
+        return true;
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Save Error:",
+            key,
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   2. NORMALIZE TEXT
+===================================================== */
+
+function normalizeText(value){
+
+    return String(
+        value || ""
+    )
+    .trim();
+
+}
+
+
+function normalizeUpper(value){
+
+    return normalizeText(
+        value
+    ).toUpperCase();
+
+}
+
+
+
+/* =====================================================
+   3. NUMBER INPUT ONLY
+===================================================== */
+
+[
+    "openPanel",
+    "closePanel"
+]
+.forEach(
+    function(id){
+
+        document
+        .getElementById(id)
+        .addEventListener(
+            "input",
+            function(){
+
+                this.value =
+                this.value
+                .replace(
+                    /\D/g,
+                    ""
+                )
+                .slice(
+                    0,
+                    3
+                );
+
+
+                updatePreview();
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   4. POPUP
+===================================================== */
+
+function closePopup(){
+
+    document
+    .getElementById(
+        "popup"
+    )
+    .style.display =
+    "none";
+
+}
+
+
+function showSuccess(message){
+
+    document
+    .getElementById(
+        "popupMessage"
+    )
+    .innerText =
+    message;
+
+
+    document
+    .getElementById(
+        "popup"
+    )
+    .style.display =
+    "flex";
+
+}
+
+
+
+/* =====================================================
+   5. DATE + TIME
+   12-HOUR AM / PM
+===================================================== */
+
+function getDateTime(){
+
+    let now =
+    new Date();
+
+
+    return {
+
+        date:
+        now.toLocaleDateString(
+            "en-GB"
+        ),
+
+        time:
+        now.toLocaleTimeString(
+            "en-US",
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit",
+                hour12:true
+            }
+        ),
+
+        iso:
+        now.toISOString(),
+
+        timestamp:
+        now.getTime()
+
+    };
+
+}
+
+
+
+/* =====================================================
+   6. CALCULATE SINGLE ANK
+===================================================== */
+
+function calculateSingle(panel){
+
+    let text =
+    String(
+        panel || ""
+    );
+
+
+    if(
+        !/^\d{3}$/.test(
+            text
+        )
+    ){
+
+        return "";
+
+    }
+
+
+    let total =
+    text
+    .split("")
+    .reduce(
+        function(sum,digit){
+
+            return (
+                sum +
+                Number(digit)
+            );
+
+        },
+        0
+    );
+
+
+    return String(
+        total % 10
+    );
+
+}
+
+
+
+/* =====================================================
+   7. FORMAT JODI
+===================================================== */
+
+function makeJodi(
+    openSingle,
+    closeSingle
+){
+
+    if(
+        openSingle === "" ||
+        closeSingle === ""
+    ){
+
+        return "";
+
+    }
+
+
+    return (
+        String(openSingle) +
+        String(closeSingle)
+    );
+
+}
+
+
+
+/* =====================================================
+   8. RESULT TYPE UI
+===================================================== */
+
+function changeResultType(){
+
+    let type =
+    document
+    .getElementById(
+        "resultType"
+    )
+    .value;
+
+
+    let openInput =
+    document
+    .getElementById(
+        "openPanel"
+    );
+
+
+    let closeInput =
+    document
+    .getElementById(
+        "closePanel"
+    );
+
+
+    let closeBox =
+    document
+    .getElementById(
+        "closeBox"
+    );
+
+
+    if(
+        type === "open"
+    ){
+
+        closeBox.style.display =
+        "none";
+
+
+        openInput.readOnly =
+        false;
+
+
+        closeInput.value =
+        "";
+
+    }
+
+    else{
+
+        closeBox.style.display =
+        "block";
+
+
+        loadPendingOpenPanel();
+
+    }
+
+
+    updatePreview();
+
+}
+
+
+
+/* =====================================================
+   9. LOAD MARKETS
+===================================================== */
+
+function loadMarkets(){
+
+    let markets =
+    getStorage(
+        "markets",
+        []
+    );
+
+
+    let select =
+    document
+    .getElementById(
+        "market"
+    );
+
+
+    let previousValue =
+    select.value;
+
+
+    select.innerHTML = `
+
+        <option value="">
+            Select Market
+        </option>
+
+    `;
+
+
+    if(
+        !Array.isArray(
+            markets
+        )
+    ){
+
+        markets = [];
+
+    }
+
+
+    let used =
+    new Set();
+
+
+    markets.forEach(
+        function(item){
+
+            let name = "";
+
+
+            if(
+                typeof item === "string"
+            ){
+
+                name =
+                normalizeText(
+                    item
+                );
+
+            }
+
+            else if(item){
+
+                name =
+                normalizeText(
+
+                    item.market ||
+
+                    item.marketName ||
+
+                    item.name
+
+                );
+
+            }
+
+
+            if(
+                !name ||
+                used.has(
+                    normalizeUpper(name)
+                )
+            ){
+
+                return;
+
+            }
+
+
+            used.add(
+                normalizeUpper(name)
+            );
+
+
+            let option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value =
+            name;
+
+
+            option.textContent =
+            name;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if(
+        previousValue &&
+        [...select.options]
+        .some(
+            function(option){
+
+                return (
+                    option.value ===
+                    previousValue
+                );
+
+            }
+        )
+    ){
+
+        select.value =
+        previousValue;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   10. MARKET CHANGE
+===================================================== */
+
+document
+.getElementById(
+    "market"
+)
+.addEventListener(
+    "change",
+    function(){
+
+        if(
+            document
+            .getElementById(
+                "resultType"
+            )
+            .value ===
+            "close"
+        ){
+
+            loadPendingOpenPanel();
+
+        }
+
+
+        updatePreview();
+
+    }
+);
+
+
+
+/* =====================================================
+   11. FIND PENDING OPEN RESULT
+===================================================== */
+
+function getPendingMarketResult(
+    results,
+    market
+){
+
+    let target =
+    normalizeUpper(
+        market
+    );
+
+
+    for(
+        let i =
+        results.length - 1;
+
+        i >= 0;
+
+        i--
+    ){
+
+        let item =
+        results[i];
+
+
+        if(
+            normalizeUpper(
+                item.market
+            )
+            !==
+            target
+        ){
+
+            continue;
+
+        }
+
+
+        let hasClose =
+        normalizeText(
+            item.closePanel
+        ) !== "";
+
+
+        if(!hasClose){
+
+            return {
+
+                item:
+                item,
+
+                index:
+                i
+
+            };
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+
+/* =====================================================
+   12. LOAD PENDING OPEN PANEL
+===================================================== */
+
+function loadPendingOpenPanel(){
+
+    let market =
+    document
+    .getElementById(
+        "market"
+    )
+    .value;
+
+
+    let openInput =
+    document
+    .getElementById(
+        "openPanel"
+    );
+
+
+    if(!market){
+
+        openInput.value =
+        "";
+
+
+        openInput.readOnly =
+        true;
+
+
+        updatePreview();
+
+
+        return;
+
+    }
+
+
+    let results =
+    getStorage(
+        "results",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            results
+        )
+    ){
+
+        results = [];
+
+    }
+
+
+    let pending =
+    getPendingMarketResult(
+        results,
+        market
+    );
+
+
+    if(!pending){
+
+        openInput.value =
+        "";
+
+
+        openInput.readOnly =
+        true;
+
+
+        updatePreview();
+
+
+        return;
+
+    }
+
+
+    openInput.value =
+    pending.item.openPanel || "";
+
+
+    openInput.readOnly =
+    true;
+
+
+    updatePreview();
+
+}
+
+
+
+/* =====================================================
+   13. PREVIEW
+===================================================== */
+
+function updatePreview(){
+
+    let market =
+    document
+    .getElementById(
+        "market"
+    )
+    .value;
+
+
+    let type =
+    document
+    .getElementById(
+        "resultType"
+    )
+    .value;
+
+
+    let openPanel =
+    document
+    .getElementById(
+        "openPanel"
+    )
+    .value;
+
+
+    let closePanel =
+    document
+    .getElementById(
+        "closePanel"
+    )
+    .value;
+
+
+    let previewBox =
+    document
+    .getElementById(
+        "previewBox"
+    );
+
+
+    let preview =
+    document
+    .getElementById(
+        "previewResult"
+    );
+
+
+    if(
+        !market ||
+        !/^\d{3}$/.test(
+            openPanel
+        )
+    ){
+
+        previewBox.style.display =
+        "none";
+
+
+        return;
+
+    }
+
+
+    let openSingle =
+    calculateSingle(
+        openPanel
+    );
+
+
+    if(
+        type === "open"
+    ){
+
+        preview.innerText =
+
+        openPanel +
+        "-" +
+        openSingle +
+        "*-***";
+
+
+        previewBox.style.display =
+        "block";
+
+
+        return;
+
+    }
+
+
+    if(
+        !/^\d{3}$/.test(
+            closePanel
+        )
+    ){
+
+        preview.innerText =
+
+        openPanel +
+        "-" +
+        openSingle +
+        "*-***";
+
+
+        previewBox.style.display =
+        "block";
+
+
+        return;
+
+    }
+
+
+    let closeSingle =
+    calculateSingle(
+        closePanel
+    );
+
+
+    let jodi =
+    makeJodi(
+        openSingle,
+        closeSingle
+    );
+
+
+    preview.innerText =
+
+    openPanel +
+    "-" +
+    jodi +
+    "-" +
+    closePanel;
+
+
+    previewBox.style.display =
+    "block";
+
+}
+
+
+
+/* =====================================================
+   14. RATE ENGINE
+===================================================== */
+
+function defaultRate(gameType){
+
+    let type =
+    normalizeUpper(
+        gameType
+    );
+
+
+    if(
+        type === "SINGLE ANK" ||
+        type === "SINGLE DIGIT"
+    ){
+
+        return 10;
+
+    }
+
+
+    if(
+        type === "SINGLE PANA" ||
+        type === "SINGLE PANEL"
+    ){
+
+        return 150;
+
+    }
+
+
+    if(
+        type === "JODI DIGIT" ||
+        type === "JODI"
+    ){
+
+        return 95;
+
+    }
+
+
+    return 0;
+
+}
+
+
+
+/* =====================================================
+   15. FIND RATE FROM STORED RATE LIST
+===================================================== */
+
+function getWinRate(bet){
+
+    let direct =
+    Number(
+        bet.winRate
+    );
+
+
+    if(
+        Number.isFinite(direct) &&
+        direct > 0
+    ){
+
+        return direct;
+
+    }
+
+
+    let stored =
+    getStorage(
+        "rates",
+        null
+    );
+
+
+    if(!stored){
+
+        stored =
+        getStorage(
+            "rateList",
+            null
+        );
+
+    }
+
+
+    let gameType =
+    normalizeUpper(
+        bet.gameType ||
+        bet.game
+    );
+
+
+    if(
+        stored &&
+        !Array.isArray(stored) &&
+        typeof stored === "object"
+    ){
+
+        for(
+            let key
+            in stored
+        ){
+
+            if(
+                normalizeUpper(key)
+                ===
+                gameType
+            ){
+
+                let rate =
+                Number(
+                    stored[key]
+                );
+
+
+                if(
+                    Number.isFinite(rate) &&
+                    rate > 0
+                ){
+
+                    return rate;
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    return defaultRate(
+        bet.gameType ||
+        bet.game
+    );
+
+}
+
+
+
+/* =====================================================
+   16. TODAY WINNING ENTRY
+===================================================== */
+
+function saveWinningEntry(
+    todayWinning,
+    bet,
+    winAmount,
+    settlementKey,
+    date,
+    time
+){
+
+    let exists =
+    todayWinning.some(
+        function(item){
+
+            return (
+                item.settlementKey ===
+                settlementKey
+            );
+
+        }
+    );
+
+
+    if(exists){
+
+        return;
+
+    }
+
+
+    todayWinning.push({
+
+        id:
+        Date.now() +
+        Math.random(),
+
+        settlementKey:
+        settlementKey,
+
+        betId:
+        bet.id || "",
+
+        mobile:
+        bet.mobile || "",
+
+        name:
+        bet.name || "",
+
+        market:
+        bet.market || "",
+
+        game:
+        bet.game || "",
+
+        gameType:
+        bet.gameType || "",
+
+        session:
+        bet.session || "",
+
+        number:
+        bet.number,
+
+        amount:
+        Number(
+            winAmount
+        ),
+
+        date:
+        date,
+
+        time:
+        time,
+
+        status:
+        "Win"
+
+    });
+
+}
+
+
+
+/* =====================================================
+   17. MATCH GAME TYPE
+===================================================== */
+
+function getGameType(bet){
+
+    let text =
+    normalizeUpper(
+
+        bet.gameType ||
+
+        bet.game ||
+
+        ""
+
+    );
+
+
+    if(
+        text.includes(
+            "JODI"
+        )
+    ){
+
+        return "JODI";
+
+    }
+
+
+    if(
+        text.includes(
+            "PANA"
+        )
+        ||
+        text.includes(
+            "PANEL"
+        )
+    ){
+
+        return "PANA";
+
+    }
+
+
+    if(
+        text.includes(
+            "ANK"
+        )
+        ||
+        text.includes(
+            "DIGIT"
+        )
+    ){
+
+        return "ANK";
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   18. BET NUMBER NORMALIZE
+===================================================== */
+
+function normalizeBetNumber(
+    value,
+    type
+){
+
+    let text =
+    String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .trim();
+
+
+    if(
+        type === "JODI"
+    ){
+
+        return text.padStart(
+            2,
+            "0"
+        );
+
+    }
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   19. SETTLE RESULT
+
+   OPEN:
+   OPEN Single Ank
+   OPEN Single Pana
+
+   CLOSE:
+   CLOSE Single Ank
+   CLOSE Single Pana
+   Jodi
+===================================================== */
+
+function settleResult(
+    result,
+    phase
+){
+
+    let bets =
+    getStorage(
+        "bets",
+        []
+    );
+
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    let todayWinning =
+    getStorage(
+        "todayWinning",
+        []
+    );
+
+
+    if(
+        !Array.isArray(bets)
+    ){
+
+        bets = [];
+
+    }
+
+
+    if(
+        !balances ||
+        Array.isArray(balances) ||
+        typeof balances !== "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    if(
+        !Array.isArray(passbook)
+    ){
+
+        passbook = [];
+
+    }
+
+
+    if(
+        !Array.isArray(todayWinning)
+    ){
+
+        todayWinning = [];
+
+    }
+
+
+    let dateTime =
+    getDateTime();
+
+
+    bets.forEach(
+        function(bet){
+
+
+            /* -----------------------------------------
+               ONLY PENDING BET
+            ----------------------------------------- */
+
+            if(
+                normalizeUpper(
+                    bet.status
+                )
+                !==
+                "PENDING"
+            ){
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               SAME MARKET
+            ----------------------------------------- */
+
+            if(
+                normalizeUpper(
+                    bet.market
+                )
+                !==
+                normalizeUpper(
+                    result.market
+                )
+            ){
+
+                return;
+
+            }
+
+
+            let gameType =
+            getGameType(
+                bet
+            );
+
+
+            let session =
+            normalizeUpper(
+                bet.session
+            );
+
+
+            let winningNumber =
+            "";
+
+
+            let eligible =
+            false;
+
+
+
+            /* =========================================
+               OPEN PHASE
+            ========================================= */
+
+            if(
+                phase === "OPEN"
+            ){
+
+                /*
+                   Jodi Open result par settle nahi hogi.
+                */
+
+                if(
+                    gameType === "JODI"
+                ){
+
+                    return;
+
+                }
+
+
+                /*
+                   Agar bid me session stored hai
+                   to OPEN hona chahiye.
+                */
+
+                if(
+                    session &&
+                    session !== "OPEN"
+                ){
+
+                    return;
+
+                }
+
+
+                if(
+                    gameType === "ANK"
+                ){
+
+                    eligible =
+                    true;
+
+
+                    winningNumber =
+                    String(
+                        result.openSingle
+                    );
+
+                }
+
+
+                else if(
+                    gameType === "PANA"
+                ){
+
+                    eligible =
+                    true;
+
+
+                    winningNumber =
+                    String(
+                        result.openPanel
+                    );
+
+                }
+
+            }
+
+
+
+            /* =========================================
+               CLOSE PHASE
+            ========================================= */
+
+            else if(
+                phase === "CLOSE"
+            ){
+
+                if(
+                    gameType === "JODI"
+                ){
+
+                    eligible =
+                    true;
+
+
+                    winningNumber =
+                    String(
+                        result.jodi
+                    );
+
+                }
+
+
+                else if(
+                    gameType === "ANK"
+                ){
+
+                    if(
+                        session &&
+                        session !== "CLOSE"
+                    ){
+
+                        return;
+
+                    }
+
+
+                    eligible =
+                    true;
+
+
+                    winningNumber =
+                    String(
+                        result.closeSingle
+                    );
+
+                }
+
+
+                else if(
+                    gameType === "PANA"
+                ){
+
+                    if(
+                        session &&
+                        session !== "CLOSE"
+                    ){
+
+                        return;
+
+                    }
+
+
+                    eligible =
+                    true;
+
+
+                    winningNumber =
+                    String(
+                        result.closePanel
+                    );
+
+                }
+
+            }
+
+
+            if(!eligible){
+
+                return;
+
+            }
+
+
+
+            /* =========================================
+               SETTLEMENT KEY
+            ========================================= */
+
+            let betId =
+
+            bet.id !== undefined
+            ? bet.id
+            : bets.indexOf(bet);
+
+
+            let settlementKey =
+
+            String(
+                result.id
+            )
+            +
+            ":"
+            +
+            phase
+            +
+            ":"
+            +
+            String(
+                betId
+            );
+
+
+            bet.settlementKey =
+            settlementKey;
+
+
+            bet.settlementResultId =
+            result.id;
+
+
+            bet.settlementPhase =
+            phase;
+
+
+            bet.resultNumber =
+            winningNumber;
+
+
+            let betNumber =
+            normalizeBetNumber(
+                bet.number,
+                gameType
+            );
+
+
+            let resultNumber =
+            normalizeBetNumber(
+                winningNumber,
+                gameType
+            );
+
+
+
+            /* =========================================
+               WIN
+            ========================================= */
+
+            if(
+                betNumber ===
+                resultNumber
+            ){
+
+                bet.status =
+                "Win";
+
+
+                let rate =
+                Number(
+                    getWinRate(
+                        bet
+                    )
+                );
+
+
+                let betAmount =
+                Number(
+                    bet.amount || 0
+                );
+
+
+                let winAmount =
+                betAmount *
+                rate;
+
+
+                bet.winRate =
+                rate;
+
+
+                bet.winAmount =
+                winAmount;
+
+
+                let mobile =
+                String(
+                    bet.mobile || ""
+                );
+
+
+                let previousBalance =
+                Number(
+                    balances[mobile] || 0
+                );
+
+
+                let currentBalance =
+                previousBalance +
+                winAmount;
+
+
+                balances[mobile] =
+                currentBalance;
+
+
+
+                /* =====================================
+                   PASSBOOK
+                ===================================== */
+
+                passbook.push({
+
+                    id:
+                    Date.now() +
+                    Math.random(),
+
+                    settlementKey:
+                    settlementKey,
+
+                    betId:
+                    betId,
+
+                    mobile:
+                    mobile,
+
+                    name:
+                    bet.name || "",
+
+                    market:
+                    bet.market || "",
+
+                    game:
+                    bet.game ||
+                    bet.gameType ||
+                    "",
+
+                    date:
+                    dateTime.date,
+
+                    time:
+                    dateTime.time,
+
+                    type:
+                    "Winning",
+
+                    previousBalance:
+                    previousBalance,
+
+                    amount:
+                    winAmount,
+
+                    currentBalance:
+                    currentBalance,
+
+                    status:
+                    "Success",
+
+                    details:
+                    String(
+                        bet.market || ""
+                    )
+                    +
+                    " - "
+                    +
+                    String(
+                        bet.game ||
+                        bet.gameType ||
+                        ""
+                    )
+                    +
+                    " Winning"
+
+                });
+
+
+
+                /* =====================================
+                   TODAY WINNING
+                ===================================== */
+
+                saveWinningEntry(
+
+                    todayWinning,
+
+                    bet,
+
+                    winAmount,
+
+                    settlementKey,
+
+                    dateTime.date,
+
+                    dateTime.time
+
+                );
+
+            }
+
+
+
+            /* =========================================
+               LOSE
+            ========================================= */
+
+            else{
+
+                bet.status =
+                "Lose";
+
+
+                bet.winAmount =
+                0;
+
+            }
+
+        }
+    );
+
+
+    saveStorage(
+        "bets",
+        bets
+    );
+
+
+    saveStorage(
+        "userBalances",
+        balances
+    );
+
+
+    saveStorage(
+        "passbook",
+        passbook
+    );
+
+
+    saveStorage(
+        "todayWinning",
+        todayWinning
+    );
+
+}
+
+
+
+/* =====================================================
+   20. CHART HISTORY KEY
+===================================================== */
+
+function chartHistoryKey(
+    result
+){
+
+    return (
+
+        normalizeUpper(
+            result.market
+        )
+        +
+        "|"
+        +
+        normalizeText(
+            result.date
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   21. SAVE / UPDATE PERMANENT CHART HISTORY
+===================================================== */
+
+function syncChartHistory(
+    result
+){
+
+    let history =
+    getStorage(
+        "chartHistory",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            history
+        )
+    ){
+
+        history = [];
+
+    }
+
+
+    let key =
+    chartHistoryKey(
+        result
+    );
+
+
+    let record = {
+
+        id:
+        result.id,
+
+        market:
+        result.market,
+
+        openPanel:
+        result.openPanel || "",
+
+        openSingle:
+        result.openSingle || "",
+
+        jodi:
+        result.jodi || "",
+
+        closeSingle:
+        result.closeSingle || "",
+
+        closePanel:
+        result.closePanel || "",
+
+        result:
+        result.result || "",
+
+        date:
+        result.date || "",
+
+        time:
+        result.closeTime ||
+        result.time ||
+        "",
+
+        openTime:
+        result.time || "",
+
+        closeTime:
+        result.closeTime || "",
+
+        status:
+        result.closePanel
+        ? "COMPLETE"
+        : "OPEN",
+
+        timestamp:
+        Number(
+            result.updatedTimestamp ||
+            result.timestamp ||
+            result.id ||
+            Date.now()
+        ),
+
+        source:
+        "result.html"
+
+    };
+
+
+    let index =
+    history.findIndex(
+        function(item){
+
+            return (
+                chartHistoryKey(
+                    item
+                )
+                ===
+                key
+            );
+
+        }
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        history.push(
+            record
+        );
+
+    }
+
+    else{
+
+        history[index] =
+        record;
+
+    }
+
+
+    saveStorage(
+        "chartHistory",
+        history
+    );
+
+}
+
+
+
+/* =====================================================
+   22. REMOVE CHART HISTORY
+===================================================== */
+
+function removeChartHistory(
+    result
+){
+
+    let history =
+    getStorage(
+        "chartHistory",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            history
+        )
+    ){
+
+        return;
+
+    }
+
+
+    let resultId =
+    String(
+        result.id || ""
+    );
+
+
+    let key =
+    chartHistoryKey(
+        result
+    );
+
+
+    history =
+    history.filter(
+        function(item){
+
+            if(
+                resultId &&
+                String(
+                    item.id || ""
+                )
+                ===
+                resultId
+            ){
+
+                return false;
+
+            }
+
+
+            return (
+                chartHistoryKey(
+                    item
+                )
+                !==
+                key
+            );
+
+        }
+    );
+
+
+    saveStorage(
+        "chartHistory",
+        history
+    );
+
+}
+
+
+
+/* =====================================================
+   23. MARKET RESULT SYNC
+===================================================== */
+
+function syncMarketResult(
+    result,
+    phase
+){
+
+    let markets =
+    getStorage(
+        "markets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            markets
+        )
+    ){
+
+        markets = [];
+
+    }
+
+
+    markets.forEach(
+        function(item){
+
+            let marketName =
+
+            item.market ||
+
+            item.marketName ||
+
+            item.name;
+
+
+            if(
+                normalizeUpper(
+                    marketName
+                )
+                !==
+                normalizeUpper(
+                    result.market
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                phase === "OPEN"
+            ){
+
+                item.gameStatus =
+                "OPEN_RESULT";
+
+
+                if(
+                    normalizeUpper(
+                        item.manualStatus
+                    )
+                    !==
+                    "HOLIDAY"
+                ){
+
+                    item.manualStatus =
+                    "OPEN";
+
+                }
+
+
+                item.resultStatus =
+                "OPEN";
+
+
+                item.resultType =
+                "OPEN";
+
+            }
+
+            else{
+
+                item.gameStatus =
+                "CLOSE";
+
+
+                item.manualStatus =
+                "CLOSE";
+
+
+                item.resultStatus =
+                "COMPLETE";
+
+
+                item.resultType =
+                "CLOSE";
+
+            }
+
+
+            item.lastResult =
+            result.result;
+
+
+            item.openPanel =
+            result.openPanel;
+
+
+            item.openSingle =
+            result.openSingle;
+
+
+            item.closePanel =
+            result.closePanel || "";
+
+
+            item.closeSingle =
+            result.closeSingle || "";
+
+
+            item.jodi =
+            result.jodi || "";
+
+
+            item.resultDate =
+            result.date;
+
+
+            item.resultTime =
+            result.closeTime ||
+            result.time;
+
+
+            item.lastUpdated =
+            new Date()
+            .toISOString();
+
+
+            item.syncStatus =
+            true;
+
+
+            item.sync =
+            true;
+
+        }
+    );
+
+
+    saveStorage(
+        "markets",
+        markets
+    );
+
+
+    /* =================================================
+       UPDATE SIGNALS
+    ================================================= */
+
+    saveStorage(
+        "lastResultSync",
+        {
+
+            market:
+            result.market,
+
+            result:
+            result.result,
+
+            resultId:
+            result.id,
+
+            phase:
+            phase,
+
+            time:
+            Date.now()
+
+        }
+    );
+
+
+    saveStorage(
+        "marketStatus",
+        {
+
+            market:
+            result.market,
+
+            status:
+            phase === "OPEN"
+            ? "OPEN_RESULT"
+            : "RESULT_COMPLETE",
+
+            time:
+            Date.now()
+
+        }
+    );
+
+
+    saveStorage(
+        "liveMarketStatus",
+        {
+
+            market:
+            result.market,
+
+            status:
+            phase === "OPEN"
+            ? "RUNNING"
+            : "CLOSE",
+
+            updatedAt:
+            getDateTime().time
+
+        }
+    );
+
+
+    saveStorage(
+        "lastMarketUpdate",
+        {
+
+            market:
+            result.market,
+
+            result:
+            result.result,
+
+            status:
+            phase === "OPEN"
+            ? "OPEN"
+            : "CLOSE",
+
+            updatedAt:
+            getDateTime().time
+
+        }
+    );
+
+
+    window.dispatchEvent(
+        new Event(
+            "resultUpdated"
+        )
+    );
+
+}
+
+
+
+/* =====================================================
+   24. SAVE RESULT
+===================================================== */
+
+function saveResult(){
+
+    let market =
+    normalizeText(
+        document
+        .getElementById(
+            "market"
+        )
+        .value
+    );
+
+
+    let resultType =
+    document
+    .getElementById(
+        "resultType"
+    )
+    .value;
+
+
+    let openPanel =
+    normalizeText(
+        document
+        .getElementById(
+            "openPanel"
+        )
+        .value
+    );
+
+
+    let closePanel =
+    normalizeText(
+        document
+        .getElementById(
+            "closePanel"
+        )
+        .value
+    );
+
+
+    if(!market){
+
+        alert(
+            "Please Select Market"
+        );
+
+
+        return;
+
+    }
+
+
+    let results =
+    getStorage(
+        "results",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            results
+        )
+    ){
+
+        results = [];
+
+    }
+
+
+
+    /* =================================================
+       OPEN RESULT
+    ================================================= */
+
+    if(
+        resultType === "open"
+    ){
+
+        if(
+            !/^\d{3}$/.test(
+                openPanel
+            )
+        ){
+
+            alert(
+                "Please Enter Valid 3 Digit Open Panel"
+            );
+
+
+            return;
+
+        }
+
+
+        let existingPending =
+        getPendingMarketResult(
+            results,
+            market
+        );
+
+
+        if(existingPending){
+
+            alert(
+                "Open Result Already Declared.\n\nPehle Close Result Declare Karein."
+            );
+
+
+            return;
+
+        }
+
+
+        let openSingle =
+        calculateSingle(
+            openPanel
+        );
+
+
+        let dateTime =
+        getDateTime();
+
+
+        let result = {
+
+            id:
+            dateTime.timestamp +
+            Math.random(),
+
+            market:
+            market,
+
+            openPanel:
+            openPanel,
+
+            openSingle:
+            openSingle,
+
+            closePanel:
+            "",
+
+            closeSingle:
+            "",
+
+            jodi:
+            "",
+
+            result:
+            openPanel +
+            "-" +
+            openSingle +
+            "*-***",
+
+            date:
+            dateTime.date,
+
+            time:
+            dateTime.time,
+
+            closeDate:
+            "",
+
+            closeTime:
+            "",
+
+            status:
+            "OPEN",
+
+            timestamp:
+            dateTime.timestamp,
+
+            updatedTimestamp:
+            dateTime.timestamp,
+
+            createdAt:
+            dateTime.iso
+
+        };
+
+
+        results.push(
+            result
+        );
+
+
+        saveStorage(
+            "results",
+            results
+        );
+
+
+        /*
+           Permanent chart history me
+           Open-only entry bhi save hogi.
+        */
+
+        syncChartHistory(
+            result
+        );
+
+
+        /*
+           OPEN bid settlement
+        */
+
+        settleResult(
+            result,
+            "OPEN"
+        );
+
+
+        /*
+           User Home Market Status
+        */
+
+        syncMarketResult(
+            result,
+            "OPEN"
+        );
+
+
+        showSuccess(
+
+            market
+            +
+            "\n\nOpen Result\n"
+            +
+            result.result
+
+        );
+
+    }
+
+
+
+    /* =================================================
+       CLOSE RESULT
+    ================================================= */
+
+    else{
+
+        if(
+            !/^\d{3}$/.test(
+                closePanel
+            )
+        ){
+
+            alert(
+                "Please Enter Valid 3 Digit Close Panel"
+            );
+
+
+            return;
+
+        }
+
+
+        let pending =
+        getPendingMarketResult(
+            results,
+            market
+        );
+
+
+        if(!pending){
+
+            alert(
+                "Pehle Open Result Declare Karein."
+            );
+
+
+            return;
+
+        }
+
+
+        let result =
+        pending.item;
+
+
+        if(!result.id){
+
+            result.id =
+            Date.now() +
+            Math.random();
+
+        }
+
+
+        let openSingle =
+        String(
+            result.openSingle !== undefined
+            &&
+            result.openSingle !== ""
+            ? result.openSingle
+            : calculateSingle(
+                result.openPanel
+            )
+        );
+
+
+        let closeSingle =
+        calculateSingle(
+            closePanel
+        );
+
+
+        let jodi =
+        makeJodi(
+            openSingle,
+            closeSingle
+        );
+
+
+        let dateTime =
+        getDateTime();
+
+
+        result.openSingle =
+        openSingle;
+
+
+        result.closePanel =
+        closePanel;
+
+
+        result.closeSingle =
+        closeSingle;
+
+
+        result.jodi =
+        jodi;
+
+
+        result.result =
+
+        result.openPanel
+        +
+        "-"
+        +
+        jodi
+        +
+        "-"
+        +
+        closePanel;
+
+
+        result.status =
+        "COMPLETE";
+
+
+        result.closeDate =
+        dateTime.date;
+
+
+        result.closeTime =
+        dateTime.time;
+
+
+        result.updatedTimestamp =
+        dateTime.timestamp;
+
+
+        result.updatedAt =
+        dateTime.iso;
+
+
+        results[
+            pending.index
+        ] =
+        result;
+
+
+        saveStorage(
+            "results",
+            results
+        );
+
+
+        /*
+           SAME chartHistory entry ko
+           Complete result me update karega.
+        */
+
+        syncChartHistory(
+            result
+        );
+
+
+        /*
+           CLOSE + JODI settlement
+        */
+
+        settleResult(
+            result,
+            "CLOSE"
+        );
+
+
+        /*
+           User Market Close Sync
+        */
+
+        syncMarketResult(
+            result,
+            "CLOSE"
+        );
+
+
+        showSuccess(
+
+            market
+            +
+            "\n\nClose Result\n"
+            +
+            result.result
+
+        );
+
+    }
+
+
+
+    /* =================================================
+       FORM RESET
+    ================================================= */
+
+    document
+    .getElementById(
+        "market"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "openPanel"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "closePanel"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "resultType"
+    )
+    .value =
+    "open";
+
+
+    document
+    .getElementById(
+        "openPanel"
+    )
+    .readOnly =
+    false;
+
+
+    changeResultType();
+
+
+    updatePreview();
+
+
+    loadResultHistory();
+
+}
+
+
+
+/* =====================================================
+   25. RESULT HISTORY
+===================================================== */
+
+function loadResultHistory(){
+
+    let results =
+    getStorage(
+        "results",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            results
+        )
+    ){
+
+        results = [];
+
+    }
+
+
+    let search =
+    normalizeUpper(
+        document
+        .getElementById(
+            "searchResult"
+        )
+        .value
+    );
+
+
+    let body =
+    document
+    .getElementById(
+        "resultHistoryBody"
+    );
+
+
+    body.innerHTML =
+    "";
+
+
+    let visible =
+    [];
+
+
+    results.forEach(
+        function(item,index){
+
+            if(
+                search &&
+                !normalizeUpper(
+                    item.market
+                )
+                .includes(
+                    search
+                )
+            ){
+
+                return;
+
+            }
+
+
+            visible.push({
+
+                item:
+                item,
+
+                index:
+                index
+
+            });
+
+        }
+    );
+
+
+    /*
+       Latest result ऊपर
+    */
+
+    visible.reverse();
+
+
+    if(
+        visible.length === 0
+    ){
+
+        body.innerHTML = `
+
+        <tr>
+
+            <td colspan="9">
+                No Result Found
+            </td>
+
+        </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    visible.forEach(
+        function(entry,rowIndex){
+
+            let item =
+            entry.item;
+
+
+            let index =
+            entry.index;
+
+
+            let isComplete =
+            normalizeText(
+                item.closePanel
+            ) !== "";
+
+
+            let statusHTML =
+
+            isComplete
+
+            ? `<span class="completeStatus">● Complete</span>`
+
+            : `<span class="pendingStatus">● Open Pending</span>`;
+
+
+            let displayTime =
+
+            isComplete &&
+            item.closeTime
+
+            ? item.closeTime
+
+            : item.time || "-";
+
+
+            body.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${rowIndex + 1}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.market || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.result || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${statusHTML}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        item.date || "-"
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        displayTime
+                    )}
+                </td>
+
+                <td>
+
+                    <button
+                    type="button"
+                    class="actionBtn editBtn"
+                    onclick="editResult(${index})">
+
+                        EDIT
+
+                    </button>
+
+                </td>
+
+                <td>
+
+                    <button
+                    type="button"
+                    class="actionBtn reverseBtn"
+                    onclick="reverseResult(${index})">
+
+                        REVERSE
+
+                    </button>
+
+                </td>
+
+                <td>
+
+                    <button
+                    type="button"
+                    class="actionBtn deleteBtn"
+                    onclick="deleteResult(${index})">
+
+                        DELETE
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   26. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+
+/* =====================================================
+   27. RESULT SETTLEMENT CHECK
+===================================================== */
+
+function hasSettlement(
+    resultId
+){
+
+    let bets =
+    getStorage(
+        "bets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            bets
+        )
+    ){
+
+        return false;
+
+    }
+
+
+    return bets.some(
+        function(bet){
+
+            return (
+
+                String(
+                    bet.settlementResultId || ""
+                )
+
+                ===
+
+                String(
+                    resultId || ""
+                )
+
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   28. EDIT RESULT
+
+   Settled result direct edit nahi hoga.
+   Pehle Reverse जरूरी.
+===================================================== */
+
+function editResult(index){
+
+    let results =
+    getStorage(
+        "results",
+        []
+    );
+
+
+    if(
+        !Array.isArray(results)
+    ){
+
+        return;
+
+    }
+
+
+    let item =
+    results[index];
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    if(
+        item.id &&
+        hasSettlement(
+            item.id
+        )
+    ){
+
+        alert(
+            "Result Already Settled.\n\nSafe Edit ke liye pehle REVERSE karein."
+        );
+
+
+        return;
+
+    }
+
+
+    document
+    .getElementById(
+        "market"
+    )
+    .value =
+    item.market || "";
+
+
+    document
+    .getElementById(
+        "openPanel"
+    )
+    .value =
+    item.openPanel || "";
+
+
+    if(
+        item.closePanel
+    ){
+
+        document
+        .getElementById(
+            "resultType"
+        )
+        .value =
+        "close";
+
+
+        document
+        .getElementById(
+            "closePanel"
+        )
+        .value =
+        item.closePanel;
+
+    }
+
+    else{
+
+        document
+        .getElementById(
+            "resultType"
+        )
+        .value =
+        "open";
+
+
+        document
+        .getElementById(
+            "closePanel"
+        )
+        .value =
+        "";
+
+    }
+
+
+    /*
+       Unsettled old entry remove karke
+       fresh save allow करेंगे.
+    */
+
+    removeChartHistory(
+        item
+    );
+
+
+    results.splice(
+        index,
+        1
+    );
+
+
+    saveStorage(
+        "results",
+        results
+    );
+
+
+    changeResultType();
+
+
+    updatePreview();
+
+
+    loadResultHistory();
+
+
+    window.scrollTo({
+
+        top:
+        0,
+
+        behavior:
+        "smooth"
+
+    });
+
+}
+
+
+
+/* =====================================================
+   29. ROLLBACK SETTLEMENT
+===================================================== */
+
+function rollbackSettlement(
+    resultId,
+    phase
+){
+
+    let bets =
+    getStorage(
+        "bets",
+        []
+    );
+
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    let todayWinning =
+    getStorage(
+        "todayWinning",
+        []
+    );
+
+
+    if(
+        !Array.isArray(bets)
+    ){
+
+        bets = [];
+
+    }
+
+
+    if(
+        !balances ||
+        Array.isArray(balances) ||
+        typeof balances !== "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    if(
+        !Array.isArray(passbook)
+    ){
+
+        passbook = [];
+
+    }
+
+
+    if(
+        !Array.isArray(todayWinning)
+    ){
+
+        todayWinning = [];
+
+    }
+
+
+    let settlementKeys =
+    [];
+
+
+    bets.forEach(
+        function(bet){
+
+            if(
+                String(
+                    bet.settlementResultId || ""
+                )
+                !==
+                String(
+                    resultId || ""
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                normalizeUpper(
+                    bet.settlementPhase
+                )
+                !==
+                normalizeUpper(
+                    phase
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                normalizeUpper(
+                    bet.status
+                )
+                ===
+                "WIN"
+            ){
+
+                let amount =
+                Number(
+                    bet.winAmount || 0
+                );
+
+
+                let mobile =
+                String(
+                    bet.mobile || ""
+                );
+
+
+                let currentBalance =
+                Number(
+                    balances[mobile] || 0
+                );
+
+
+                balances[mobile] =
+                Math.max(
+                    0,
+                    currentBalance -
+                    amount
+                );
+
+            }
+
+
+            if(
+                bet.settlementKey
+            ){
+
+                settlementKeys.push(
+                    bet.settlementKey
+                );
+
+            }
+
+
+            bet.status =
+            "Pending";
+
+
+            bet.winAmount =
+            0;
+
+
+            delete bet.settlementKey;
+
+            delete bet.settlementResultId;
+
+            delete bet.settlementPhase;
+
+            delete bet.resultNumber;
+
+        }
+    );
+
+
+    passbook =
+    passbook.filter(
+        function(item){
+
+            return (
+                !settlementKeys.includes(
+                    item.settlementKey
+                )
+            );
+
+        }
+    );
+
+
+    todayWinning =
+    todayWinning.filter(
+        function(item){
+
+            return (
+                !settlementKeys.includes(
+                    item.settlementKey
+                )
+            );
+
+        }
+    );
+
+
+    saveStorage(
+        "bets",
+        bets
+    );
+
+
+    saveStorage(
+        "userBalances",
+        balances
+    );
+
+
+    saveStorage(
+        "passbook",
+        passbook
+    );
+
+
+    saveStorage(
+        "todayWinning",
+        todayWinning
+    );
+
+}
+
+
+
+/* =====================================================
+   30. MARKET TO OPEN RESULT
+===================================================== */
+
+function marketToOpenResult(
+    result
+){
+
+    let markets =
+    getStorage(
+        "markets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(markets)
+    ){
+
+        markets = [];
+
+    }
+
+
+    markets.forEach(
+        function(item){
+
+            let name =
+
+            item.market ||
+
+            item.marketName ||
+
+            item.name;
+
+
+            if(
+                normalizeUpper(name)
+                !==
+                normalizeUpper(
+                    result.market
+                )
+            ){
+
+                return;
+
+            }
+
+
+            item.gameStatus =
+            "OPEN_RESULT";
+
+
+            if(
+                normalizeUpper(
+                    item.manualStatus
+                )
+                !==
+                "HOLIDAY"
+            ){
+
+                item.manualStatus =
+                "OPEN";
+
+            }
+
+
+            item.lastResult =
+            result.result;
+
+
+            item.openPanel =
+            result.openPanel;
+
+
+            item.openSingle =
+            result.openSingle;
+
+
+            item.closePanel =
+            "";
+
+
+            item.closeSingle =
+            "";
+
+
+            item.jodi =
+            "";
+
+
+            item.resultStatus =
+            "OPEN";
+
+
+            item.resultType =
+            "OPEN";
+
+
+            item.lastUpdated =
+            new Date()
+            .toISOString();
+
+        }
+    );
+
+
+    saveStorage(
+        "markets",
+        markets
+    );
+
+}
+
+
+
+/* =====================================================
+   31. MARKET TO FRESH
+===================================================== */
+
+function marketToFresh(
+    marketName
+){
+
+    let markets =
+    getStorage(
+        "markets",
+        []
+    );
+
+
+    if(
+        !Array.isArray(markets)
+    ){
+
+        markets = [];
+
+    }
+
+
+    markets.forEach(
+        function(item){
+
+            let name =
+
+            item.market ||
+
+            item.marketName ||
+
+            item.name;
+
+
+            if(
+                normalizeUpper(name)
+                !==
+                normalizeUpper(
+                    marketName
+                )
+            ){
+
+                return;
+
+            }
+
+
+            item.gameStatus =
+            "";
+
+
+            if(
+                normalizeUpper(
+                    item.manualStatus
+                )
+                !==
+                "HOLIDAY"
+            ){
+
+                item.manualStatus =
+                "OPEN";
+
+            }
+
+
+            item.lastResult =
+            "***-**-***";
+
+
+            item.openPanel =
+            "";
+
+
+            item.openSingle =
+            "";
+
+
+            item.closePanel =
+            "";
+
+
+            item.closeSingle =
+            "";
+
+
+            item.jodi =
+            "";
+
+
+            item.resultStatus =
+            "";
+
+
+            item.resultType =
+            "";
+
+
+            item.lastUpdated =
+            new Date()
+            .toISOString();
+
+        }
+    );
+
+
+    saveStorage(
+        "markets",
+        markets
+    );
+
+}
+
+
+
+/* =====================================================
+   32. REVERSE RESULT
+===================================================== */
+
+function reverseResult(index){
+
+    let results =
+    getStorage(
+        "results",
+        []
+    );
+
+
+    if(
+        !Array.isArray(results)
+    ){
+
+        return;
+
+    }
+
+
+    let item =
+    results[index];
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    if(!item.id){
+
+        alert(
+            "Ye purana Legacy Result hai.\nSafe automatic reverse available nahi hai."
+        );
+
+
+        return;
+
+    }
+
+
+    let confirmed =
+    confirm(
+
+        "\"" +
+        item.market +
+        "\" ka Result Reverse karna hai?"
+
+    );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       CLOSE RESULT REVERSE
+    ================================================= */
+
+    if(
+        normalizeText(
+            item.closePanel
+        ) !== ""
+    ){
+
+        rollbackSettlement(
+            item.id,
+            "CLOSE"
+        );
+
+
+        item.closePanel =
+        "";
+
+
+        item.closeSingle =
+        "";
+
+
+        item.jodi =
+        "";
+
+
+        item.result =
+
+        item.openPanel
+        +
+        "-"
+        +
+        item.openSingle
+        +
+        "*-***";
+
+
+        item.status =
+        "OPEN";
+
+
+        item.closeDate =
+        "";
+
+
+        item.closeTime =
+        "";
+
+
+        item.updatedTimestamp =
+        Date.now();
+
+
+        results[index] =
+        item;
+
+
+        saveStorage(
+            "results",
+            results
+        );
+
+
+        /*
+           Chart History ko Open-only
+           entry me वापस change करेगा.
+        */
+
+        syncChartHistory(
+            item
+        );
+
+
+        marketToOpenResult(
+            item
+        );
+
+
+        saveStorage(
+            "lastResultSync",
+            {
+
+                market:
+                item.market,
+
+                result:
+                item.result,
+
+                resultId:
+                item.id,
+
+                phase:
+                "REVERSE_CLOSE",
+
+                time:
+                Date.now()
+
+            }
+        );
+
+
+        window.dispatchEvent(
+            new Event(
+                "resultUpdated"
+            )
+        );
+
+
+        alert(
+            "Close Result Reverse Successfully"
+        );
+
+
+        loadResultHistory();
+
+
+        return;
+
+    }
+
+
+
+    /* =================================================
+       OPEN RESULT REVERSE
+    ================================================= */
+
+    rollbackSettlement(
+        item.id,
+        "OPEN"
+    );
+
+
+    let marketName =
+    item.market;
+
+
+    removeChartHistory(
+        item
+    );
+
+
+    results.splice(
+        index,
+        1
+    );
+
+
+    saveStorage(
+        "results",
+        results
+    );
+
+
+    marketToFresh(
+        marketName
+    );
+
+
+    saveStorage(
+        "lastResultSync",
+        {
+
+            market:
+            marketName,
+
+            result:
+            "***-**-***",
+
+            resultId:
+            item.id,
+
+            phase:
+            "REVERSE_OPEN",
+
+            time:
+            Date.now()
+
+        }
+    );
+
+
+    window.dispatchEvent(
+        new Event(
+            "resultUpdated"
+        )
+    );
+
+
+    alert(
+        "Open Result Reverse Successfully"
+    );
+
+
+    loadResultHistory();
+
+}
+
+
+
+/* =====================================================
+   33. DELETE RESULT
+
+   Settled result direct delete prohibited.
+===================================================== */
+
+function deleteResult(index){
+
+    let results =
+    getStorage(
+        "results",
+        []
+    );
+
+
+    if(
+        !Array.isArray(results)
+    ){
+
+        return;
+
+    }
+
+
+    let item =
+    results[index];
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    if(
+        item.id &&
+        hasSettlement(
+            item.id
+        )
+    ){
+
+        alert(
+            "Settled Result ko direct Delete nahi kar sakte.\n\nPehle REVERSE karein."
+        );
+
+
+        return;
+
+    }
+
+
+    let confirmed =
+    confirm(
+
+        "\"" +
+        item.market +
+        "\" ka Result Delete karna hai?"
+
+    );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    removeChartHistory(
+        item
+    );
+
+
+    results.splice(
+        index,
+        1
+    );
+
+
+    saveStorage(
+        "results",
+        results
+    );
+
+
+    loadResultHistory();
+
+}
+
+
+
+/* =====================================================
+   34. STORAGE LIVE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key === "markets"
+        ){
+
+            loadMarkets();
+
+        }
+
+
+        if(
+            event.key === "results"
+        ){
+
+            loadResultHistory();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   35. FIRST LOAD
+===================================================== */
+
+loadMarkets();
+
+
+changeResultType();
+
+
+updatePreview();
+
+
+loadResultHistory();
+
+
+
+console.log(
+    "✅ HR MATKA RESULT FINAL COMPLETE ENGINE CONNECTED"
+);
+
+
+console.log(
+    "✅ Result + Settlement + Wallet + Passbook + Today Winning + Permanent Chart History Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

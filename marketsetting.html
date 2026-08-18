@@ -1,0 +1,1496 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Market Setting</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#333;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+label{
+display:block;
+margin-top:10px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+padding:12px;
+margin-top:15px;
+background:#8e44ad;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+}
+
+button:hover{
+background:#6c3483;
+}
+
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+}
+
+table th{
+background:#8e44ad;
+color:white;
+padding:12px;
+border:1px solid #ddd;
+}
+
+table td{
+padding:10px;
+text-align:center;
+border:1px solid #ddd;
+}
+
+table tr:nth-child(even){
+background:#f8f8f8;
+}
+
+.back{
+display:block;
+text-align:center;
+margin-top:20px;
+text-decoration:none;
+font-weight:bold;
+color:#555;
+}
+
+.popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.5);
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+.popup-box{
+background:white;
+padding:25px;
+width:320px;
+border-radius:12px;
+text-align:center;
+}
+
+.close-btn{
+background:#34495e;
+margin-top:15px;
+width:100%;
+}
+
+.statusOpen{
+color:green;
+font-weight:bold;
+}
+
+.statusClose{
+color:red;
+font-weight:bold;
+}
+
+.statusAuto{
+color:#e67e22;
+font-weight:bold;
+}
+
+.actionBtn{
+padding:6px 10px;
+margin:2px;
+font-size:13px;
+}
+
+.openBtn{
+background:#27ae60;
+}
+
+.openBtn:hover{
+background:#1e8449;
+}
+
+.closeMarketBtn{
+background:#e74c3c;
+}
+
+.closeMarketBtn:hover{
+background:#c0392b;
+}
+
+.editBtn{
+background:#3498db;
+}
+
+.editBtn:hover{
+background:#2980b9;
+}
+
+.deleteBtn{
+background:#7f8c8d;
+}
+
+.deleteBtn:hover{
+background:#616a6b;
+}
+
+@media(max-width:700px){
+
+.container{
+padding:10px;
+}
+
+.card{
+padding:12px;
+overflow-x:auto;
+}
+
+table{
+min-width:700px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+Market Management
+</h1>
+
+<h2 style="text-align:center;color:#8e44ad;">
+
+Total Market :
+
+<span id="totalMarket">
+0
+</span>
+
+</h2>
+
+<div class="card">
+
+<label>
+Market Name
+</label>
+
+<input
+type="text"
+id="market"
+placeholder="Enter Market Name">
+
+<label>
+Open Time
+</label>
+
+<input
+type="time"
+id="openTime">
+
+<label>
+Close Time
+</label>
+
+<input
+type="time"
+id="closeTime">
+
+<button onclick="saveMarket()">
+💾 Save Market
+</button>
+
+<br><br>
+
+<h2>
+Market List
+</h2>
+
+<table id="marketTable">
+
+<tr>
+
+<th>ID</th>
+
+<th>Market</th>
+
+<th>Open</th>
+
+<th>Close</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</table>
+
+<br>
+
+<a
+href="index.html"
+class="back">
+
+← Back To Admin Panel
+
+</a>
+
+</div>
+
+</div>
+
+
+<!-- ============================== -->
+<!-- SUCCESS POPUP -->
+<!-- ============================== -->
+
+<div
+class="popup"
+id="popup">
+
+<div class="popup-box">
+
+<h2>
+Notification
+</h2>
+
+<p id="popupMessage">
+Market Saved Successfully
+</p>
+
+<button
+class="close-btn"
+onclick="closePopup()">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+// =====================================================
+// HR MATKA
+// MARKET SETTING
+// COMPLETE REPLACEMENT
+// =====================================================
+
+
+// =====================================================
+// 1. DEFAULT MARKETS
+// =====================================================
+
+const defaultMarkets = [
+
+{
+id:1,
+market:"SRIDEVI",
+openTime:"11:30",
+closeTime:"12:30",
+manualStatus:"AUTO"
+},
+
+{
+id:2,
+market:"TIME BAZAR",
+openTime:"12:50",
+closeTime:"13:50",
+manualStatus:"AUTO"
+},
+
+{
+id:3,
+market:"MADHUR DAY",
+openTime:"13:25",
+closeTime:"14:25",
+manualStatus:"AUTO"
+},
+
+{
+id:4,
+market:"MILAN DAY",
+openTime:"14:50",
+closeTime:"16:50",
+manualStatus:"AUTO"
+},
+
+{
+id:5,
+market:"RAJDHANI DAY",
+openTime:"15:05",
+closeTime:"17:05",
+manualStatus:"AUTO"
+},
+
+{
+id:6,
+market:"SUPREME DAY",
+openTime:"15:30",
+closeTime:"17:30",
+manualStatus:"AUTO"
+},
+
+{
+id:7,
+market:"KALYAN",
+openTime:"15:40",
+closeTime:"17:40",
+manualStatus:"AUTO"
+},
+
+{
+id:8,
+market:"SRIDEVI NIGHT",
+openTime:"19:10",
+closeTime:"20:10",
+manualStatus:"AUTO"
+},
+
+{
+id:9,
+market:"MADHUR NIGHT",
+openTime:"20:25",
+closeTime:"22:25",
+manualStatus:"AUTO"
+},
+
+{
+id:10,
+market:"SUPREME NIGHT",
+openTime:"20:40",
+closeTime:"22:40",
+manualStatus:"AUTO"
+},
+
+{
+id:11,
+market:"MILAN NIGHT",
+openTime:"20:55",
+closeTime:"22:55",
+manualStatus:"AUTO"
+},
+
+{
+id:12,
+market:"KALYAN NIGHT",
+openTime:"21:30",
+closeTime:"23:30",
+manualStatus:"AUTO"
+},
+
+{
+id:13,
+market:"RAJDHANI NIGHT",
+openTime:"21:30",
+closeTime:"23:45",
+manualStatus:"AUTO"
+},
+
+{
+id:14,
+market:"MAIN BAZAR",
+openTime:"21:45",
+closeTime:"23:55",
+manualStatus:"AUTO"
+}
+
+];
+
+
+// =====================================================
+// 2. FIRST TIME MARKET STORAGE
+// =====================================================
+
+if(localStorage.getItem("markets") === null){
+
+localStorage.setItem(
+"markets",
+JSON.stringify(defaultMarkets)
+);
+
+}
+
+
+// =====================================================
+// 3. CAPITALIZE MARKET NAME
+// =====================================================
+
+function formatMarketName(name){
+
+return String(name || "")
+.trim()
+.toLowerCase()
+.replace(
+/\b\w/g,
+function(letter){
+
+return letter.toUpperCase();
+
+}
+);
+
+}
+
+
+// =====================================================
+// 4. POPUP
+// =====================================================
+
+function showPopup(message){
+
+document.getElementById(
+"popupMessage"
+).innerText = message;
+
+document.getElementById(
+"popup"
+).style.display = "flex";
+
+}
+
+
+function closePopup(){
+
+document.getElementById(
+"popup"
+).style.display = "none";
+
+}
+
+
+// =====================================================
+// 5. TIME STATUS
+// =====================================================
+
+function getAutomaticStatus(item){
+
+if(
+!item.openTime ||
+!item.closeTime
+){
+
+return false;
+
+}
+
+let now =
+new Date();
+
+let currentTime =
+now.getHours() * 60 +
+now.getMinutes();
+
+
+let openParts =
+item.openTime.split(":");
+
+let closeParts =
+item.closeTime.split(":");
+
+
+let open =
+Number(openParts[0]) * 60 +
+Number(openParts[1]);
+
+
+let close =
+Number(closeParts[0]) * 60 +
+Number(closeParts[1]);
+
+
+return (
+currentTime >= open &&
+currentTime <= close
+);
+
+}
+
+
+// =====================================================
+// 6. LOAD MARKETS
+// =====================================================
+
+function loadMarkets(){
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+
+document.getElementById(
+"totalMarket"
+).innerText =
+markets.length;
+
+
+let marketTable =
+document.getElementById(
+"marketTable"
+);
+
+
+marketTable.innerHTML = `
+
+<tr>
+
+<th>ID</th>
+
+<th>Market</th>
+
+<th>Open</th>
+
+<th>Close</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+`;
+
+
+// -------------------------------------
+// SORT BY OPEN TIME
+// -------------------------------------
+
+markets.sort(function(a,b){
+
+return String(
+a.openTime || ""
+).localeCompare(
+String(b.openTime || "")
+);
+
+});
+
+
+markets.forEach(
+function(item,index){
+
+let manualStatus =
+String(
+item.manualStatus || "AUTO"
+).toUpperCase();
+
+
+let status = "";
+
+let cls = "";
+
+
+if(manualStatus === "OPEN"){
+
+status =
+"🟢 Open";
+
+cls =
+"statusOpen";
+
+}
+else if(manualStatus === "CLOSE"){
+
+status =
+"🔴 Closed";
+
+cls =
+"statusClose";
+
+}
+else{
+
+if(getAutomaticStatus(item)){
+
+status =
+"🟢 Open (Auto)";
+
+cls =
+"statusOpen";
+
+}
+else{
+
+status =
+"🔴 Closed (Auto)";
+
+cls =
+"statusClose";
+
+}
+
+}
+
+
+marketTable.innerHTML += `
+
+<tr>
+
+<td>
+${index + 1}
+</td>
+
+<td>
+${item.market}
+</td>
+
+<td>
+${item.openTime || ""}
+</td>
+
+<td>
+${item.closeTime || ""}
+</td>
+
+<td class="${cls}">
+${status}
+</td>
+
+<td>
+
+<button
+class="actionBtn openBtn"
+onclick="manualOpen(${item.id})">
+
+🟢 Open
+
+</button>
+
+
+<button
+class="actionBtn closeMarketBtn"
+onclick="manualClose(${item.id})">
+
+🔴 Close
+
+</button>
+
+<br><br>
+
+<button
+class="actionBtn editBtn"
+onclick="editMarket(${item.id})">
+
+✏️ Edit
+
+</button>
+
+
+<button
+class="actionBtn deleteBtn"
+onclick="deleteMarket(${item.id})">
+
+🗑️ Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+// =====================================================
+// 7. SAVE NEW MARKET
+// =====================================================
+
+function saveMarket(){
+
+let market =
+formatMarketName(
+document.getElementById(
+"market"
+).value
+);
+
+
+let openTime =
+document.getElementById(
+"openTime"
+).value;
+
+
+let closeTime =
+document.getElementById(
+"closeTime"
+).value;
+
+
+if(
+market === "" ||
+openTime === "" ||
+closeTime === ""
+){
+
+alert(
+"Please Fill All Fields"
+);
+
+return;
+
+}
+
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+
+// -------------------------------------
+// DUPLICATE MARKET CHECK
+// -------------------------------------
+
+let alreadyExists =
+markets.some(function(item){
+
+return (
+String(item.market || "")
+.trim()
+.toLowerCase() ===
+market.toLowerCase()
+);
+
+});
+
+
+if(alreadyExists){
+
+alert(
+"Market Already Exists"
+);
+
+return;
+
+}
+
+
+// -------------------------------------
+// NEW MARKET
+// -------------------------------------
+
+markets.push({
+
+id:
+Date.now(),
+
+market:
+market,
+
+openTime:
+openTime,
+
+closeTime:
+closeTime,
+
+manualStatus:
+"AUTO",
+
+gameStatus:
+"",
+
+lastResult:
+"",
+
+openPanel:
+"",
+
+closePanel:
+"",
+
+jodi:
+"",
+
+resultStatus:
+"",
+
+resultType:
+"",
+
+syncStatus:
+false,
+
+sync:
+false,
+
+roundStartedAt:
+null
+
+});
+
+
+// -------------------------------------
+// SORT
+// -------------------------------------
+
+markets.sort(function(a,b){
+
+return String(
+a.openTime || ""
+).localeCompare(
+String(b.openTime || "")
+);
+
+});
+
+
+localStorage.setItem(
+"markets",
+JSON.stringify(markets)
+);
+
+
+document.getElementById(
+"market"
+).value = "";
+
+document.getElementById(
+"openTime"
+).value = "";
+
+document.getElementById(
+"closeTime"
+).value = "";
+
+
+showPopup(
+"Market Saved Successfully"
+);
+
+
+loadMarkets();
+
+}
+
+
+// =====================================================
+// 8. DELETE MARKET
+// =====================================================
+
+function deleteMarket(id){
+
+if(
+!confirm(
+"Delete This Market ?"
+)
+){
+
+return;
+
+}
+
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+
+markets =
+markets.filter(
+function(item){
+
+return item.id != id;
+
+}
+);
+
+
+localStorage.setItem(
+"markets",
+JSON.stringify(markets)
+);
+
+
+loadMarkets();
+
+}
+
+
+// =====================================================
+// 9. EDIT MARKET
+// =====================================================
+
+function editMarket(id){
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+
+let market =
+markets.find(
+function(item){
+
+return item.id == id;
+
+}
+);
+
+
+if(!market){
+
+return;
+
+}
+
+
+document.getElementById(
+"market"
+).value =
+market.market || "";
+
+
+document.getElementById(
+"openTime"
+).value =
+market.openTime || "";
+
+
+document.getElementById(
+"closeTime"
+).value =
+market.closeTime || "";
+
+
+// -------------------------------------
+// OLD MARKET REMOVE
+// -------------------------------------
+
+markets =
+markets.filter(
+function(item){
+
+return item.id != id;
+
+}
+);
+
+
+localStorage.setItem(
+"markets",
+JSON.stringify(markets)
+);
+
+
+loadMarkets();
+
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+}
+
+
+// =====================================================
+// 10. MANUAL OPEN
+//
+// IMPORTANT FIX:
+//
+// OLD CLOSE RESULT HISTORY DELETE NAHI HOGI.
+//
+// NEW ROUND START HOGI.
+//
+// roundStartedAt KI HELP SE
+// marketgame.html CURRENT ROUND KA
+// RESULT IDENTIFY KAR SAKEGA.
+// =====================================================
+
+function manualOpen(id){
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+
+let selectedMarket = null;
+
+
+markets.forEach(
+function(item){
+
+if(item.id == id){
+
+selectedMarket = item;
+
+
+// -------------------------------------
+// MANUAL OPEN
+// -------------------------------------
+
+item.manualStatus =
+"OPEN";
+
+
+// -------------------------------------
+// OLD RESULT STATUS RESET
+// -------------------------------------
+
+item.gameStatus =
+"";
+
+item.lastResult =
+"";
+
+item.openPanel =
+"";
+
+item.closePanel =
+"";
+
+item.jodi =
+"";
+
+item.resultStatus =
+"";
+
+item.resultType =
+"";
+
+item.syncStatus =
+false;
+
+item.sync =
+false;
+
+
+// -------------------------------------
+// NEW ROUND IDENTIFIER
+// -------------------------------------
+
+item.roundStartedAt =
+Date.now();
+
+
+item.lastUpdated =
+new Date().toISOString();
+
+}
+
+});
+
+
+if(!selectedMarket){
+
+alert(
+"Market Not Found"
+);
+
+return;
+
+}
+
+
+localStorage.setItem(
+"markets",
+JSON.stringify(markets)
+);
+
+
+// -------------------------------------
+// LIVE MARKET STATUS
+// -------------------------------------
+
+localStorage.setItem(
+
+"liveMarketStatus",
+
+JSON.stringify({
+
+market:
+selectedMarket.market,
+
+status:
+"OPEN",
+
+updatedAt:
+new Date().toLocaleString(),
+
+roundStartedAt:
+selectedMarket.roundStartedAt
+
+})
+
+);
+
+
+// -------------------------------------
+// LAST MARKET UPDATE
+// -------------------------------------
+
+localStorage.setItem(
+
+"lastMarketUpdate",
+
+JSON.stringify({
+
+market:
+selectedMarket.market,
+
+result:
+"",
+
+status:
+"OPEN",
+
+updatedAt:
+new Date().toLocaleString(),
+
+roundStartedAt:
+selectedMarket.roundStartedAt
+
+})
+
+);
+
+
+// -------------------------------------
+// MARKET STATUS
+// -------------------------------------
+
+localStorage.setItem(
+
+"marketStatus",
+
+JSON.stringify({
+
+market:
+selectedMarket.market,
+
+status:
+"OPEN",
+
+time:
+Date.now(),
+
+roundStartedAt:
+selectedMarket.roundStartedAt
+
+})
+
+);
+
+
+// -------------------------------------
+// UPDATE SIGNAL
+// -------------------------------------
+
+window.dispatchEvent(
+new Event(
+"marketUpdated"
+)
+);
+
+
+showPopup(
+selectedMarket.market +
+" Open Successfully"
+);
+
+
+loadMarkets();
+
+
+console.log(
+"✅ New Market Round Started:",
+selectedMarket.market,
+selectedMarket.roundStartedAt
+);
+
+}
+
+
+// =====================================================
+// 11. MANUAL CLOSE
+// =====================================================
+
+function manualClose(id){
+
+let markets =
+JSON.parse(
+localStorage.getItem("markets")
+) || [];
+
+
+let selectedMarket = null;
+
+
+markets.forEach(
+function(item){
+
+if(item.id == id){
+
+selectedMarket = item;
+
+item.manualStatus =
+"CLOSE";
+
+item.gameStatus =
+"MANUAL_CLOSE";
+
+item.lastUpdated =
+new Date().toISOString();
+
+}
+
+});
+
+
+if(!selectedMarket){
+
+alert(
+"Market Not Found"
+);
+
+return;
+
+}
+
+
+localStorage.setItem(
+"markets",
+JSON.stringify(markets)
+);
+
+
+// -------------------------------------
+// LIVE STATUS
+// -------------------------------------
+
+localStorage.setItem(
+
+"liveMarketStatus",
+
+JSON.stringify({
+
+market:
+selectedMarket.market,
+
+status:
+"CLOSE",
+
+updatedAt:
+new Date().toLocaleString(),
+
+roundStartedAt:
+selectedMarket.roundStartedAt || null
+
+})
+
+);
+
+
+localStorage.setItem(
+
+"lastMarketUpdate",
+
+JSON.stringify({
+
+market:
+selectedMarket.market,
+
+result:
+selectedMarket.lastResult || "",
+
+status:
+"CLOSE",
+
+updatedAt:
+new Date().toLocaleString(),
+
+roundStartedAt:
+selectedMarket.roundStartedAt || null
+
+})
+
+);
+
+
+localStorage.setItem(
+
+"marketStatus",
+
+JSON.stringify({
+
+market:
+selectedMarket.market,
+
+status:
+"MANUAL_CLOSE",
+
+time:
+Date.now(),
+
+roundStartedAt:
+selectedMarket.roundStartedAt || null
+
+})
+
+);
+
+
+// -------------------------------------
+// UPDATE SIGNAL
+// -------------------------------------
+
+window.dispatchEvent(
+new Event(
+"marketUpdated"
+)
+);
+
+
+showPopup(
+selectedMarket.market +
+" Closed Successfully"
+);
+
+
+loadMarkets();
+
+}
+
+
+// =====================================================
+// 12. MARKET NAME AUTO CAPITALIZE
+// =====================================================
+
+document.getElementById(
+"market"
+).addEventListener(
+"blur",
+function(){
+
+this.value =
+formatMarketName(
+this.value
+);
+
+}
+);
+
+
+// =====================================================
+// 13. AUTO REFRESH
+// =====================================================
+
+setInterval(
+function(){
+
+loadMarkets();
+
+},
+30000
+);
+
+
+// =====================================================
+// 14. OTHER TAB UPDATE
+// =====================================================
+
+window.addEventListener(
+"storage",
+function(event){
+
+if(
+event.key === "markets" ||
+event.key === "results"
+){
+
+loadMarkets();
+
+}
+
+}
+);
+
+
+// =====================================================
+// 15. FIRST LOAD
+// =====================================================
+
+loadMarkets();
+
+
+console.log(
+"✅ HR MATKA Market Setting Final Connected"
+);
+
+</script>
+
+</body>
+
+</html>

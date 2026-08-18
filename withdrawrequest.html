@@ -1,0 +1,3210 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Withdrawal Request - HR MATKA</title>
+
+
+<style>
+
+/* =====================================================
+   HR MATKA ADMIN PANEL
+   WITHDRAWREQUEST.HTML
+   FINAL COMPLETE REPLACEMENT
+
+   FEATURES:
+   - Pending / Paid / Rejected counters
+   - Search
+   - Copy details
+   - Safe Approve
+   - Safe Reject
+   - Wallet Debit
+   - Passbook Debit Entry
+   - Duplicate Approval Protection
+   - 12 Hour AM / PM
+   - Withdrawal History Sync
+   - Dashboard Sync Signal
+===================================================== */
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
+
+body{
+    background:#eeeeee;
+    color:#222222;
+    min-height:100vh;
+    padding-bottom:30px;
+}
+
+
+button,
+input{
+    font:inherit;
+}
+
+
+.app{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:15px;
+}
+
+
+/* =====================================================
+   PAGE TITLE
+===================================================== */
+
+.pageTitle{
+    background:#202a3a;
+    color:#ffffff;
+    padding:17px;
+    text-align:center;
+    border-radius:9px;
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.15);
+}
+
+
+/* =====================================================
+   COUNTERS
+===================================================== */
+
+.counterGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:16px;
+}
+
+
+.counterBox{
+    background:#ffffff;
+    border-radius:10px;
+    padding:17px 10px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+
+.counterBox p{
+    color:#666666;
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+
+.counterBox h2{
+    font-size:24px;
+}
+
+
+.pendingCounter{
+    border-left:4px solid #f39c12;
+}
+
+
+.paidCounter{
+    border-left:4px solid #27ae60;
+}
+
+
+.rejectedCounter{
+    border-left:4px solid #e53935;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.searchBox{
+    background:#ffffff;
+    padding:13px;
+    border-radius:10px;
+    margin-bottom:16px;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+
+.searchBox input{
+    width:100%;
+    padding:13px;
+    border:1px solid #cccccc;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+}
+
+
+.searchBox input:focus{
+    border-color:#2196f3;
+    box-shadow:0 0 0 2px rgba(33,150,243,.12);
+}
+
+
+/* =====================================================
+   REQUEST LIST
+===================================================== */
+
+.requestList{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+
+.requestCard{
+    background:#ffffff;
+    border-radius:12px;
+    padding:18px;
+    box-shadow:0 3px 12px rgba(0,0,0,.12);
+    border-left:4px solid #f39c12;
+}
+
+
+.requestCard.paid{
+    border-left-color:#27ae60;
+}
+
+
+.requestCard.rejected{
+    border-left-color:#e53935;
+}
+
+
+.requestTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+
+.requestNumber{
+    font-size:17px;
+    font-weight:bold;
+}
+
+
+.requestAmount{
+    color:#1565c0;
+    font-size:20px;
+    font-weight:bold;
+}
+
+
+.detailsGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 35px;
+}
+
+
+.detailItem{
+    min-width:0;
+}
+
+
+.detailLabel{
+    display:block;
+    color:#888888;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+
+.detailValue{
+    font-size:15px;
+    font-weight:600;
+    word-break:break-word;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.statusText{
+    margin-top:17px;
+    font-weight:bold;
+    font-size:15px;
+}
+
+
+.statusPending{
+    color:#e67e00;
+}
+
+
+.statusPaid{
+    color:#159447;
+}
+
+
+.statusRejected{
+    color:#e53935;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.actionButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-top:17px;
+}
+
+
+.actionButtons button{
+    border:none;
+    border-radius:7px;
+    padding:12px 8px;
+    color:#ffffff;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.copyBtn{
+    background:#29a9df;
+}
+
+
+.approveBtn{
+    background:#35b77b;
+}
+
+
+.rejectBtn{
+    background:#dc6474;
+}
+
+
+.actionButtons button:disabled{
+    background:#cccccc;
+    cursor:not-allowed;
+    opacity:.75;
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+.backBtn{
+    display:block;
+    margin-top:20px;
+    padding:13px;
+    background:#455a64;
+    color:#ffffff;
+    border-radius:9px;
+    text-align:center;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+
+/* =====================================================
+   NO DATA
+===================================================== */
+
+.noData{
+    background:#ffffff;
+    padding:35px 15px;
+    border-radius:10px;
+    text-align:center;
+    color:#777777;
+    font-size:17px;
+    font-weight:bold;
+    box-shadow:0 3px 10px rgba(0,0,0,.10);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .app{
+        padding:10px;
+    }
+
+
+    .pageTitle{
+        font-size:21px;
+        padding:14px;
+    }
+
+
+    .counterGrid{
+        gap:7px;
+    }
+
+
+    .counterBox{
+        padding:13px 5px;
+    }
+
+
+    .counterBox p{
+        font-size:11px;
+    }
+
+
+    .counterBox h2{
+        font-size:20px;
+    }
+
+
+    .detailsGrid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+
+    .actionButtons{
+        grid-template-columns:1fr;
+    }
+
+
+    .requestCard{
+        padding:14px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<div class="pageTitle">
+
+    Withdrawal Request
+
+</div>
+
+
+<!-- =====================================================
+     COUNTERS
+===================================================== -->
+
+<div class="counterGrid">
+
+
+<div class="counterBox pendingCounter">
+
+    <p>
+        Pending Requests
+    </p>
+
+    <h2 id="pendingCount">
+        0
+    </h2>
+
+</div>
+
+
+<div class="counterBox paidCounter">
+
+    <p>
+        Paid Requests
+    </p>
+
+    <h2 id="paidCount">
+        0
+    </h2>
+
+</div>
+
+
+<div class="counterBox rejectedCounter">
+
+    <p>
+        Rejected Requests
+    </p>
+
+    <h2 id="rejectedCount">
+        0
+    </h2>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<div class="searchBox">
+
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Mobile / User Name / UPI / Account Number"
+autocomplete="off">
+
+
+</div>
+
+
+<!-- =====================================================
+     REQUEST LIST
+===================================================== -->
+
+<div
+id="requestList"
+class="requestList">
+
+</div>
+
+
+<a
+href="index.html"
+class="backBtn">
+
+    ← Back To Admin Panel
+
+</a>
+
+
+</div>
+
+
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   HR MATKA
+   WITHDRAWAL REQUEST
+   FINAL COMPLETE ENGINE
+
+   STORAGE CONNECTIONS:
+   - withdrawals
+   - userBalances
+   - passbook
+   - lastWithdrawalUpdate
+   - lastWalletUpdate
+===================================================== */
+
+
+/* =====================================================
+   1. SAFE STORAGE READ
+===================================================== */
+
+function getStorage(
+    key,
+    fallback
+){
+
+    try{
+
+        let raw =
+        localStorage.getItem(
+            key
+        );
+
+
+        if(
+            raw === null ||
+            raw === undefined ||
+            raw === ""
+        ){
+
+            return fallback;
+
+        }
+
+
+        return JSON.parse(
+            raw
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Read Error:",
+            key,
+            error
+        );
+
+
+        return fallback;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   2. SAFE STORAGE SAVE
+===================================================== */
+
+function saveStorage(
+    key,
+    value
+){
+
+    try{
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(
+                value
+            )
+        );
+
+
+        return true;
+
+    }
+    catch(error){
+
+        console.error(
+            "Storage Save Error:",
+            key,
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   3. SAFE TEXT
+===================================================== */
+
+function safe(value){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+
+        return "-";
+
+    }
+
+
+    return String(
+        value
+    );
+
+}
+
+
+
+/* =====================================================
+   4. NORMALIZE TEXT
+===================================================== */
+
+function normalizeText(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .trim();
+
+}
+
+
+
+/* =====================================================
+   5. NORMALIZE STATUS
+===================================================== */
+
+function normalizeStatus(value){
+
+    return normalizeText(
+        value
+    )
+    .toUpperCase();
+
+}
+
+
+
+/* =====================================================
+   6. MOBILE NORMALIZE
+===================================================== */
+
+function normalizeMobile(value){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+}
+
+
+
+/* =====================================================
+   7. CAPITALIZE NAME
+===================================================== */
+
+function capitalizeWords(value){
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /\b\w/g,
+        function(letter){
+
+            return letter.toUpperCase();
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   8. HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value === undefined ||
+        value === null
+        ? ""
+        : value
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+
+/* =====================================================
+   9. DATE + TIME
+   ALWAYS 12 HOUR AM / PM
+===================================================== */
+
+function getDateTime(){
+
+    let now =
+    new Date();
+
+
+    return {
+
+        date:
+        now.toLocaleDateString(
+            "en-GB"
+        ),
+
+        time:
+        now.toLocaleTimeString(
+            "en-US",
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit",
+                hour12:true
+            }
+        )
+        .replace(
+            /\bam\b/gi,
+            "AM"
+        )
+        .replace(
+            /\bpm\b/gi,
+            "PM"
+        ),
+
+        timestamp:
+        now.getTime(),
+
+        iso:
+        now.toISOString()
+
+    };
+
+}
+
+
+
+/* =====================================================
+   10. FORMAT STORED TIME
+===================================================== */
+
+function formatTime12(value){
+
+    if(
+        !value ||
+        value === "-"
+    ){
+
+        return "-";
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    text =
+    text
+    .replace(
+        /\bam\b/gi,
+        "AM"
+    )
+    .replace(
+        /\bpm\b/gi,
+        "PM"
+    );
+
+
+    return text;
+
+}
+
+
+
+/* =====================================================
+   11. EXTRACT OLD DATE + TIME
+===================================================== */
+
+function extractOldDateTime(value){
+
+    let result = {
+
+        date:"-",
+
+        time:"-"
+
+    };
+
+
+    if(!value){
+
+        return result;
+
+    }
+
+
+    let text =
+    String(
+        value
+    )
+    .trim();
+
+
+    if(
+        text.includes(",")
+    ){
+
+        let parts =
+        text.split(",");
+
+
+        result.date =
+        parts.shift()
+        .trim()
+        || "-";
+
+
+        result.time =
+        parts.join(",")
+        .trim()
+        || "-";
+
+
+        return result;
+
+    }
+
+
+    result.date =
+    text;
+
+
+    return result;
+
+}
+
+
+
+/* =====================================================
+   12. REQUEST DATE
+===================================================== */
+
+function getRequestDate(item){
+
+    if(
+        item.requestDate
+    ){
+
+        return item.requestDate;
+
+    }
+
+
+    let old =
+    extractOldDateTime(
+        item.date
+    );
+
+
+    return (
+        old.date ||
+        "-"
+    );
+
+}
+
+
+
+/* =====================================================
+   13. REQUEST TIME
+===================================================== */
+
+function getRequestTime(item){
+
+    if(
+        item.requestTime
+    ){
+
+        return formatTime12(
+            item.requestTime
+        );
+
+    }
+
+
+    if(
+        item.time
+    ){
+
+        return formatTime12(
+            item.time
+        );
+
+    }
+
+
+    let old =
+    extractOldDateTime(
+        item.date
+    );
+
+
+    return formatTime12(
+        old.time
+    );
+
+}
+
+
+
+/* =====================================================
+   14. PAID DATE
+===================================================== */
+
+function getPaidDate(item){
+
+    return (
+
+        item.paidDate ||
+
+        item.approvedDate ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   15. PAID TIME
+===================================================== */
+
+function getPaidTime(item){
+
+    return formatTime12(
+
+        item.paidTime ||
+
+        item.approvedTime ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   16. REJECT DATE
+===================================================== */
+
+function getRejectDate(item){
+
+    return (
+
+        item.rejectedDate ||
+
+        item.rejectDate ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   17. REJECT TIME
+===================================================== */
+
+function getRejectTime(item){
+
+    return formatTime12(
+
+        item.rejectedTime ||
+
+        item.rejectTime ||
+
+        "-"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   18. UNIQUE ID
+===================================================== */
+
+function createUniqueId(){
+
+    return (
+
+        Date.now()
+        .toString()
+
+        +
+
+        "-"
+
+        +
+
+        Math.random()
+        .toString(36)
+        .slice(
+            2,
+            10
+        )
+
+    );
+
+}
+
+
+
+/* =====================================================
+   19. GLOBAL DATA
+===================================================== */
+
+let withdrawals = [];
+
+
+
+/* =====================================================
+   20. RELOAD WITHDRAWALS
+===================================================== */
+
+function reloadWithdrawals(){
+
+    withdrawals =
+    getStorage(
+        "withdrawals",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            withdrawals
+        )
+    ){
+
+        withdrawals = [];
+
+    }
+
+}
+
+
+
+/* =====================================================
+   21. STATUS CHECK
+===================================================== */
+
+function isPaidStatus(value){
+
+    let status =
+    normalizeStatus(
+        value
+    );
+
+
+    return (
+
+        status === "PAID"
+
+        ||
+
+        status === "APPROVED"
+
+        ||
+
+        status === "SUCCESS"
+
+        ||
+
+        status === "SUCCESSFUL"
+
+    );
+
+}
+
+
+
+/* =====================================================
+   22. COUNTERS
+===================================================== */
+
+function updateCounters(){
+
+    let pending =
+    0;
+
+
+    let paid =
+    0;
+
+
+    let rejected =
+    0;
+
+
+    withdrawals.forEach(
+        function(item){
+
+            let status =
+            normalizeStatus(
+                item.status
+            );
+
+
+            if(
+                status === "PENDING"
+            ){
+
+                pending++;
+
+            }
+
+
+            else if(
+                isPaidStatus(
+                    status
+                )
+            ){
+
+                paid++;
+
+            }
+
+
+            else if(
+                status === "REJECTED"
+            ){
+
+                rejected++;
+
+            }
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "pendingCount"
+    )
+    .innerText =
+    pending;
+
+
+    document
+    .getElementById(
+        "paidCount"
+    )
+    .innerText =
+    paid;
+
+
+    document
+    .getElementById(
+        "rejectedCount"
+    )
+    .innerText =
+    rejected;
+
+}
+
+
+
+/* =====================================================
+   23. REQUEST NUMBER
+===================================================== */
+
+function getRequestNumber(
+    item,
+    index
+){
+
+    if(
+        item.requestNumber
+    ){
+
+        return item.requestNumber;
+
+    }
+
+
+    if(
+        item.requestId
+    ){
+
+        return item.requestId;
+
+    }
+
+
+    return index + 1;
+
+}
+
+
+
+/* =====================================================
+   24. FIND REQUEST INDEX
+===================================================== */
+
+function findRequestIndex(id){
+
+    return withdrawals
+    .findIndex(
+        function(item){
+
+            return (
+
+                String(
+                    item.id
+                )
+
+                ===
+
+                String(
+                    id
+                )
+
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   25. RENDER REQUESTS
+===================================================== */
+
+function renderRequests(){
+
+    reloadWithdrawals();
+
+
+    updateCounters();
+
+
+    let search =
+    document
+    .getElementById(
+        "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+
+    let records =
+    withdrawals
+    .map(
+        function(item,index){
+
+            return {
+
+                item:item,
+
+                originalIndex:index
+
+            };
+
+        }
+    );
+
+
+    /*
+       Latest First
+    */
+
+    records.sort(
+        function(a,b){
+
+            let aTime =
+            Number(
+                a.item.processedAt ||
+                a.item.timestamp ||
+                a.item.id ||
+                0
+            );
+
+
+            let bTime =
+            Number(
+                b.item.processedAt ||
+                b.item.timestamp ||
+                b.item.id ||
+                0
+            );
+
+
+            return (
+                bTime -
+                aTime
+            );
+
+        }
+    );
+
+
+    if(search){
+
+        records =
+        records.filter(
+            function(record){
+
+                let item =
+                record.item;
+
+
+                let text =
+                [
+
+                    item.name,
+
+                    item.mobile,
+
+                    item.holderName,
+
+                    item.bankName,
+
+                    item.bank,
+
+                    item.accountNumber,
+
+                    item.ifsc,
+
+                    item.ifscCode,
+
+                    item.upi,
+
+                    item.upiId,
+
+                    item.paymentMode,
+
+                    item.amount,
+
+                    item.requestId,
+
+                    item.status
+
+                ]
+                .join(
+                    " "
+                )
+                .toLowerCase();
+
+
+                return text.includes(
+                    search
+                );
+
+            }
+        );
+
+    }
+
+
+    let list =
+    document
+    .getElementById(
+        "requestList"
+    );
+
+
+    list.innerHTML =
+    "";
+
+
+    if(
+        records.length ===
+        0
+    ){
+
+        list.innerHTML = `
+
+        <div class="noData">
+
+            No Withdrawal Request Found
+
+        </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    records.forEach(
+        function(record){
+
+            let item =
+            record.item;
+
+
+            let originalIndex =
+            record.originalIndex;
+
+
+            let status =
+            normalizeText(
+                item.status ||
+                "Pending"
+            );
+
+
+            let statusUpper =
+            normalizeStatus(
+                status
+            );
+
+
+            let paid =
+            isPaidStatus(
+                statusUpper
+            );
+
+
+            let rejected =
+            statusUpper ===
+            "REJECTED";
+
+
+            let cardClass =
+            "";
+
+
+            let statusClass =
+            "statusPending";
+
+
+            if(paid){
+
+                cardClass =
+                "paid";
+
+
+                statusClass =
+                "statusPaid";
+
+            }
+
+
+            if(rejected){
+
+                cardClass =
+                "rejected";
+
+
+                statusClass =
+                "statusRejected";
+
+            }
+
+
+            let bankName =
+
+            item.bankName ||
+
+            item.bank ||
+
+            "-";
+
+
+            let accountNumber =
+
+            item.accountNumber ||
+
+            "-";
+
+
+            let ifsc =
+
+            item.ifsc ||
+
+            item.ifscCode ||
+
+            "-";
+
+
+            let upi =
+
+            item.upi ||
+
+            item.upiId ||
+
+            "-";
+
+
+            let holderName =
+
+            item.holderName ||
+
+            item.holder ||
+
+            "-";
+
+
+            let paymentMode =
+
+            item.paymentMode ||
+
+            "-";
+
+
+            let requestNumber =
+            getRequestNumber(
+                item,
+                originalIndex
+            );
+
+
+            let completionHTML =
+            "";
+
+
+            if(paid){
+
+                completionHTML = `
+
+                <div class="detailItem">
+
+                    <span class="detailLabel">
+                        Paid Date
+                    </span>
+
+                    <div class="detailValue">
+
+                        ${escapeHTML(
+                            getPaidDate(
+                                item
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <span class="detailLabel">
+                        Paid Time
+                    </span>
+
+                    <div class="detailValue">
+
+                        ${escapeHTML(
+                            getPaidTime(
+                                item
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+                `;
+
+            }
+
+
+            if(rejected){
+
+                completionHTML = `
+
+                <div class="detailItem">
+
+                    <span class="detailLabel">
+                        Rejected Date
+                    </span>
+
+                    <div class="detailValue">
+
+                        ${escapeHTML(
+                            getRejectDate(
+                                item
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detailItem">
+
+                    <span class="detailLabel">
+                        Rejected Time
+                    </span>
+
+                    <div class="detailValue">
+
+                        ${escapeHTML(
+                            getRejectTime(
+                                item
+                            )
+                        )}
+
+                    </div>
+
+                </div>
+
+                `;
+
+            }
+
+
+            let actionHTML =
+            "";
+
+
+            if(
+                statusUpper ===
+                "PENDING"
+            ){
+
+                actionHTML = `
+
+                <button
+                type="button"
+                class="approveBtn"
+                onclick="approveRequest('${escapeHTML(
+                    item.id
+                )}')">
+
+                    ✓ Approve
+
+                </button>
+
+
+                <button
+                type="button"
+                class="rejectBtn"
+                onclick="rejectRequest('${escapeHTML(
+                    item.id
+                )}')">
+
+                    ✕ Reject
+
+                </button>
+
+                `;
+
+            }
+
+            else{
+
+                actionHTML = `
+
+                <button
+                type="button"
+                disabled>
+
+                    ${escapeHTML(
+                        status
+                    )}
+
+                </button>
+
+                `;
+
+            }
+
+
+            list.innerHTML += `
+
+            <div class="requestCard ${cardClass}">
+
+
+                <div class="requestTop">
+
+
+                    <div class="requestNumber">
+
+                        Request #${escapeHTML(
+                            requestNumber
+                        )}
+
+                    </div>
+
+
+                    <div class="requestAmount">
+
+                        ₹ ${Number(
+                            item.amount || 0
+                        ).toFixed(2)}
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="detailsGrid">
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            User Name
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                capitalizeWords(
+                                    safe(
+                                        item.name
+                                    )
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Mobile Number
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    item.mobile
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Payment Mode
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    paymentMode
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Account Holder Name
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    holderName
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Bank Name
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    bankName
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Account Number
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    accountNumber
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            IFSC Code
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    ifsc
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            UPI ID / PhonePe
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                safe(
+                                    upi
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Request Date
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                getRequestDate(
+                                    item
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detailItem">
+
+                        <span class="detailLabel">
+                            Request Time
+                        </span>
+
+                        <div class="detailValue">
+
+                            ${escapeHTML(
+                                getRequestTime(
+                                    item
+                                )
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    ${completionHTML}
+
+
+                </div>
+
+
+                <div
+                class="
+                statusText
+                ${statusClass}
+                ">
+
+                    ${escapeHTML(
+                        status
+                    )}
+
+                </div>
+
+
+                <div class="actionButtons">
+
+
+                    <button
+                    type="button"
+                    class="copyBtn"
+                    onclick="copyDetails('${escapeHTML(
+                        item.id
+                    )}')">
+
+                        📋 Copy Details
+
+                    </button>
+
+
+                    ${actionHTML}
+
+
+                </div>
+
+
+            </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   26. COPY DETAILS
+===================================================== */
+
+function copyDetails(id){
+
+    reloadWithdrawals();
+
+
+    let index =
+    findRequestIndex(
+        id
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Request Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    let item =
+    withdrawals[index];
+
+
+    let text =
+
+`Withdrawal Request
+
+User Name: ${capitalizeWords(safe(item.name))}
+Mobile Number: ${safe(item.mobile)}
+Amount: ₹${Number(item.amount || 0).toFixed(2)}
+Payment Mode: ${safe(item.paymentMode)}
+
+Account Holder Name: ${safe(item.holderName || item.holder)}
+Bank Name: ${safe(item.bankName || item.bank)}
+Account Number: ${safe(item.accountNumber)}
+IFSC Code: ${safe(item.ifsc || item.ifscCode)}
+UPI ID: ${safe(item.upi || item.upiId)}
+
+Request Date: ${getRequestDate(item)}
+Request Time: ${getRequestTime(item)}
+Paid Date: ${getPaidDate(item)}
+Paid Time: ${getPaidTime(item)}
+Rejected Date: ${getRejectDate(item)}
+Rejected Time: ${getRejectTime(item)}
+Status: ${safe(item.status)}`;
+
+
+    copyText(
+        text
+    );
+
+}
+
+
+
+/* =====================================================
+   27. COPY HELPER
+===================================================== */
+
+function copyText(text){
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+        .writeText(
+            text
+        )
+        .then(
+            function(){
+
+                alert(
+                    "Details Copied Successfully"
+                );
+
+            }
+        )
+        .catch(
+            function(){
+
+                fallbackCopy(
+                    text
+                );
+
+            }
+        );
+
+    }
+
+    else{
+
+        fallbackCopy(
+            text
+        );
+
+    }
+
+}
+
+
+
+function fallbackCopy(text){
+
+    let textarea =
+    document.createElement(
+        "textarea"
+    );
+
+
+    textarea.value =
+    text;
+
+
+    textarea.style.position =
+    "fixed";
+
+
+    textarea.style.opacity =
+    "0";
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.focus();
+
+
+    textarea.select();
+
+
+    try{
+
+        let copied =
+        document.execCommand(
+            "copy"
+        );
+
+
+        if(copied){
+
+            alert(
+                "Details Copied Successfully"
+            );
+
+        }
+
+        else{
+
+            alert(
+                "Copy Failed"
+            );
+
+        }
+
+    }
+    catch(error){
+
+        alert(
+            "Copy Failed"
+        );
+
+    }
+
+
+    textarea.remove();
+
+}
+
+
+
+/* =====================================================
+   28. PASSBOOK DUPLICATE CHECK
+===================================================== */
+
+function passbookEntryExists(
+    passbook,
+    withdrawalId
+){
+
+    return passbook.some(
+        function(item){
+
+            return (
+
+                String(
+                    item.withdrawalId ||
+                    ""
+                )
+
+                ===
+
+                String(
+                    withdrawalId ||
+                    ""
+                )
+
+                &&
+
+                normalizeStatus(
+                    item.type
+                )
+                .includes(
+                    "WITHDRAW"
+                )
+
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   29. CREATE WITHDRAW PASSBOOK ENTRY
+===================================================== */
+
+function createWithdrawalPassbookEntry(
+    item,
+    previousBalance,
+    currentBalance,
+    amount,
+    dateTime
+){
+
+    return {
+
+        id:
+        createUniqueId(),
+
+        withdrawalId:
+        item.id,
+
+        requestId:
+        item.requestId ||
+        item.id,
+
+        mobile:
+        normalizeText(
+            item.mobile
+        ),
+
+        name:
+        capitalizeWords(
+            item.name
+        ),
+
+        market:
+        "",
+
+        game:
+        "Withdrawal",
+
+        date:
+        dateTime.date,
+
+        time:
+        dateTime.time,
+
+        type:
+        "Withdrawal",
+
+        transactionType:
+        "Debit",
+
+        previousBalance:
+        previousBalance,
+
+        amount:
+        amount,
+
+        currentBalance:
+        currentBalance,
+
+        status:
+        "Success",
+
+        details:
+        "Withdrawal Approved",
+
+        timestamp:
+        dateTime.timestamp,
+
+        createdAt:
+        dateTime.iso
+
+    };
+
+}
+
+
+
+/* =====================================================
+   30. APPROVE REQUEST
+===================================================== */
+
+function approveRequest(id){
+
+    reloadWithdrawals();
+
+
+    let index =
+    findRequestIndex(
+        id
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Request Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    let item =
+    withdrawals[index];
+
+
+    if(
+        normalizeStatus(
+            item.status
+        )
+        !==
+        "PENDING"
+    ){
+
+        alert(
+            "This Request Is Already Processed"
+        );
+
+
+        renderRequests();
+
+
+        return;
+
+    }
+
+
+    let amount =
+    Number(
+        item.amount || 0
+    );
+
+
+    if(
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ){
+
+        alert(
+            "Invalid Withdrawal Amount"
+        );
+
+
+        return;
+
+    }
+
+
+    let mobile =
+    normalizeText(
+        item.mobile
+    );
+
+
+    if(!mobile){
+
+        alert(
+            "User Mobile Number Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    let balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    if(
+        !balances ||
+        Array.isArray(
+            balances
+        ) ||
+        typeof balances !==
+        "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    let currentBalance =
+    Number(
+        balances[mobile] || 0
+    );
+
+
+    if(
+        !Number.isFinite(
+            currentBalance
+        )
+    ){
+
+        currentBalance =
+        0;
+
+    }
+
+
+    if(
+        amount >
+        currentBalance
+    ){
+
+        alert(
+            "User Wallet Balance Is Insufficient"
+        );
+
+
+        return;
+
+    }
+
+
+    let confirmed =
+    confirm(
+
+        "Approve Withdrawal ₹"
+        +
+        amount.toFixed(2)
+        +
+        " ?"
+
+    );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    /*
+       Final duplicate safety:
+       Confirm ke baad fresh data read.
+    */
+
+    reloadWithdrawals();
+
+
+    index =
+    findRequestIndex(
+        id
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Request Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    item =
+    withdrawals[index];
+
+
+    if(
+        normalizeStatus(
+            item.status
+        )
+        !==
+        "PENDING"
+    ){
+
+        alert(
+            "This Request Is Already Processed"
+        );
+
+
+        renderRequests();
+
+
+        return;
+
+    }
+
+
+    balances =
+    getStorage(
+        "userBalances",
+        {}
+    );
+
+
+    if(
+        !balances ||
+        Array.isArray(
+            balances
+        ) ||
+        typeof balances !==
+        "object"
+    ){
+
+        balances = {};
+
+    }
+
+
+    currentBalance =
+    Number(
+        balances[mobile] || 0
+    );
+
+
+    if(
+        !Number.isFinite(
+            currentBalance
+        )
+    ){
+
+        currentBalance =
+        0;
+
+    }
+
+
+    if(
+        amount >
+        currentBalance
+    ){
+
+        alert(
+            "User Wallet Balance Is Insufficient"
+        );
+
+
+        return;
+
+    }
+
+
+    let passbook =
+    getStorage(
+        "passbook",
+        []
+    );
+
+
+    if(
+        !Array.isArray(
+            passbook
+        )
+    ){
+
+        passbook = [];
+
+    }
+
+
+    /*
+       Same withdrawal already passbook me ho
+       to dobara debit nahi karenge.
+    */
+
+    if(
+        passbookEntryExists(
+            passbook,
+            item.id
+        )
+    ){
+
+        alert(
+            "This Withdrawal Is Already Added In Passbook"
+        );
+
+
+        return;
+
+    }
+
+
+    let dateTime =
+    getDateTime();
+
+
+    let newBalance =
+    currentBalance -
+    amount;
+
+
+    balances[mobile] =
+    newBalance;
+
+
+    /*
+       Withdrawal Status Update
+    */
+
+    item.status =
+    "Paid";
+
+
+    item.paidDate =
+    dateTime.date;
+
+
+    item.paidTime =
+    dateTime.time;
+
+
+    item.approvedDate =
+    dateTime.date;
+
+
+    item.approvedTime =
+    dateTime.time;
+
+
+    item.processedAt =
+    dateTime.timestamp;
+
+
+    item.processedTimestamp =
+    dateTime.timestamp;
+
+
+    item.processedISO =
+    dateTime.iso;
+
+
+    item.previousBalance =
+    currentBalance;
+
+
+    item.currentBalance =
+    newBalance;
+
+
+    item.debitedAmount =
+    amount;
+
+
+    item.walletDebited =
+    true;
+
+
+    withdrawals[index] =
+    item;
+
+
+    /*
+       Passbook Debit Entry
+    */
+
+    passbook.push(
+
+        createWithdrawalPassbookEntry(
+
+            item,
+
+            currentBalance,
+
+            newBalance,
+
+            amount,
+
+            dateTime
+
+        )
+
+    );
+
+
+    /*
+       SAVE ALL TOGETHER
+    */
+
+    saveStorage(
+        "userBalances",
+        balances
+    );
+
+
+    saveStorage(
+        "passbook",
+        passbook
+    );
+
+
+    saveStorage(
+        "withdrawals",
+        withdrawals
+    );
+
+
+    /*
+       Admin/User Sync Signals
+    */
+
+    saveStorage(
+        "lastWithdrawalUpdate",
+        {
+
+            withdrawalId:
+            item.id,
+
+            mobile:
+            mobile,
+
+            amount:
+            amount,
+
+            status:
+            "Paid",
+
+            time:
+            dateTime.timestamp
+
+        }
+    );
+
+
+    saveStorage(
+        "lastWalletUpdate",
+        {
+
+            mobile:
+            mobile,
+
+            previousBalance:
+            currentBalance,
+
+            amount:
+            amount,
+
+            currentBalance:
+            newBalance,
+
+            type:
+            "Withdrawal",
+
+            time:
+            dateTime.timestamp
+
+        }
+    );
+
+
+    window.dispatchEvent(
+        new Event(
+            "withdrawalUpdated"
+        )
+    );
+
+
+    alert(
+
+        "Withdrawal Approved Successfully"
+        +
+        "\n\nWallet Debit: ₹"
+        +
+        amount.toFixed(2)
+        +
+        "\nNew Balance: ₹"
+        +
+        newBalance.toFixed(2)
+
+    );
+
+
+    renderRequests();
+
+}
+
+
+
+/* =====================================================
+   31. REJECT REQUEST
+===================================================== */
+
+function rejectRequest(id){
+
+    reloadWithdrawals();
+
+
+    let index =
+    findRequestIndex(
+        id
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Request Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    let item =
+    withdrawals[index];
+
+
+    if(
+        normalizeStatus(
+            item.status
+        )
+        !==
+        "PENDING"
+    ){
+
+        alert(
+            "This Request Is Already Processed"
+        );
+
+
+        renderRequests();
+
+
+        return;
+
+    }
+
+
+    let amount =
+    Number(
+        item.amount || 0
+    );
+
+
+    let confirmed =
+    confirm(
+
+        "Reject Withdrawal ₹"
+        +
+        amount.toFixed(2)
+        +
+        " ?"
+
+    );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    /*
+       Confirm ke baad final status re-check.
+    */
+
+    reloadWithdrawals();
+
+
+    index =
+    findRequestIndex(
+        id
+    );
+
+
+    if(
+        index === -1
+    ){
+
+        alert(
+            "Request Not Found"
+        );
+
+
+        return;
+
+    }
+
+
+    item =
+    withdrawals[index];
+
+
+    if(
+        normalizeStatus(
+            item.status
+        )
+        !==
+        "PENDING"
+    ){
+
+        alert(
+            "This Request Is Already Processed"
+        );
+
+
+        renderRequests();
+
+
+        return;
+
+    }
+
+
+    let dateTime =
+    getDateTime();
+
+
+    item.status =
+    "Rejected";
+
+
+    item.rejectedDate =
+    dateTime.date;
+
+
+    item.rejectedTime =
+    dateTime.time;
+
+
+    item.rejectDate =
+    dateTime.date;
+
+
+    item.rejectTime =
+    dateTime.time;
+
+
+    item.processedAt =
+    dateTime.timestamp;
+
+
+    item.processedTimestamp =
+    dateTime.timestamp;
+
+
+    item.processedISO =
+    dateTime.iso;
+
+
+    item.walletDebited =
+    false;
+
+
+    withdrawals[index] =
+    item;
+
+
+    saveStorage(
+        "withdrawals",
+        withdrawals
+    );
+
+
+    saveStorage(
+        "lastWithdrawalUpdate",
+        {
+
+            withdrawalId:
+            item.id,
+
+            mobile:
+            item.mobile || "",
+
+            amount:
+            Number(
+                item.amount || 0
+            ),
+
+            status:
+            "Rejected",
+
+            time:
+            dateTime.timestamp
+
+        }
+    );
+
+
+    window.dispatchEvent(
+        new Event(
+            "withdrawalUpdated"
+        )
+    );
+
+
+    alert(
+        "Withdrawal Rejected Successfully"
+    );
+
+
+    renderRequests();
+
+}
+
+
+
+/* =====================================================
+   32. SEARCH EVENT
+===================================================== */
+
+document
+.getElementById(
+    "searchInput"
+)
+.addEventListener(
+    "input",
+    renderRequests
+);
+
+
+
+/* =====================================================
+   33. STORAGE LIVE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "storage",
+    function(event){
+
+        if(
+            event.key ===
+            "withdrawals"
+
+            ||
+
+            event.key ===
+            "userBalances"
+
+            ||
+
+            event.key ===
+            "passbook"
+
+            ||
+
+            event.key ===
+            "lastWithdrawalUpdate"
+        ){
+
+            renderRequests();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   34. SAME PAGE UPDATE
+===================================================== */
+
+window.addEventListener(
+    "withdrawalUpdated",
+    function(){
+
+        renderRequests();
+
+    }
+);
+
+
+
+/* =====================================================
+   35. WINDOW FOCUS REFRESH
+===================================================== */
+
+window.addEventListener(
+    "focus",
+    function(){
+
+        renderRequests();
+
+    }
+);
+
+
+
+/* =====================================================
+   36. VISIBILITY REFRESH
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        if(
+            document.visibilityState ===
+            "visible"
+        ){
+
+            renderRequests();
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   37. FIRST LOAD
+===================================================== */
+
+renderRequests();
+
+
+
+/* =====================================================
+   38. SAME TAB LOCAL TEST REFRESH
+===================================================== */
+
+setInterval(
+    function(){
+
+        renderRequests();
+
+    },
+    3000
+);
+
+
+
+console.log(
+    "✅ HR MATKA Withdrawal Request FINAL Complete Replacement Connected"
+);
+
+
+console.log(
+    "✅ Pending + Paid + Rejected Connected"
+);
+
+
+console.log(
+    "✅ Wallet Debit + Passbook Debit Connected"
+);
+
+
+console.log(
+    "✅ Duplicate Approval Protection Connected"
+);
+
+
+console.log(
+    "✅ 12-Hour AM/PM + Withdrawal History Sync Connected"
+);
+
+</script>
+
+
+</body>
+
+</html>

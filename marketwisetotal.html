@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Market Wise Bidding / Winning</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#222;
+}
+
+.filter-box{
+background:#fff;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+margin-bottom:20px;
+}
+
+label{
+display:block;
+margin-top:10px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+button{
+margin-top:20px;
+padding:12px 25px;
+border:none;
+background:#2196F3;
+color:#fff;
+font-size:16px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1976D2;
+}
+
+.cards{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+margin-bottom:25px;
+}
+
+.card{
+flex:1;
+min-width:220px;
+padding:20px;
+border-radius:10px;
+text-align:center;
+color:white;
+box-shadow:0 0 10px rgba(0,0,0,.15);
+}
+
+.card h2{
+font-size:18px;
+margin-bottom:10px;
+}
+
+.card h1{
+font-size:34px;
+color:white;
+margin:0;
+}
+
+.bid{
+background:#00BCD4;
+}
+
+.win{
+background:#FFC107;
+color:#000;
+}
+
+.win h1{
+color:#000;
+}
+
+.profit{
+background:#4CAF50;
+}
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+
+.back-btn{
+display:block;
+text-align:center;
+margin-top:20px;
+font-size:18px;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Market Wise Bidding / Winning</h1>
+
+<div class="filter-box">
+
+<label>From Date</label>
+<input type="date" id="fromDate">
+
+<label>To Date</label>
+<input type="date" id="toDate">
+
+<button id="saveBtn">
+SAVE
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card bid">
+<h2>Total Bidding</h2>
+<h1 id="totalBid">₹ 0</h1>
+</div>
+
+<div class="card win">
+<h2>Total Winning</h2>
+<h1 id="totalWin">₹ 0</h1>
+</div>
+
+<div class="card profit">
+<h2>Total Profit</h2>
+<h1 id="totalProfit">₹ 0</h1>
+</div>
+
+</div>
+
+<div class="table-box">
+
+<table id="marketTable" width="100%" cellspacing="0">
+
+<thead>
+
+<tr style="background:#2196F3;color:white;">
+
+<th style="padding:12px;">+</th>
+<th>Market ID</th>
+<th>Market Name</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td align="center">
+<button onclick="toggleRow(1)">+</button>
+</td>
+<td>1</td>
+<td>SRIDEVI</td>
+</tr>
+
+<tr id="row1" style="display:none;background:#f8f8f8;">
+<td colspan="3">
+
+<p><b>Total Bid Amount :</b>
+<span id="bid1">₹ 0</span></p>
+
+<p><b>Total Winning Amount :</b>
+<span id="win1">₹ 0</span></p>
+
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<button onclick="toggleRow(2)">+</button>
+</td>
+<td>2</td>
+<td>TIME BAZAR</td>
+</tr>
+
+<tr id="row2" style="display:none;background:#f8f8f8;">
+<td colspan="3">
+
+<p><b>Total Bid Amount :</b>
+<span id="bid2">₹ 0</span></p>
+
+<p><b>Total Winning Amount :</b>
+<span id="win2">₹ 0</span></p>
+
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<button onclick="toggleRow(3)">+</button>
+</td>
+<td>3</td>
+<td>MADHUR DAY</td>
+</tr>
+
+<tr id="row3" style="display:none;background:#f8f8f8;">
+<td colspan="3">
+
+<p><b>Total Bid Amount :</b>
+<span id="bid3">₹ 0</span></p>
+
+<p><b>Total Winning Amount :</b>
+<span id="win3">₹ 0</span></p>
+
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<button onclick="toggleRow(4)">+</button>
+</td>
+<td>4</td>
+<td>MILAN DAY</td>
+</tr>
+
+<tr id="row4" style="display:none;background:#f8f8f8;">
+<td colspan="3">
+
+<p><b>Total Bid Amount :</b>
+<span id="bid4">₹ 0</span></p>
+
+<p><b>Total Winning Amount :</b>
+<span id="win4">₹ 0</span></p>
+
+</td>
+</tr>
+
+<tr>
+<td align="center">
+<button onclick="toggleRow(5)">+</button>
+</td>
+<td>5</td>
+<td>RAJDHANI DAY</td>
+</tr>
+
+<tr id="row5" style="display:none;background:#f8f8f8;">
+<td colspan="3">
+
+<p><b>Total Bid Amount :</b>
+<span id="bid5">₹ 0</span></p>
+
+<p><b>Total Winning Amount :</b>
+<span id="win5">₹ 0</span></p>
+
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<a href="index.html" class="back-btn">
+⬅ Back To Admin Panel
+</a>
+
+</div>
+
+
+<script>
+
+function toggleRow(id){
+
+let row = document.getElementById("row"+id);
+
+if(row.style.display=="none" || row.style.display==""){
+
+row.style.display="table-row";
+
+}else{
+
+row.style.display="none";
+
+}
+
+}
+
+let totalBid = 0;
+let totalWin = 0;
+
+for(let i=1;i<=5;i++){
+
+let bid =
+Math.floor(Math.random()*5000)+500;
+
+let win =
+Math.floor(Math.random()*3000)+200;
+
+document.getElementById("bid"+i).innerHTML =
+"₹ " + bid;
+
+document.getElementById("win"+i).innerHTML =
+"₹ " + win;
+
+totalBid += bid;
+totalWin += win;
+
+}
+
+document.getElementById("totalBid").innerHTML =
+"₹ " + totalBid;
+
+document.getElementById("totalWin").innerHTML =
+"₹ " + totalWin;
+
+document.getElementById("totalProfit").innerHTML =
+"₹ " + (totalBid-totalWin);
+
+</script>
+
+
+<script src="marketreport.js"></script>
+
+    
+</body>
+
